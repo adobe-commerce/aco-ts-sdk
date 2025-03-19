@@ -34,7 +34,7 @@ async function main() {
     "sandbox" as Environment
   );
 
-  // Define a product
+  // Define a couple of products
   const product1: FeedProduct = {
     sku: "EXAMPLE-SKU-001",
     scope: { locale: "en-US" },
@@ -79,7 +79,7 @@ async function main() {
     ],
   };
 
-  // Create the product
+  // Create the products
   try {
     const response = await client.createProducts([product1, product2]);
     console.log("Product created successfully:", response);
