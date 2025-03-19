@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+dist/
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# OS
+.DS_Store
+
+# pnpm specific
+pnpm-lock.yaml
+.pnpm-debug.log 

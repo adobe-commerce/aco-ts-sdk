@@ -1,0 +1,67 @@
+{{>licenseInfo}}
+
+import { createHttpClient } from "./http-client";
+import {
+  AdobeCredentials,
+  CellId,
+  Environment,
+{{#models}}
+{{#model}}
+  {{classname}},
+{{/model}}
+{{/models}}
+} from "./types";
+import { createAuthService } from "./auth";
+import { config } from "dotenv";
+
+export interface Client {
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+  {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>;
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
+}
+
+export function createClient(
+  credentials: AdobeCredentials,
+  cellId: CellId,
+  tenantId: string,
+  environment: Environment
+): Client {
+  // Read .env overrides if present
+  config();
+  const auth = createAuthService(credentials, process.env.IMS_BASE_URL_OVERRIDE ?? undefined);
+  const http = createHttpClient(auth, cellId, environment, tenantId, process.env.BASE_URL_OVERRIDE ?? undefined);
+
+  return {
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+    /**
+     * {{summary}}
+     {{#notes}}
+     * {{&notes}}
+     {{/notes}}
+     * @param data - {{#allParams}}{{#isBodyParam}}{{{dataType}}}{{/isBodyParam}}{{/allParams}} payload
+     * @returns {Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>} feed response indicating the number of accepted items
+     * @throws {Error} if the API request fails
+     */
+    async {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}> {
+      return await http.request<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>(`{{{path}}}`, {
+        method: "{{httpMethod}}",
+        {{#hasBodyParam}}
+        body: JSON.stringify(data),
+        {{/hasBodyParam}}
+      });
+    },
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
+  };
+}

@@ -1,0 +1,11 @@
+additionalProperties:
+  artifactId: adobe-commerce-ts-sdk
+  npmName: adobe-commerce-ts-sdk
+templateDir: templates
+files:
+  client.mustache:
+    templateType: SupportingFiles
+    destinationFilename: src/client.ts
+  types.mustache:
+    templateType: SupportingFiles
+    destinationFilename: src/types.ts

@@ -1,0 +1,90 @@
+{{>licenseInfo}}
+
+{{#models}}
+{{#model}}
+{{#isEnum}}
+/**
+ * {{{description}}}
+ * @export
+ * @enum {string}
+ */
+export enum {{classname}} {
+{{#allowableValues}}
+{{#enumVars}}
+    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+{{/enumVars}}
+{{/allowableValues}}
+}
+{{/isEnum}}
+{{^isEnum}}
+/**
+ * {{{description}}}
+ * @export
+ * @interface {{classname}}
+ */
+export interface {{classname}} {
+{{#vars}}
+    /**
+     * {{{description}}}
+     * @type {{=<% %>=}}{<%datatype%>}<%={{ }}=%>
+     * @memberof {{classname}}
+     */
+    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}Array<{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum>{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+{{/vars}}
+}
+{{/isEnum}}
+{{/model}}
+{{/models}}
+
+// Manually define any enum types that are referenced but not generated
+{{#models}}
+{{#model}}
+{{^isEnum}}
+{{#vars}}
+{{#isEnum}}
+{{#items.isEnum}}
+/**
+ * Enum for {{classname}}.{{name}}
+ * @export
+ * @enum {string}
+ */
+export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum {
+{{#items}}
+{{#allowableValues}}
+{{#enumVars}}
+    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+{{/enumVars}}
+{{/allowableValues}}
+{{/items}}
+}
+{{/items.isEnum}}
+{{^items.isEnum}}
+/**
+ * Enum for {{classname}}.{{name}}
+ * @export
+ * @enum {string}
+ */
+export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum {
+{{#allowableValues}}
+{{#enumVars}}
+    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+{{/enumVars}}
+{{/allowableValues}}
+}
+{{/items.isEnum}}
+{{/isEnum}}
+{{/vars}}
+{{/isEnum}}
+{{/model}}
+{{/models}}
+
+// Config Types
+export interface AdobeCredentials {
+    clientId: string;
+    clientSecret: string;
+    scopes: string;
+}
+
+export type CellId = "na1";
+
+export type Environment = "production" | "sandbox";
