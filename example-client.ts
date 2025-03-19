@@ -1,9 +1,9 @@
 import { config } from "dotenv";
 import { createClient } from "./src/client";
 import {
-  FeedProduct,
-  CellId,
+  Region,
   Environment,
+  FeedProduct,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   ProductAttributeTypeEnum,
@@ -13,7 +13,7 @@ import {
 config();
 
 // Validate required environment variables
-const requiredEnvVars = ["IMS_CLIENT_ID", "IMS_CLIENT_SECRET", "IMS_SCOPES", "CELL_ID", "TENANT_ID"];
+const requiredEnvVars = ["IMS_CLIENT_ID", "IMS_CLIENT_SECRET", "IMS_SCOPES", "TENANT_ID", "REGION", "ENVIRONMENT"];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
@@ -29,9 +29,9 @@ async function main() {
       clientSecret: process.env.IMS_CLIENT_SECRET!,
       scopes: process.env.IMS_SCOPES!,
     },
-    process.env.CELL_ID as CellId,
     process.env.TENANT_ID!,
-    "sandbox" as Environment
+    process.env.REGION as Region,
+    process.env.ENVIRONMENT as Environment
   );
 
   // Define a couple of products

@@ -17,9 +17,9 @@ npm install @adobe/aco-ts-sdk
 ```typescript
 import { createClient } from "@adobe/aco-ts-sdk";
 import {
-  FeedProduct,
-  CellId,
+  Region,
   Environment,
+  FeedProduct,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   ProductAttributeTypeEnum,
@@ -32,8 +32,8 @@ const client = createClient(
     clientSecret: "my-client-secret",
     scopes: "adobeio_api,openid,AdobeID,read_organizations",
   },
-  "na1" as CellId,
   "my-tenant-id",
+  "na1" as Region,
   "sandbox" as Environment
 );
 

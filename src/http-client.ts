@@ -1,6 +1,6 @@
 import { ApiError } from "./errors";
 import { AuthService } from "./auth";
-import { CellId, Environment } from "./types";
+import { Environment, Region } from "./types";
 
 export interface HttpClient {
   request<T>(endpoint: string, options?: RequestInit): Promise<T>;
@@ -8,13 +8,13 @@ export interface HttpClient {
 
 export function createHttpClient(
   auth: AuthService,
-  cellId: CellId,
-  environment: Environment,
   tenantId: string,
+  region: Region,
+  environment: Environment,
   baseUrlOverride?: string
 ): HttpClient {
   const baseUrl =
-    baseUrlOverride || `https://${cellId}${environment === "production" ? "" : "-sandbox"}.api.commerce.adobe.com`;
+    baseUrlOverride || `https://${region}${environment === "production" ? "" : "-sandbox"}.api.commerce.adobe.com`;
   const timeout = 10000;
   const maxRetries = 3;
   const retryDelay = 1000;

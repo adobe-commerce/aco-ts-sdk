@@ -1089,6 +1089,6 @@ export interface AdobeCredentials {
     scopes: string;
 }
 
-export type CellId = "na1";
+export type Region = "na1";
 
 export type Environment = "production" | "sandbox";

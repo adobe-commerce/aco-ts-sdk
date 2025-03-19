@@ -14,7 +14,7 @@
 import { createHttpClient } from "./http-client";
 import {
   AdobeCredentials,
-  CellId,
+  Region,
   Environment,
   DiscountsFinalPrice,
   DiscountsPercentage,
@@ -67,14 +67,14 @@ export interface Client {
 
 export function createClient(
   credentials: AdobeCredentials,
-  cellId: CellId,
   tenantId: string,
+  region: Region,
   environment: Environment
 ): Client {
   // Read .env overrides if present
   config();
   const auth = createAuthService(credentials, process.env.IMS_BASE_URL_OVERRIDE ?? undefined);
-  const http = createHttpClient(auth, cellId, environment, tenantId, process.env.BASE_URL_OVERRIDE ?? undefined);
+  const http = createHttpClient(auth, tenantId, region, environment, process.env.BASE_URL_OVERRIDE ?? undefined);
 
   return {
     /**
