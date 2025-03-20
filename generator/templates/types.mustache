@@ -26,10 +26,10 @@ export interface {{classname}} {
 {{#vars}}
     /**
      * {{{description}}}
-     * @type {{=<% %>=}}{<%datatype%>}<%={{ }}=%>
+     * @type {{=<% %>=}}{<%#isEnum%><%#isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum[]<%/isArray%><%^isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum<%/isArray%><%/isEnum%><%^isEnum%><%dataType%><%/isEnum%>}<%={{ }}=%>
      * @memberof {{classname}}
      */
-    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}Array<{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum>{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum[]{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
 {{/vars}}
 }
 {{/isEnum}}

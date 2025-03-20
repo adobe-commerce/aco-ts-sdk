@@ -100,10 +100,10 @@ export interface FeedMetadata {
     scope: Scope;
     /**
      * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`: Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product Compare Page. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedMetadataVisibleInEnum[]}
      * @memberof FeedMetadata
      */
-    visibleIn?: Array<FeedMetadataVisibleInEnum>;
+    visibleIn?: FeedMetadataVisibleInEnum[];
     /**
      * Label for the attribute that is displayed in user interfaces.
      * @type {string}
@@ -112,7 +112,7 @@ export interface FeedMetadata {
     label: string;
     /**
      * Data type
-     * @type {string}
+     * @type {FeedMetadataDataTypeEnum}
      * @memberof FeedMetadata
      */
     dataType: FeedMetadataDataTypeEnum;
@@ -142,10 +142,10 @@ export interface FeedMetadata {
     searchWeight?: number;
     /**
      * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedMetadataSearchTypesEnum[]}
      * @memberof FeedMetadata
      */
-    searchTypes?: Array<FeedMetadataSearchTypesEnum>;
+    searchTypes?: FeedMetadataSearchTypesEnum[];
 }
 /**
  * Delete metadata information for a product attribute.
@@ -186,10 +186,10 @@ export interface FeedMetadataUpdate {
     scope: Scope;
     /**
      * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`: Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product Compare Page. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedMetadataUpdateVisibleInEnum[]}
      * @memberof FeedMetadataUpdate
      */
-    visibleIn?: Array<FeedMetadataUpdateVisibleInEnum>;
+    visibleIn?: FeedMetadataUpdateVisibleInEnum[];
     /**
      * Label for the attribute that is displayed in user interfaces.
      * @type {string}
@@ -198,7 +198,7 @@ export interface FeedMetadataUpdate {
     label?: string;
     /**
      * Data type
-     * @type {string}
+     * @type {FeedMetadataUpdateDataTypeEnum}
      * @memberof FeedMetadataUpdate
      */
     dataType?: FeedMetadataUpdateDataTypeEnum;
@@ -228,10 +228,10 @@ export interface FeedMetadataUpdate {
     searchWeight?: number;
     /**
      * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedMetadataUpdateSearchTypesEnum[]}
      * @memberof FeedMetadataUpdate
      */
-    searchTypes?: Array<FeedMetadataUpdateSearchTypesEnum>;
+    searchTypes?: FeedMetadataUpdateSearchTypesEnum[];
 }
 /**
  * Price book information
@@ -408,16 +408,16 @@ export interface FeedProduct {
     shortDescription?: string;
     /**
      * Indicates whether the product is visible on the storefront. The value is \"Enabled\" if it is visible, and \"Disabled\" if it is not visible. 
-     * @type {string}
+     * @type {FeedProductStatusEnum}
      * @memberof FeedProduct
      */
     status: FeedProductStatusEnum;
     /**
      * Storefront area where the product is visible. An empty list means that it is not visible as a stand alone product. * `CATALOG`: Product is visible on Product Listing Page and Product Detail Page. * `SEARCH`: Product is visible on Search Results Page and Product Detail Page. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedProductVisibleInEnum[]}
      * @memberof FeedProduct
      */
-    visibleIn?: Array<FeedProductVisibleInEnum>;
+    visibleIn?: FeedProductVisibleInEnum[];
     /**
      * Meta attributes that are specified in <meta> tags.
      * @type {Array&lt;ProductMetaAttribute&gt;}
@@ -518,16 +518,16 @@ export interface FeedProductUpdate {
     shortDescription?: string;
     /**
      * Indicates whether the product is visible on the storefront. The value is \"Enabled\" if it is visible, and \"Disabled\" if it is not visible. 
-     * @type {string}
+     * @type {FeedProductUpdateStatusEnum}
      * @memberof FeedProductUpdate
      */
     status?: FeedProductUpdateStatusEnum;
     /**
      * Storefront area where the product is visible. An empty list means that it is not visible as a stand alone product. * `CATALOG`: Product is visible on Product Listing Page and Product Detail Page. * `SEARCH`: Product is visible on Search Results Page and Product Detail Page. 
-     * @type {Array&lt;string&gt;}
+     * @type {FeedProductUpdateVisibleInEnum[]}
      * @memberof FeedProductUpdate
      */
-    visibleIn?: Array<FeedProductUpdateVisibleInEnum>;
+    visibleIn?: FeedProductUpdateVisibleInEnum[];
     /**
      * Meta attributes that are specified in <meta> tags.
      * @type {Array&lt;ProductMetaAttribute&gt;}
@@ -749,7 +749,7 @@ export interface ProductAttribute {
     code: string;
     /**
      * Type of attribute value to be applied during the rendering phase. Validation occurs only when the code is rendered. Invalid values are ignored. - `BOOLEAN`: Accept single value: \"true\" or false - `NUMBER`: Accept single number,e.g. \"85\", \"0.42\", etc. - `STRING`: Accept single string,e.g. \"Great day, yall!\" - `ARRAY`: Accept list of strings ,e.g. [\"red\", \"green\", \"blue\"] - `OBJECT`: Accept JSON object `\"{\"name\": \"swatch\", \"color\": \"red\"}\"` 
-     * @type {string}
+     * @type {ProductAttributeTypeEnum}
      * @memberof ProductAttribute
      */
     type: ProductAttributeTypeEnum;
@@ -786,10 +786,10 @@ export interface ProductImage {
     label?: string;
     /**
      * Roles associated with this image that determine how the image is used on the storefront. - `BASE`: Product image is visible as a main image on the Product Detail Page. - `SMALL`: Product image is visible as a main image on the Category or search result page or other product listing pages. - `THUMBNAIL`: Thumbnail images appear in the thumbnail gallery, shopping cart, etc. - `SWATCH`: A swatch can be used to illustrate the color, pattern, or texture. 
-     * @type {Array&lt;string&gt;}
+     * @type {ProductImageRolesEnum[]}
      * @memberof ProductImage
      */
-    roles?: Array<ProductImageRolesEnum>;
+    roles?: ProductImageRolesEnum[];
     /**
      * Custom image role. Merchants can define custom roles in addition to the predefined values. 
      * @type {Array&lt;string&gt;}
@@ -873,7 +873,7 @@ export interface ProductOption {
     defaultValueId?: string;
     /**
      * Option type. Indicates the product type the option can be assigned to. - `CONFIGURABLE`: Configurable product option - `SWATCH`: Swatch product option. Must be used for color or text swatches attributes 
-     * @type {string}
+     * @type {ProductOptionTypeEnum}
      * @memberof ProductOption
      */
     type: ProductOptionTypeEnum;
