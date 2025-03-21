@@ -57,10 +57,6 @@ export function createHttpClient(
     async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
       const headers = await getHeaders(options?.headers);
 
-      if (options?.method === "DELETE") {
-        endpoint = `${endpoint}/delete`;
-      }
-
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
           const response = await executeRequest<T>(endpoint, {
@@ -70,11 +66,16 @@ export function createHttpClient(
           return response;
         } catch (error) {
           if (attempt === maxRetries) throw error;
+
+          if (error instanceof ApiError && error.statusCode >= 400 && error.statusCode < 500) {
+            throw error;
+          }
+
           await delay(retryDelay * attempt);
         }
       }
 
-      throw new ApiError("Max retries exceeded", 0);
+      throw new ApiError("Could not execute request", 0);
     },
   };
 }
