@@ -1,0 +1,99 @@
+{{>licenseInfo}}
+
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { createClient } from '../src/client';
+import { createHttpClient } from '../src/http-client';
+import { createAuthService } from '../src/auth';
+import {
+{{#models}}
+{{#model}}
+  {{classname}},
+{{/model}}
+{{/models}}
+} from '../src/types';
+
+// Mock the dependencies
+vi.mock('../src/http-client');
+vi.mock('../src/auth');
+
+describe('Client', () => {
+  const mockCredentials = {
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    scopes: 'test-scopes',
+  };
+  const mockTenantId = 'test-tenant-id';
+  const mockRegion = 'na1';
+  const mockEnvironment = 'sandbox';
+
+  const mockHttpClient = {
+    request: vi.fn(),
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (createHttpClient as Mock).mockReturnValue(mockHttpClient);
+    (createAuthService as Mock).mockReturnValue({});
+  });
+
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+{{#operation}}
+  describe('{{nickname}}', () => {
+    it('should call the correct endpoint with {{httpMethod}} method', async () => {
+      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const mockData = [{
+{{#allParams}}
+{{#isBodyParam}}
+{{#vars}}
+{{#isEnum}}
+        {{name}}: {{enumName}}.{{{defaultValue}}},
+{{/isEnum}}
+{{^isEnum}}
+{{#isPrimitiveType}}
+{{#isString}}
+        {{name}}: 'test-{{name}}',
+{{/isString}}
+{{#isInteger}}
+        {{name}}: 1,
+{{/isInteger}}
+{{#isNumber}}
+        {{name}}: 1.0,
+{{/isNumber}}
+{{#isBoolean}}
+        {{name}}: true,
+{{/isBoolean}}
+{{/isPrimitiveType}}
+{{^isPrimitiveType}}
+{{#isRequired}}
+        {{name}}: {{#isArray}}[]{{/isArray}}{{^isArray}}{}{{/isArray}},
+{{/isRequired}}
+{{/isPrimitiveType}}
+{{/isEnum}}
+{{/vars}}
+{{/isBodyParam}}
+{{/allParams}}
+      }];
+      const mockResponse = { accepted: 1 };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      // @ts-expect-error - Ignore type check warning
+      const result = await client.{{nickname}}({{#allParams}}{{#isBodyParam}}mockData{{/isBodyParam}}{{/allParams}});
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('{{{path}}}', {
+        method: '{{httpMethod}}',
+        {{#hasBodyParam}}
+        body: JSON.stringify(mockData),
+        {{/hasBodyParam}}
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
+});

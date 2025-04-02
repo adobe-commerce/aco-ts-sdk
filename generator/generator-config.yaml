@@ -8,3 +8,6 @@ files:
   types.mustache:
     templateType: SupportingFiles
     destinationFilename: src/types.ts
+  client.test.mustache:
+    templateType: SupportingFiles
+    destinationFilename: test/client.test.ts

@@ -1,5 +1,6 @@
-import { config } from "dotenv";
-import { createClient } from "./src/client";
+/* eslint-disable no-console */
+import { config } from 'dotenv';
+import { createClient } from './src/client';
 import {
   Region,
   Environment,
@@ -7,13 +8,13 @@ import {
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   ProductAttributeTypeEnum,
-} from "./src/types";
+} from './src/types';
 
 // Load environment variables from .env file
 config();
 
 // Validate required environment variables
-const requiredEnvVars = ["IMS_CLIENT_ID", "IMS_CLIENT_SECRET", "IMS_SCOPES", "TENANT_ID", "REGION", "ENVIRONMENT"];
+const requiredEnvVars = ['IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_SCOPES', 'TENANT_ID', 'REGION', 'ENVIRONMENT'];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
@@ -21,7 +22,7 @@ for (const envVar of requiredEnvVars) {
   }
 }
 
-async function main() {
+async function main(): Promise<void> {
   // Create client instance
   const client = createClient(
     {
@@ -31,50 +32,50 @@ async function main() {
     },
     process.env.TENANT_ID!,
     process.env.REGION as Region,
-    process.env.ENVIRONMENT as Environment
+    process.env.ENVIRONMENT as Environment,
   );
 
   // Define a couple of products
   const product1: FeedProduct = {
-    sku: "EXAMPLE-SKU-001",
-    scope: { locale: "en-US" },
-    name: "Example Product 1",
-    slug: "example-product-1",
-    description: "This is an example product created via the SDK",
+    sku: 'EXAMPLE-SKU-001',
+    scope: { locale: 'en-US' },
+    name: 'Example Product 1',
+    slug: 'example-product-1',
+    description: 'This is an example product created via the SDK',
     status: FeedProductStatusEnum.Enabled,
     visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
     attributes: [
       {
-        code: "brand",
+        code: 'brand',
         type: ProductAttributeTypeEnum.String,
-        values: ["Example Brand"],
+        values: ['Example Brand'],
       },
       {
-        code: "category",
+        code: 'category',
         type: ProductAttributeTypeEnum.String,
-        values: ["Electronics"],
+        values: ['Electronics'],
       },
     ],
   };
 
   const product2: FeedProduct = {
-    sku: "EXAMPLE-SKU-002",
-    scope: { locale: "en-US" },
-    name: "Example Product 2",
-    slug: "example-product-2",
-    description: "This is another example product created via the SDK",
+    sku: 'EXAMPLE-SKU-002',
+    scope: { locale: 'en-US' },
+    name: 'Example Product 2',
+    slug: 'example-product-2',
+    description: 'This is another example product created via the SDK',
     status: FeedProductStatusEnum.Enabled,
     visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
     attributes: [
       {
-        code: "brand",
+        code: 'brand',
         type: ProductAttributeTypeEnum.String,
-        values: ["Example Brand"],
+        values: ['Example Brand'],
       },
       {
-        code: "category",
+        code: 'category',
         type: ProductAttributeTypeEnum.String,
-        values: ["Electronics"],
+        values: ['Electronics'],
       },
     ],
   };
@@ -82,9 +83,9 @@ async function main() {
   // Create the products
   try {
     const response = await client.createProducts([product1, product2]);
-    console.log("Product created successfully:", response);
+    console.log('Product created successfully:', response);
   } catch (error) {
-    console.error("Error creating product:", error);
+    console.error('Error creating product:', error);
   }
 }
 

@@ -1,5 +1,7 @@
 src/apis/**
 src/models/**
+apis/**
+models/**
 src/index.ts
 src/runtime.ts
 package.json
@@ -7,3 +9,5 @@ package.json
 .npmignore
 README.md
 tsconfig.json
+index.ts
+runtime.ts

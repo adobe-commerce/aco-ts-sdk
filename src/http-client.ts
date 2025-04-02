@@ -1,6 +1,18 @@
-import { ApiError } from "./errors";
-import { AuthService } from "./auth";
-import { Environment, Region } from "./types";
+/**
+ * ADOBE CONFIDENTIAL
+ *
+ * Copyright 2025 Adobe All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains the property of Adobe and its suppliers, if any. The
+ * intellectual and technical concepts contained herein are proprietary to Adobe and its suppliers and are protected by
+ * all applicable intellectual property laws, including trade secret and copyright laws. Dissemination of this
+ * information or reproduction of this material is strictly forbidden unless prior written permission is obtained from
+ * Adobe.
+ */
+
+import { ApiError } from './errors';
+import type { AuthService } from './auth';
+import type { Environment, Region } from './types';
 
 export interface HttpClient {
   request<T>(endpoint: string, options?: RequestInit): Promise<T>;
@@ -11,17 +23,17 @@ export function createHttpClient(
   tenantId: string,
   region: Region,
   environment: Environment,
-  baseUrlOverride?: string
+  baseUrlOverride?: string,
 ): HttpClient {
   const baseUrl =
-    baseUrlOverride || `https://${region}${environment === "production" ? "" : "-sandbox"}.api.commerce.adobe.com`;
+    baseUrlOverride || `https://${region}${environment === 'production' ? '' : '-sandbox'}.api.commerce.adobe.com`;
   const timeout = 10000;
   const maxRetries = 3;
   const retryDelay = 1000;
 
   const getHeaders = async (additionalHeaders?: HeadersInit): Promise<HeadersInit> => {
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${await auth.getBearerToken()}`,
       ...additionalHeaders,
     };
@@ -29,7 +41,7 @@ export function createHttpClient(
   };
 
   const delay = async (ms: number): Promise<void> => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
   };
 
   const executeRequest = async <T>(endpoint: string, options: RequestInit): Promise<T> => {
@@ -75,7 +87,7 @@ export function createHttpClient(
         }
       }
 
-      throw new ApiError("Could not execute request", 0);
+      throw new ApiError('Could not execute request', 0);
     },
   };
 }

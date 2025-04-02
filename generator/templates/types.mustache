@@ -11,7 +11,7 @@
 export enum {{classname}} {
 {{#allowableValues}}
 {{#enumVars}}
-    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
 }
@@ -24,12 +24,12 @@ export enum {{classname}} {
  */
 export interface {{classname}} {
 {{#vars}}
-    /**
-     * {{{description}}}
-     * @type {{=<% %>=}}{<%#isEnum%><%#isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum[]<%/isArray%><%^isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum<%/isArray%><%/isEnum%><%^isEnum%><%dataType%><%/isEnum%>}<%={{ }}=%>
-     * @memberof {{classname}}
-     */
-    {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum[]{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+  /**
+   * {{{description}}}
+   * @type {{=<% %>=}}{<%#isEnum%><%#isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum[]<%/isArray%><%^isArray%><%classname%><%#lambda.titlecase%><%name%><%/lambda.titlecase%>Enum<%/isArray%><%/isEnum%><%^isEnum%><%dataType%><%/isEnum%>}<%={{ }}=%>
+   * @memberof {{classname}}
+   */
+  {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum[]{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
 {{/vars}}
 }
 {{/isEnum}}
@@ -52,7 +52,7 @@ export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum 
 {{#items}}
 {{#allowableValues}}
 {{#enumVars}}
-    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
 {{/items}}
@@ -67,7 +67,7 @@ export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum 
 export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum {
 {{#allowableValues}}
 {{#enumVars}}
-    {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
+  {{{name}}} = {{{value}}}{{^-last}},{{/-last}}
 {{/enumVars}}
 {{/allowableValues}}
 }
@@ -80,11 +80,11 @@ export enum {{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum 
 
 // Config Types
 export interface AdobeCredentials {
-    clientId: string;
-    clientSecret: string;
-    scopes: string;
+  clientId: string;
+  clientSecret: string;
+  scopes: string;
 }
 
-export type Region = "na1";
+export type Region = 'na1';
 
-export type Environment = "production" | "sandbox";
+export type Environment = 'production' | 'sandbox';
