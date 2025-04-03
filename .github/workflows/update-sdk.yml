@@ -29,7 +29,9 @@ jobs:
         run: pnpm install
 
       - name: Install OpenAPI Generator CLI
-        run: pnpm add -g @openapitools/openapi-generator-cli
+        run: |
+          pnpm add -g @openapitools/openapi-generator-cli
+          echo "$(pnpm bin -g)" >> $GITHUB_PATH
 
       - name: Generate SDK
         id: generate
@@ -62,7 +64,8 @@ jobs:
 
       - name: Push changes
         if: steps.generate.outcome == 'success'
-        run: git push -u origin $BRANCH_NAME
+        run: |
+          git push --set-upstream origin $BRANCH_NAME
 
       - name: Create Pull Request
         if: steps.generate.outcome == 'success'
