@@ -71,3 +71,5 @@ jobs:
             --body "$PR_BODY" \
             --base main \
             --head $BRANCH_NAME
+        env:
+          GH_TOKEN: ${{ github.token }}
