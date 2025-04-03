@@ -54,7 +54,7 @@ jobs:
         if: steps.generate.outcome == 'success' && steps.check_changes.outputs.has_changes == 'true'
         id: git_operations
         run: |
-          BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d)"
+          BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d-%H%M%S)"
           git checkout -b $BRANCH_NAME
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
