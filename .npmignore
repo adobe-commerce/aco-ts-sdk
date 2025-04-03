@@ -12,5 +12,6 @@ coverage/
 .idea
 .vscode
 .openapi-generator-ignore
+openapitools.json
 .eslintrc
 .prettierrc

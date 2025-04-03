@@ -30,7 +30,6 @@ jobs:
       - name: Install OpenAPI Generator CLI
         run: |
           pnpm add -g @openapitools/openapi-generator-cli
-          echo "$(pnpm bin -g)" >> $GITHUB_PATH
 
       - name: Generate SDK
         id: generate

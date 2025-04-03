@@ -1,9 +1,13 @@
 #!/bin/bash
 
+FORCE=false
+GEN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd "$GEN_DIR" || exit 1
+
 SPEC_FILE_URL="https://raw.githubusercontent.com/AdobeDocs/commerce-services/refs/heads/ccdm-early-access/src/openapi/data-ingestion-schema-v1.yaml"
 TEMP_SPEC="catalog-ingestion-openapi-spec.yaml.tmp"
 CURRENT_SPEC="catalog-ingestion-openapi-spec.yaml"
-FORCE=false
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do
@@ -34,9 +38,25 @@ fi
 mv "$TEMP_SPEC" "$CURRENT_SPEC"
 
 printf "\nGenerating client SDK code and types...\n\n"
-openapi-generator generate -c generator-config.yaml -i "$CURRENT_SPEC" -g typescript-fetch -o ../
+
+if [ ! -f "generator-config.yaml" ]; then
+    printf "\n❌ Error: generator-config.yaml not found in %s\n" "$(pwd)"
+    exit 1
+fi
+
+GENERATOR_CLI=$(pnpm exec which openapi-generator-cli)
+if [ -z "$GENERATOR_CLI" ]; then
+    printf "\n❌ Error: openapi-generator-cli not found in PATH\n"
+    exit 1
+fi
+
+if ! "$GENERATOR_CLI" generate -c "$(pwd)/generator-config.yaml" -i "$(pwd)/$CURRENT_SPEC" -g typescript-fetch -o ../; then
+    printf "\n❌ OpenAPI generator failed! Generation aborted.\n"
+    exit 1
+fi
 
 printf "\nFormatting generated code...\n\n"
+cd .. || exit 1
 pnpm format
 
 printf "\nLinting generated code...\n\n"

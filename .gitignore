@@ -25,3 +25,6 @@ coverage/
 # pnpm specific
 pnpm-lock.yaml
 .pnpm-debug.log 
+
+# OpenAPI Generator
+openapitools.json
