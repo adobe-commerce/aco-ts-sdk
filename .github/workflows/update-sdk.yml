@@ -65,9 +65,7 @@ jobs:
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
           # Create PR
-          PR_BODY="Automated PR to update the SDK from the latest OpenAPI spec.
-
-This PR was created automatically by the GitHub Action \"update-sdk\" workflow."
+          PR_BODY="Automated PR to update the SDK from the latest OpenAPI spec.\n\nThis PR was created automatically by the GitHub Action \"update-sdk\" workflow."
           gh pr create \
             --title "chore: update SDK from OpenAPI spec" \
             --body "$PR_BODY" \
