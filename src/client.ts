@@ -195,6 +195,8 @@ export interface Client {
   updateProducts(data: Array<FeedProductUpdate>): Promise<ProcessFeedResponse>;
 }
 
+// THIS IS A TEST OF THE UPDATE SDK WORKFLOW PR CREATION
+
 /**
  * Creates a client instance for interacting with the Adobe Commerce Optimizer API.
  *
