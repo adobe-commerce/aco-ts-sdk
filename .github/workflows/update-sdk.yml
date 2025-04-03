@@ -76,4 +76,4 @@ jobs:
             This PR was created automatically by the GitHub Action "update-sdk" workflow.
           branch: ${{ steps.git_operations.outputs.branch_name }}
           base: main
-          delete-branch: true
+          delete-branch: false
