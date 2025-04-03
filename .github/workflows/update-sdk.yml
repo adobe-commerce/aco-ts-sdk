@@ -77,3 +77,4 @@ jobs:
           branch: ${{ steps.git_operations.outputs.branch_name }}
           base: main
           delete-branch: false
+          rebase: false
