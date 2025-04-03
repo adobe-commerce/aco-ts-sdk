@@ -63,6 +63,12 @@ jobs:
           git commit -m "chore: update SDK from OpenAPI spec"
           git push -u origin $BRANCH_NAME
           echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          # Debug information
+          echo "Current branch: $(git branch --show-current)"
+          echo "Git status after commit:"
+          git status
+          echo "Git diff after commit:"
+          git diff main
 
       - name: Create pull request
         if: steps.generate.outcome == 'success' && steps.check_changes.outputs.has_changes == 'true'
@@ -77,4 +83,4 @@ jobs:
           branch: ${{ steps.git_operations.outputs.branch_name }}
           base: main
           delete-branch: false
-          rebase: false
+          token: ${{ secrets.GITHUB_TOKEN }}
