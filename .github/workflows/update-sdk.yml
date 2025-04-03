@@ -1,0 +1,75 @@
+name: Update SDK
+
+on:
+  workflow_dispatch: # Allow manual triggering
+  schedule:
+    - cron: '0 13 * * *' # Run daily at 13:00 UTC (8:00 AM CST)
+
+jobs:
+  update-sdk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install OpenAPI Generator CLI
+        run: |
+          pnpm add -g @openapitools/openapi-generator-cli
+
+      - name: Generate SDK
+        id: generate
+        run: |
+          cd generator
+          chmod +x generate.sh
+          ./generate.sh
+
+      - name: Check for changes
+        if: steps.generate.outcome == 'success'
+        id: check_changes
+        run: |
+          if git diff --quiet; then
+            echo "No changes detected in the SDK. Skipping commit and PR creation."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected in the SDK. Proceeding with commit and PR creation."
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create new branch and pull request
+        if: steps.generate.outcome == 'success' && steps.check_changes.outputs.has_changes == 'true'
+        id: git_operations
+        run: |
+          BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d-%H%M%S)"
+          git checkout -b $BRANCH_NAME
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git status
+          git commit -m "chore: update SDK from OpenAPI spec"
+          git push -u origin $BRANCH_NAME
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+          # Create PR
+          PR_BODY="Automated PR to update the SDK from the latest OpenAPI spec. This PR was created automatically by the GitHub Action \"update-sdk\" workflow."
+          gh pr create \
+            --title "chore: update SDK from OpenAPI spec" \
+            --body "$PR_BODY" \
+            --base main \
+            --head $BRANCH_NAME
+        env:
+          GH_TOKEN: ${{ github.token }}
