@@ -1,8 +1,10 @@
 name: Update SDK
 
 on:
+  workflow_dispatch: # Allow manual triggering
   schedule:
     - cron: '15 18 * * *' # Run daily at 18:15 UTC (6:15 PM UTC)
+    # - cron: '0 14 * * *' # Run daily at 14:00 UTC (9:00 AM CST)
 
 jobs:
   update-sdk:
