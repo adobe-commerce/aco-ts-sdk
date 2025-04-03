@@ -2,12 +2,11 @@
 
 FORCE=false
 GEN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-cd "$GEN_DIR" || exit 1
-
 SPEC_FILE_URL="https://raw.githubusercontent.com/AdobeDocs/commerce-services/refs/heads/ccdm-early-access/src/openapi/data-ingestion-schema-v1.yaml"
 TEMP_SPEC="catalog-ingestion-openapi-spec.yaml.tmp"
 CURRENT_SPEC="catalog-ingestion-openapi-spec.yaml"
+
+cd "$GEN_DIR" || exit 1
 
 # Parse command line arguments
 while [[ "$#" -gt 0 ]]; do

@@ -53,6 +53,8 @@ jobs:
       - name: Create new branch and pull request
         if: steps.generate.outcome == 'success' && steps.check_changes.outputs.has_changes == 'true'
         id: git_operations
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d-%H%M%S)"
           git checkout -b $BRANCH_NAME
@@ -71,5 +73,3 @@ jobs:
             --body "$PR_BODY" \
             --base main \
             --head $BRANCH_NAME
-        env:
-          GH_TOKEN: ${{ github.token }}
