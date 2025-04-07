@@ -56,20 +56,34 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d-%H%M%S)"
-          git checkout -b $BRANCH_NAME
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add .
-          git status
-          git commit -m "chore: update SDK from OpenAPI spec"
-          git push -u origin $BRANCH_NAME
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          # Check for existing open PRs with the same title pattern
+          EXISTING_PR=$(gh pr list --state open --search "title:chore: update SDK from OpenAPI spec" --json number,headRefName --jq '.[0]')
+          EXISTING_PR_NUMBER=$(echo "$EXISTING_PR" | jq -r '.number // empty')
+          EXISTING_BRANCH=$(echo "$EXISTING_PR" | jq -r '.headRefName // empty')
 
-          # Create PR
-          PR_BODY="Automated PR to update the SDK from the latest OpenAPI spec. This PR was created automatically by the GitHub Action \"update-sdk\" workflow."
-          gh pr create \
-            --title "chore: update SDK from OpenAPI spec" \
-            --body "$PR_BODY" \
-            --base main \
-            --head $BRANCH_NAME
+          if [ -n "$EXISTING_PR_NUMBER" ]; then
+            echo "Found existing open PR #$EXISTING_PR_NUMBER for SDK updates. Updating with latest changes."
+            git checkout $EXISTING_BRANCH
+            git add .
+            git commit -m "chore: update SDK from OpenAPI spec"
+            git push origin $EXISTING_BRANCH
+            echo "branch_name=$EXISTING_BRANCH" >> $GITHUB_OUTPUT
+          else
+            BRANCH_NAME="chore/update-sdk-$(date +%Y-%m-%d-%H%M%S)"
+            git checkout -b $BRANCH_NAME
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add .
+            git status
+            git commit -m "chore: update SDK from OpenAPI spec"
+            git push -u origin $BRANCH_NAME
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+            # Create PR
+            PR_BODY="Automated PR to update the SDK from the latest OpenAPI spec. This PR was created automatically by the GitHub Action \"update-sdk\" workflow."
+            gh pr create \
+              --title "chore: update SDK from OpenAPI spec" \
+              --body "$PR_BODY" \
+              --base main \
+              --head $BRANCH_NAME
+          fi
