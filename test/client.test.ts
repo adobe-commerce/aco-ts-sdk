@@ -19,6 +19,14 @@ import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { createClient } from '../src/client';
 import { createHttpClient } from '../src/http-client';
 import { createAuthService } from '../src/auth';
+import {
+  ProcessFeedResponse,
+  FeedMetadataDataTypeEnum,
+  FeedProductStatusEnum,
+  FeedProductVisibleInEnum,
+  FeedMetadataVisibleInEnum,
+  ProductAttributeTypeEnum,
+} from '../src/types';
 
 // Mock the dependencies
 vi.mock('../src/http-client');
@@ -38,6 +46,127 @@ describe('Client', () => {
     request: vi.fn(),
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const createMockData = (operationName: string): any[] => {
+    const baseMock = {
+      scope: { locale: 'en-US' },
+    };
+
+    switch (operationName) {
+      case 'createProductMetadata':
+      case 'updateProductMetadata':
+        return [
+          {
+            ...baseMock,
+            code: 'test-attribute',
+            label: 'Test Attribute',
+            dataType: FeedMetadataDataTypeEnum.Text,
+            visibleIn: [FeedMetadataVisibleInEnum.ProductDetail],
+            filterable: true,
+            sortable: true,
+            searchable: true,
+            searchWeight: 1,
+            searchTypes: ['AUTOCOMPLETE'],
+          },
+        ];
+
+      case 'deleteProductMetadata':
+        return [
+          {
+            ...baseMock,
+            code: 'test-attribute',
+          },
+        ];
+
+      case 'createProducts':
+      case 'updateProducts':
+        return [
+          {
+            ...baseMock,
+            sku: 'test-sku',
+            name: 'Test Product',
+            slug: 'test-product',
+            description: 'This is a test product created via the SDK',
+            shortDescription: 'test product',
+            status: FeedProductStatusEnum.Enabled,
+            visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+            attributes: [
+              {
+                code: 'brand',
+                type: ProductAttributeTypeEnum.String,
+                values: ['Test Brand'],
+              },
+              {
+                code: 'category',
+                type: ProductAttributeTypeEnum.String,
+                values: ['Electronics'],
+              },
+            ],
+            images: [
+              {
+                url: 'https://example.com/image.jpg',
+                label: 'Test Product Image',
+                roles: ['BASE', 'SMALL'],
+                customRoles: ['widget'],
+              },
+            ],
+            links: [
+              {
+                type: 'VARIANT_OF',
+                sku: 'parent-product',
+              },
+            ],
+            routes: [
+              {
+                path: 'path/to/test-sku',
+                position: 2,
+              },
+            ],
+          },
+        ];
+
+      case 'deleteProducts':
+        return [
+          {
+            ...baseMock,
+            sku: 'test-sku',
+          },
+        ];
+
+      case 'createPrices':
+      case 'updatePrices':
+        return [
+          {
+            sku: 'test-sku',
+            priceBookId: 'test-pricebook',
+            price: 99.99,
+          },
+        ];
+
+      case 'deletePrices':
+        return [
+          {
+            sku: 'test-sku',
+            priceBookId: 'test-pricebook',
+          },
+        ];
+
+      case 'createPriceBooks':
+      case 'updatePriceBooks':
+      case 'deletePriceBooks':
+        return [
+          {
+            priceBookId: 'test-pricebook',
+            name: 'Test Price Book',
+            currency: 'USD',
+          },
+        ];
+
+      default:
+        return [{}];
+    }
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     (createHttpClient as Mock).mockReturnValue(mockHttpClient);
@@ -47,12 +176,14 @@ describe('Client', () => {
   describe('createProductMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('createProductMetadata');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.createProductMetadata(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
@@ -66,12 +197,14 @@ describe('Client', () => {
   describe('deleteProductMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('deleteProductMetadata');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.deleteProductMetadata(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata/delete', {
@@ -85,12 +218,14 @@ describe('Client', () => {
   describe('updateProductMetadata', () => {
     it('should call the correct endpoint with PATCH method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('updateProductMetadata');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.updateProductMetadata(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
@@ -104,12 +239,14 @@ describe('Client', () => {
   describe('createPriceBooks', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('createPriceBooks');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.createPriceBooks(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/price-books', {
@@ -123,12 +260,14 @@ describe('Client', () => {
   describe('deletePriceBooks', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('deletePriceBooks');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.deletePriceBooks(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/price-books/delete', {
@@ -142,12 +281,14 @@ describe('Client', () => {
   describe('updatePriceBooks', () => {
     it('should call the correct endpoint with PATCH method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('updatePriceBooks');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.updatePriceBooks(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/price-books', {
@@ -161,12 +302,14 @@ describe('Client', () => {
   describe('createPrices', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('createPrices');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.createPrices(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/prices', {
@@ -180,12 +323,14 @@ describe('Client', () => {
   describe('deletePrices', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('deletePrices');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.deletePrices(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/prices/delete', {
@@ -199,12 +344,14 @@ describe('Client', () => {
   describe('updatePrices', () => {
     it('should call the correct endpoint with PATCH method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('updatePrices');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.updatePrices(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/prices', {
@@ -218,12 +365,14 @@ describe('Client', () => {
   describe('createProducts', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('createProducts');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.createProducts(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products', {
@@ -237,12 +386,14 @@ describe('Client', () => {
   describe('deleteProducts', () => {
     it('should call the correct endpoint with POST method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('deleteProducts');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.deleteProducts(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/delete', {
@@ -256,12 +407,14 @@ describe('Client', () => {
   describe('updateProducts', () => {
     it('should call the correct endpoint with PATCH method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{}];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('updateProducts');
+      const mockResponse: ProcessFeedResponse = {
+        status: 'ACCEPTED',
+        acceptedCount: 1,
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
       const result = await client.updateProducts(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products', {

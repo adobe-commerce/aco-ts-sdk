@@ -65,7 +65,7 @@ jobs:
             echo "Found existing open PR #$EXISTING_PR_NUMBER for SDK updates. Updating with latest changes."
             git checkout $EXISTING_BRANCH
             git add .
-            git commit -m "chore: update SDK from OpenAPI spec"
+            git commit -m "chore: update SDK from OpenAPI spec $(date +%Y-%m-%d-%H%M%S)"
             git push origin $EXISTING_BRANCH
             echo "branch_name=$EXISTING_BRANCH" >> $GITHUB_OUTPUT
           else

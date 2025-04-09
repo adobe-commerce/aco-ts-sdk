@@ -13,7 +13,7 @@ awk '
 BEGIN { p=1 }
 /^servers:/ { 
   print "servers:";
-  print "  - url: https://na1.api.commerce.adobe.com/<TENANT_ID>/api/";
+  print "  - url: https://na1.api.commerce.adobe.com/<TENANT_ID>/";
   print "    description: Production endpoint. The TENANT_ID value is the identifier of the Adobe Commerce instance. See [Adobe Commerce Cloud Manager](https://experience.adobe.com/#/commerce/cloud-service/instances) to see your available instances.";
   print "";
   p=0 

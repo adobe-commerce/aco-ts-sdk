@@ -10,6 +10,11 @@ import {
   {{classname}},
 {{/model}}
 {{/models}}
+  FeedMetadataDataTypeEnum,
+  FeedProductStatusEnum,
+  FeedProductVisibleInEnum,
+  FeedMetadataVisibleInEnum,
+  ProductAttributeTypeEnum,
 } from '../src/types';
 
 // Mock the dependencies
@@ -30,6 +35,113 @@ describe('Client', () => {
     request: vi.fn(),
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const createMockData = (operationName: string): any[] => {
+    const baseMock = {
+      scope: { locale: 'en-US' }
+    };
+
+    switch (operationName) {
+      case 'createProductMetadata':
+      case 'updateProductMetadata':
+        return [{
+          ...baseMock,
+          code: 'test-attribute',
+          label: 'Test Attribute',
+          dataType: FeedMetadataDataTypeEnum.Text,
+          visibleIn: [FeedMetadataVisibleInEnum.ProductDetail],
+          filterable: true,
+          sortable: true,
+          searchable: true,
+          searchWeight: 1,
+          searchTypes: ['AUTOCOMPLETE']
+        }];
+
+      case 'deleteProductMetadata':
+        return [{
+          ...baseMock,
+          code: 'test-attribute'
+        }];
+
+      case 'createProducts':
+      case 'updateProducts':
+        return [{
+          ...baseMock,
+          sku: 'test-sku',
+          name: 'Test Product',
+          slug: 'test-product',
+          description: 'This is a test product created via the SDK',
+          shortDescription: 'test product',
+          status: FeedProductStatusEnum.Enabled,
+          visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+          attributes: [
+            {
+              code: 'brand',
+              type: ProductAttributeTypeEnum.String,
+              values: ['Test Brand']
+            },
+            {
+              code: 'category',
+              type: ProductAttributeTypeEnum.String,
+              values: ['Electronics']
+            }
+          ],
+          images: [
+            {
+              url: 'https://example.com/image.jpg',
+              label: 'Test Product Image',
+              roles: ['BASE', 'SMALL'],
+              customRoles: ['widget']
+            }
+          ],
+          links: [
+            {
+              type: 'VARIANT_OF',
+              sku: 'parent-product'
+            }
+          ],
+          routes: [
+            {
+              path: 'path/to/test-sku',
+              position: 2
+            }
+          ]
+        }];
+
+      case 'deleteProducts':
+        return [{
+          ...baseMock,
+          sku: 'test-sku'
+        }];
+
+      case 'createPrices':
+      case 'updatePrices':
+        return [{
+          sku: 'test-sku',
+          priceBookId: 'test-pricebook',
+          price: 99.99
+        }];
+
+      case 'deletePrices':
+        return [{
+          sku: 'test-sku',
+          priceBookId: 'test-pricebook'
+        }];
+
+      case 'createPriceBooks':
+      case 'updatePriceBooks':
+      case 'deletePriceBooks':
+        return [{
+          priceBookId: 'test-pricebook',
+          name: 'Test Price Book',
+          currency: 'USD'
+        }];
+
+      default:
+        return [{}];
+    }
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     (createHttpClient as Mock).mockReturnValue(mockHttpClient);
@@ -43,44 +155,15 @@ describe('Client', () => {
   describe('{{nickname}}', () => {
     it('should call the correct endpoint with {{httpMethod}} method', async () => {
       const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
-      const mockData = [{
-{{#allParams}}
-{{#isBodyParam}}
-{{#vars}}
-{{#isEnum}}
-        {{name}}: {{enumName}}.{{{defaultValue}}},
-{{/isEnum}}
-{{^isEnum}}
-{{#isPrimitiveType}}
-{{#isString}}
-        {{name}}: 'test-{{name}}',
-{{/isString}}
-{{#isInteger}}
-        {{name}}: 1,
-{{/isInteger}}
-{{#isNumber}}
-        {{name}}: 1.0,
-{{/isNumber}}
-{{#isBoolean}}
-        {{name}}: true,
-{{/isBoolean}}
-{{/isPrimitiveType}}
-{{^isPrimitiveType}}
-{{#isRequired}}
-        {{name}}: {{#isArray}}[]{{/isArray}}{{^isArray}}{}{{/isArray}},
-{{/isRequired}}
-{{/isPrimitiveType}}
-{{/isEnum}}
-{{/vars}}
-{{/isBodyParam}}
-{{/allParams}}
-      }];
-      const mockResponse = { accepted: 1 };
+      const mockData = createMockData('{{nickname}}');
+      const mockResponse: {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}ProcessFeedResponse{{/returnType}} = { 
+        status: 'ACCEPTED',
+        acceptedCount: 1 
+      };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      // @ts-expect-error - Ignore type check warning
-      const result = await client.{{nickname}}({{#allParams}}{{#isBodyParam}}mockData{{/isBodyParam}}{{/allParams}});
+      const result = await client.{{nickname}}(mockData);
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('{{{path}}}', {
         method: '{{httpMethod}}',
