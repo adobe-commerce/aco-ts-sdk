@@ -1319,7 +1319,6 @@ export enum ProductImageRolesEnum {
 export interface AdobeCredentials {
   clientId: string;
   clientSecret: string;
-  scopes: string;
 }
 
 export type Region = 'na1';

@@ -14,7 +14,7 @@ import {
 config();
 
 // Validate required environment variables
-const requiredEnvVars = ['IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_SCOPES', 'TENANT_ID', 'REGION', 'ENVIRONMENT'];
+const requiredEnvVars = ['IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'TENANT_ID', 'REGION', 'ENVIRONMENT'];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
@@ -28,7 +28,6 @@ async function main(): Promise<void> {
     {
       clientId: process.env.IMS_CLIENT_ID!,
       clientSecret: process.env.IMS_CLIENT_SECRET!,
-      scopes: process.env.IMS_SCOPES!,
     },
     process.env.TENANT_ID!,
     process.env.REGION as Region,

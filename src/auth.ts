@@ -19,6 +19,7 @@ export interface AuthService {
 
 const IMS_BASE_URL = 'https://ims-na1.adobelogin.com';
 const TOKEN_BUFFER_SECONDS = 300; // 5 minutes
+const DEFAULT_SCOPES = 'adobeio_api,openid,AdobeID,read_organizations';
 
 interface TokenResponse {
   access_token: string;
@@ -32,7 +33,7 @@ interface CachedToken {
 }
 
 export function createAuthService(credentials: AdobeCredentials, imsBaseUrlOverride?: string): AuthService {
-  if (!credentials.clientId || !credentials.clientSecret || !credentials.scopes) {
+  if (!credentials.clientId || !credentials.clientSecret) {
     throw new ConfigurationError('Required credentials are missing');
   }
 
@@ -50,7 +51,7 @@ export function createAuthService(credentials: AdobeCredentials, imsBaseUrlOverr
       client_id: credentials.clientId,
       client_secret: credentials.clientSecret,
       grant_type: 'client_credentials',
-      scope: credentials.scopes,
+      scope: DEFAULT_SCOPES,
     });
 
     const response = await fetch(imsTokenEndpoint, {
