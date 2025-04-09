@@ -322,10 +322,9 @@ export interface FeedPrices {
    * Active discounts
    *
    * @memberof FeedPrices
-   * @type {Array & lt;
-   * FeedPricesDiscountsInner & gt}
+   * @type {FeedPricesDiscountsInner[]}
    */
-  discounts?: Array<FeedPricesDiscountsInner>;
+  discounts?: FeedPricesDiscountsInner[];
 }
 /**
  * Delete product price information.
@@ -402,10 +401,9 @@ export interface FeedPricesUpdate {
    * Active discounts
    *
    * @memberof FeedPricesUpdate
-   * @type {Array & lt;
-   * FeedPricesDiscountsInner & gt}
+   * @type {FeedPricesDiscountsInner[]}
    */
-  discounts?: Array<FeedPricesDiscountsInner>;
+  discounts?: FeedPricesDiscountsInner[];
 }
 /**
  * @export
@@ -474,60 +472,53 @@ export interface FeedProduct {
    * Meta attributes that are specified in <meta> tags.
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductMetaAttribute & gt}
+   * @type {ProductMetaAttribute[]}
    */
-  metaTags?: Array<ProductMetaAttribute>;
+  metaTags?: ProductMetaAttribute[];
   /**
    * A list of product attributes.
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductAttribute & gt}
+   * @type {ProductAttribute[]}
    */
-  attributes?: Array<ProductAttribute>;
+  attributes?: ProductAttribute[];
   /**
    * A list of product images.
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductImage & gt}
+   * @type {ProductImage[]}
    */
-  images?: Array<ProductImage>;
+  images?: ProductImage[];
   /**
    * A list of linked SKUs.
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductLink & gt}
+   * @type {ProductLink[]}
    */
-  links?: Array<ProductLink>;
+  links?: ProductLink[];
   /**
    * A list of product routes.
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductRoutes & gt}
+   * @type {ProductRoutes[]}
    */
-  routes?: Array<ProductRoutes>;
+  routes?: ProductRoutes[];
   /**
    * Composite products, such as configurable products, must provide a list of product options that a shopper can select
    * (for example, "color", "size", etc.).
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductConfiguration & gt}
+   * @type {ProductConfiguration[]}
    */
-  configurations?: Array<ProductConfiguration>;
+  configurations?: ProductConfiguration[];
   /**
    * Composite products, such as bundle products, must include a list of individual products that are part of the
    * bundle, organized into groups (for example, "shirts", "pants", "accessories").
    *
    * @memberof FeedProduct
-   * @type {Array & lt;
-   * ProductBundle & gt}
+   * @type {ProductBundle[]}
    */
-  bundles?: Array<ProductBundle>;
+  bundles?: ProductBundle[];
 }
 /**
  * @export
@@ -614,62 +605,55 @@ export interface FeedProductUpdate {
    * Meta attributes that are specified in <meta> tags.
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductMetaAttribute & gt}
+   * @type {ProductMetaAttribute[]}
    */
-  metaTags?: Array<ProductMetaAttribute>;
+  metaTags?: ProductMetaAttribute[];
   /**
    * A list of product attributes.
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductAttribute & gt}
+   * @type {ProductAttribute[]}
    */
-  attributes?: Array<ProductAttribute>;
+  attributes?: ProductAttribute[];
   /**
    * A list of product images.
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductImage & gt}
+   * @type {ProductImage[]}
    */
-  images?: Array<ProductImage>;
+  images?: ProductImage[];
   /**
    * A list of linked SKUs. For product variants, this is a required field that establishes a link between a product
    * variant and the corresponding configurable product. `VARIANT_OF` link type must be specified to establish a
    * connection to the configurable product SKU.
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductLink & gt}
+   * @type {ProductLink[]}
    */
-  links?: Array<ProductLink>;
+  links?: ProductLink[];
   /**
    * A list of product routes.
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductRoutes & gt}
+   * @type {ProductRoutes[]}
    */
-  routes?: Array<ProductRoutes>;
+  routes?: ProductRoutes[];
   /**
    * Composite products, such as configurable products, must provide a list of product options that a shopper can select
    * (for example, "color", "size", etc.).
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductConfiguration & gt}
+   * @type {ProductConfiguration[]}
    */
-  configurations?: Array<ProductConfiguration>;
+  configurations?: ProductConfiguration[];
   /**
    * Composite products, such as bundle products, must include a list of individual products that are part of the
    * bundle, organized into groups (for example, "shirts", "pants", "accessories").
    *
    * @memberof FeedProductUpdate
-   * @type {Array & lt;
-   * ProductBundle & gt}
+   * @type {ProductBundle[]}
    */
-  bundles?: Array<ProductBundle>;
+  bundles?: ProductBundle[];
 }
 /**
  * @export
@@ -728,10 +712,9 @@ export interface Model400ProcessFeedResponse {
    * List of items that did not pass validation. Fix the payload for invalid items before resubmitting the request.
    *
    * @memberof Model400ProcessFeedResponse
-   * @type {Array & lt;
-   * FeedItemFailedValidationResult & gt}
+   * @type {FeedItemFailedValidationResult[]}
    */
-  errors?: Array<FeedItemFailedValidationResult>;
+  errors?: FeedItemFailedValidationResult[];
 }
 /**
  * @export
@@ -873,10 +856,9 @@ export interface ProductAttribute {
    * A list of value(s) associated with a specified attribute code.
    *
    * @memberof ProductAttribute
-   * @type {Array & lt;
-   * string & gt}
+   * @type {string[]}
    */
-  values: Array<string>;
+  values: string[];
   /**
    * The variant reference ID establishes a link between a product variant and the corresponding [Option Value
    * ID](#operation/ProductsPost!path=options/values/id&t=request) in a configurable product. A variant reference ID can
@@ -919,19 +901,17 @@ export interface ProductBundle {
    * A list of default product SKUs that are selected in this bundle group.
    *
    * @memberof ProductBundle
-   * @type {Array & lt;
-   * string & gt}
+   * @type {string[]}
    */
-  defaultItemSkus?: Array<string>;
+  defaultItemSkus?: string[];
   /**
    * A list of individual products that are part of the bundle. Each item in the list represents a product that can be
    * selected as part of the bundle.
    *
    * @memberof ProductBundle
-   * @type {Array & lt;
-   * ProductBundleItem & gt}
+   * @type {ProductBundleItem[]}
    */
-  items: Array<ProductBundleItem>;
+  items: ProductBundleItem[];
 }
 /**
  * @export
@@ -1000,10 +980,9 @@ export interface ProductConfiguration {
    * A list of option values. Defines option values available to shoppers (for example, "red" color or "large" size).
    *
    * @memberof ProductConfiguration
-   * @type {Array & lt;
-   * ProductOptionValue & gt}
+   * @type {ProductOptionValue[]}
    */
-  values: Array<ProductOptionValue>;
+  values: ProductOptionValue[];
 }
 /**
  * @export
@@ -1039,10 +1018,9 @@ export interface ProductImage {
    * Custom image role. Merchants can define custom roles in addition to the predefined values.
    *
    * @memberof ProductImage
-   * @type {Array & lt;
-   * string & gt}
+   * @type {string[]}
    */
-  customRoles?: Array<string>;
+  customRoles?: string[];
 }
 /**
  * Product association
@@ -1084,10 +1062,9 @@ export interface ProductMetaAttribute {
    * A meta keywords
    *
    * @memberof ProductMetaAttribute
-   * @type {Array & lt;
-   * string & gt}
+   * @type {string[]}
    */
-  keywords?: Array<string>;
+  keywords?: string[];
   /**
    * A meta description
    *
