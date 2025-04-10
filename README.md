@@ -1,24 +1,36 @@
 # Adobe Commerce Optimizer SDK
 
-A TypeScript SDK for easy integration with the Adobe Commerce Optimizer Data Ingestion API.
+The Adobe Commerce Optimizer (ACO) SDK provides an easy integration point with the Adobe Commerce Optimizer Data
+Ingestion API. With the ACO SDK, you do not need to manage the full integration with catalog ingestion APIs and IMS
+authentication methods. Simply follow the guide below to install and begin using the ACO client SDK directly in your
+codebase.
 
-## Documentation
-
-For complete API documentation, visit the
-[Adobe Commerce Composable Catalog Documentation](https://developer-stage.adobe.com/commerce/services/composable-catalog/data-ingestion).
+For complete Merchandising Services documentation, visit the
+[Adobe Developer Documentation](https://developer-stage.adobe.com/commerce/services/composable-catalog/) site.
 
 ## Installation
 
 ```bash
-npm install @adobe/aco-ts-sdk
+npm install @adobe-commerce/aco-ts-sdk
 ```
 
-## Creating a Client
+## Create the Client
 
-The SDK provides a client for interacting with the Adobe Commerce Optimizer API. To create a client instance:
+To get started ingesting your catalog into Adobe Commerce Optimizer, you first need to create the client. In order to do
+this, use the `createClient` function provided in the `@adobe-commerce/aco-ts-sdk` package. The `createClient` function
+requires the following parameters:
+
+- `credentials`: The credentials object contains the IMS fields needed to authenticate with the ACO APIs
+  - `clientId`: This is your client id found in the Adobe Developer Console. See [documentation]().
+  - `clientSecret`: This is your client secret found in the Adobe Developer Console. See [documentation]().
+- `tenantId`: This is the identifier for your ACO instance. See [documentation]().
+- `region`: This is the region in which your ACO instance is deployed. Example: `na1` See [documentation]().
+- `environment`: This is your ACO instance's environment type: `sandbox` or `production`
+
+### Example:
 
 ```typescript
-import { createClient, Environment, Region } from '@adobe/aco-ts-sdk';
+import { createClient, Environment, Region } from '@adobe-commerce/aco-ts-sdk';
 
 const client = createClient(
   {
@@ -31,9 +43,16 @@ const client = createClient(
 );
 ```
 
-## Available Operations
+Once the `client` is initialized, you can begin ingesting your catalog data to Adobe Commerce Optimizer!
 
-The client provides the following Catalog operations:
+## Ingest Catalog Data
+
+The ACO SDK Client provides the ability to easily manage the following entities in your catalog:
+
+- Products
+- Product Metadata
+- Price Books
+- Prices
 
 ### Product Operations
 
@@ -45,7 +64,7 @@ import {
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   ProductAttributeTypeEnum,
-} from '@adobe/aco-ts-sdk';
+} from '@adobe-commerce/aco-ts-sdk';
 
 const product1: FeedProduct = {
   sku: 'EXAMPLE-SKU-001',
@@ -88,7 +107,7 @@ const response = await client.createProducts([product1, product2]);
 #### Update Products
 
 ```typescript
-import { FeedProductUpdate } from '@adobe/aco-ts-sdk';
+import { FeedProductUpdate } from '@adobe-commerce/aco-ts-sdk';
 
 const productUpdate: FeedProductUpdate = {
   sku: 'EXAMPLE-SKU-001',
@@ -103,7 +122,7 @@ const response = await client.updateProducts([productUpdate]);
 #### Delete Products
 
 ```typescript
-import { FeedProductDelete } from '@adobe/aco-ts-sdk';
+import { FeedProductDelete } from '@adobe-commerce/aco-ts-sdk';
 
 const productDelete: FeedProductDelete = {
   sku: 'EXAMPLE-SKU-001',
@@ -119,7 +138,7 @@ const response = await client.deleteProducts([productDelete]);
 #### Create Product Metadata
 
 ```typescript
-import { FeedMetadata, FeedMetadataDataTypeEnum, FeedMetadataVisibleInEnum } from '@adobe/aco-ts-sdk';
+import { FeedMetadata, FeedMetadataDataTypeEnum, FeedMetadataVisibleInEnum } from '@adobe-commerce/aco-ts-sdk';
 
 const metadata: FeedMetadata = {
   code: 'color',
@@ -139,7 +158,7 @@ const response = await client.createProductMetadata([metadata]);
 #### Update Product Metadata
 
 ```typescript
-import { FeedMetadataUpdate } from '@adobe/aco-ts-sdk';
+import { FeedMetadataUpdate } from '@adobe-commerce/aco-ts-sdk';
 
 const metadataUpdate: FeedMetadataUpdate = {
   code: 'color',
@@ -154,7 +173,7 @@ const response = await client.updateProductMetadata([metadataUpdate]);
 #### Delete Product Metadata
 
 ```typescript
-import { FeedMetadataDelete } from '@adobe/aco-ts-sdk';
+import { FeedMetadataDelete } from '@adobe-commerce/aco-ts-sdk';
 
 const metadataDelete: FeedMetadataDelete = {
   code: 'color',
@@ -170,7 +189,7 @@ const response = await client.deleteProductMetadata([metadataDelete]);
 #### Create Price Books
 
 ```typescript
-import { FeedPricebook } from '@adobe/aco-ts-sdk';
+import { FeedPricebook } from '@adobe-commerce/aco-ts-sdk';
 
 const pricebook: FeedPricebook = {
   code: 'default',
@@ -199,7 +218,7 @@ const response = await client.updatePriceBooks([pricebookUpdate]);
 #### Delete Price Books
 
 ```typescript
-import { FeedPricebook } from '@adobe/aco-ts-sdk';
+import { FeedPricebook } from '@adobe-commerce/aco-ts-sdk';
 
 const pricebookDelete: FeedPricebook = {
   code: 'default',
@@ -214,7 +233,7 @@ const response = await client.deletePriceBooks([pricebookDelete]);
 #### Create Prices
 
 ```typescript
-import { FeedPrices } from '@adobe/aco-ts-sdk';
+import { FeedPrices } from '@adobe-commerce/aco-ts-sdk';
 
 const price: FeedPrices = {
   sku: 'EXAMPLE-SKU-001',
@@ -230,7 +249,7 @@ const response = await client.createPrices([price]);
 #### Update Prices
 
 ```typescript
-import { FeedPricesUpdate } from '@adobe/aco-ts-sdk';
+import { FeedPricesUpdate } from '@adobe-commerce/aco-ts-sdk';
 
 const priceUpdate: FeedPricesUpdate = {
   sku: 'EXAMPLE-SKU-001',
@@ -246,7 +265,7 @@ const response = await client.updatePrices([priceUpdate]);
 #### Delete Prices
 
 ```typescript
-import { FeedPricesDelete } from '@adobe/aco-ts-sdk';
+import { FeedPricesDelete } from '@adobe-commerce/aco-ts-sdk';
 
 const priceDelete: FeedPricesDelete = {
   sku: 'EXAMPLE-SKU-001',
@@ -260,4 +279,5 @@ const response = await client.deletePrices([priceDelete]);
 
 ## Types
 
-See the [types.ts](https://github.com/adobe-commerce/aco-ts-sdk/blob/main/src/types.ts) file for all exported types.
+See the [types.ts](https://github.com/adobe-commerce/aco-ts-sdk/blob/main/src/types.ts) file for all exported type
+definitions.
