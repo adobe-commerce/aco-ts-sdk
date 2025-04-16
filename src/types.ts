@@ -1292,7 +1292,12 @@ export enum ProductImageRolesEnum {
   Swatch = 'SWATCH',
 }
 
-// Config Types
+/**
+ * Adobe IMS credentials
+ *
+ * @param clientId - The client ID for the API requests
+ * @param clientSecret - The client secret for the API requests
+ */
 export interface AdobeCredentials {
   clientId: string;
   clientSecret: string;
@@ -1301,3 +1306,18 @@ export interface AdobeCredentials {
 export type Region = 'na1';
 
 export type Environment = 'production' | 'sandbox';
+
+/**
+ * Client configuration
+ *
+ * @param credentials - Adobe IMS credentials for authentication
+ * @param tenantId - The tenant ID for the API requests
+ * @param region - The region for the API endpoint (e.g., 'us', 'eu')
+ * @param environment - The environment to use ('production' or 'sandbox')
+ */
+export interface ClientConfig {
+  credentials: AdobeCredentials;
+  tenantId: string;
+  region: Region;
+  environment: Environment;
+}

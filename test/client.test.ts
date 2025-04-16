@@ -21,6 +21,7 @@ import { createHttpClient } from '../src/http-client';
 import { createAuthService } from '../src/auth';
 import {
   ProcessFeedResponse,
+  ClientConfig,
   FeedMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
@@ -175,7 +176,13 @@ describe('Client', () => {
 
   describe('createProductMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('createProductMetadata');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -196,7 +203,13 @@ describe('Client', () => {
 
   describe('deleteProductMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('deleteProductMetadata');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -217,7 +230,13 @@ describe('Client', () => {
 
   describe('updateProductMetadata', () => {
     it('should call the correct endpoint with PATCH method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('updateProductMetadata');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -238,7 +257,13 @@ describe('Client', () => {
 
   describe('createPriceBooks', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('createPriceBooks');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -259,7 +284,13 @@ describe('Client', () => {
 
   describe('deletePriceBooks', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('deletePriceBooks');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -280,7 +311,13 @@ describe('Client', () => {
 
   describe('updatePriceBooks', () => {
     it('should call the correct endpoint with PATCH method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('updatePriceBooks');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -301,7 +338,13 @@ describe('Client', () => {
 
   describe('createPrices', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('createPrices');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -322,7 +365,13 @@ describe('Client', () => {
 
   describe('deletePrices', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('deletePrices');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -343,7 +392,13 @@ describe('Client', () => {
 
   describe('updatePrices', () => {
     it('should call the correct endpoint with PATCH method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('updatePrices');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -364,7 +419,13 @@ describe('Client', () => {
 
   describe('createProducts', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('createProducts');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -385,7 +446,13 @@ describe('Client', () => {
 
   describe('deleteProducts', () => {
     it('should call the correct endpoint with POST method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('deleteProducts');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',
@@ -406,7 +473,13 @@ describe('Client', () => {
 
   describe('updateProducts', () => {
     it('should call the correct endpoint with PATCH method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('updateProducts');
       const mockResponse: ProcessFeedResponse = {
         status: 'ACCEPTED',

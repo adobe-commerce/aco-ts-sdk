@@ -10,6 +10,7 @@ import {
   {{classname}},
 {{/model}}
 {{/models}}
+  ClientConfig,
   FeedMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
@@ -154,7 +155,13 @@ describe('Client', () => {
 {{#operation}}
   describe('{{nickname}}', () => {
     it('should call the correct endpoint with {{httpMethod}} method', async () => {
-      const client = createClient(mockCredentials, mockTenantId, mockRegion, mockEnvironment);
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
       const mockData = createMockData('{{nickname}}');
       const mockResponse: {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}ProcessFeedResponse{{/returnType}} = { 
         status: 'ACCEPTED',

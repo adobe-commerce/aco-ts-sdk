@@ -8,42 +8,67 @@ codebase.
 For complete Merchandising Services documentation, visit the
 [Adobe Developer Documentation](https://developer-stage.adobe.com/commerce/services/composable-catalog/) site.
 
-## Installation
+## Install the SDK
 
 ```bash
 npm install @adobe-commerce/aco-ts-sdk
 ```
 
-## Create the Client
+## Initialize the SDK
 
 To get started ingesting your catalog into Adobe Commerce Optimizer, you first need to create the client. In order to do
 this, use the `createClient` function provided in the `@adobe-commerce/aco-ts-sdk` package. The `createClient` function
-requires the following parameters:
+accepts a client configuration object of type `ClientConfig`. The `ClientConfig` object requires the following:
 
 - `credentials`: The credentials object contains the IMS fields needed to authenticate with the ACO APIs
   - `clientId`: This is your client id found in the Adobe Developer Console. See [documentation]().
   - `clientSecret`: This is your client secret found in the Adobe Developer Console. See [documentation]().
 - `tenantId`: This is the identifier for your ACO instance. See [documentation]().
-- `region`: This is the region in which your ACO instance is deployed. Example: `na1` See [documentation]().
+- `region`: This is the region in which your ACO instance is deployed. Example: `na1`. See [documentation]().
 - `environment`: This is your ACO instance's environment type: `sandbox` or `production`
+
+### How do I find my configuration values?
+
+In the [Commerce Cloud Manager](https://experience.adobe.com/#/@commerceprojectbeacon/commerce/cloud-service/instances),
+you will see a list of all of the instances you have provisioned. Find the instance you want to point the ACO SDK to and
+click the "Instance info" icon. In the popup, find the `GraphQL endpoint` URL. From this URL, we can determine the
+required `tenantId`, `region`, and `environment` configuration variables.
+
+The URL is composed of the following: `https://{region}[-sandbox].api.commerce.adobe.com/{tenantId}/graphql` As an
+example, if your GraphQL endpoint URL is `https://na1-sandbox.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
+then your configuration variables are as follows:
+
+- `tenantId`: `WVYj1WZf8ifzLH7n6WAVas`
+- `region`: `na1`
+- `environment`: `sandbox`
+
+_Note:_ Only the `sandbox` environment type will have its `environment` explicitly designated in the URL. If the
+environment type is `production`, then the `environment` will be omitted from the URL. Example:
+
+- Sandbox: `https://na1-sandbox.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
+- Production: `https://na1.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
 
 ### Example:
 
 ```typescript
-import { createClient, Environment, Region } from '@adobe-commerce/aco-ts-sdk';
+import { createClient, Client, ClientConfig, Environment, Region } from '@adobe-commerce/aco-ts-sdk';
 
-const client = createClient(
-  {
+// Define your configuration
+const config: ClientConfig = {
+  credentials: {
     clientId: 'my-client-id', // Your IMS client id from Dev Console
     clientSecret: 'my-client-secret', // Your IMS client secret from Dev Console
   },
-  'my-tenant-id', // Your instance's tenant id found in Commerce Cloud Manager UI
-  'na1' as Region, // Your instance's region
-  'sandbox' as Environment, // Your instance's environment type: sandbox or production
-);
+  tenantId: 'my-tenant-id', // Your instance's tenant id found in Commerce Cloud Manager UI
+  region: 'na1' as Region, // Your instance's region found in Commerce Cloud Manager UI
+  environment: 'sandbox' as Environment, // Your instance's environment type: sandbox or production
+};
+
+// Initialize the client instance
+const client: Client = createClient(config);
 ```
 
-Once the `client` is initialized, you can begin ingesting your catalog data to Adobe Commerce Optimizer!
+Once the `client` is initialized, you can begin ingesting your catalog data into Adobe Commerce Optimizer!
 
 ## Ingest Catalog Data
 

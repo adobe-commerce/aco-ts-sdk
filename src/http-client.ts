@@ -26,7 +26,8 @@ export function createHttpClient(
   baseUrlOverride?: string,
 ): HttpClient {
   const baseUrl =
-    baseUrlOverride || `https://${region}${environment === 'production' ? '' : '-sandbox'}.api.commerce.adobe.com`;
+    baseUrlOverride ||
+    `https://${region.toLowerCase()}${environment.toLowerCase() === 'production' ? '' : '-sandbox'}.api.commerce.adobe.com`;
   const timeout = 10000;
   const maxRetries = 3;
   const retryDelay = 1000;

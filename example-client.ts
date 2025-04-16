@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 import { config } from 'dotenv';
-import { createClient } from './src/client';
+import { createClient, Client } from './src/client';
 import {
+  ClientConfig,
   Region,
   Environment,
   FeedProduct,
@@ -23,16 +24,19 @@ for (const envVar of requiredEnvVars) {
 }
 
 async function main(): Promise<void> {
-  // Create client instance
-  const client = createClient(
-    {
+  // Define your configuration
+  const config: ClientConfig = {
+    credentials: {
       clientId: process.env.IMS_CLIENT_ID!,
       clientSecret: process.env.IMS_CLIENT_SECRET!,
     },
-    process.env.TENANT_ID!,
-    process.env.REGION as Region,
-    process.env.ENVIRONMENT as Environment,
-  );
+    tenantId: process.env.TENANT_ID!,
+    region: process.env.REGION as Region,
+    environment: process.env.ENVIRONMENT as Environment,
+  };
+
+  // Initialize the client instance
+  const client: Client = createClient(config);
 
   // Define a couple of products
   const product1: FeedProduct = {

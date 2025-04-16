@@ -5,6 +5,7 @@ import {
   AdobeCredentials,
   Region,
   Environment,
+  ClientConfig,
 {{#models}}
 {{#model}}
   {{classname}},
@@ -40,32 +41,30 @@ export interface Client {
  *
  * @example
  *   ```typescript
- *   const client = createClient(
- *     {
- *       clientId: 'your-client-id',
- *       clientSecret: 'your-client-secret'
+ *   // Define your configuration
+ *   const config = {
+ *     credentials: {
+ *       clientId: process.env.IMS_CLIENT_ID!,
+ *       clientSecret: process.env.IMS_CLIENT_SECRET!,
  *     },
- *     'your-tenant-id',
- *     'na1',
- *     'sandbox'
- *   );
+ *     tenantId: process.env.TENANT_ID!,
+ *     region: process.env.REGION as Region,
+ *     environment: process.env.ENVIRONMENT as Environment,
+ *   };
+ *
+ *   // Initialize the client instance
+ *   const client = createClient(config);
  *
  *   // Use the client to interact with the API
  *   const response = await client.createProducts([product]);
  *   ```;
  *
- * @param credentials - Adobe IMS credentials for authentication
- * @param tenantId - The tenant ID for the API requests
- * @param region - The region for the API endpoint (e.g., 'us', 'eu')
- * @param environment - The environment to use ('production' or 'sandbox')
+ * @param clientConfig {ClientConfig} - SDK client configuration and authentication credentials
  * @returns {Client} A client instance with methods for interacting with the API
  */
-export function createClient(
-  credentials: AdobeCredentials,
-  tenantId: string,
-  region: Region,
-  environment: Environment
-): Client {
+export function createClient(clientConfig: ClientConfig): Client {
+  const { credentials, tenantId, region, environment } = clientConfig;
+
   // Read .env overrides if present
   config();
   const auth = createAuthService(credentials, process.env.IMS_BASE_URL_OVERRIDE ?? undefined);
