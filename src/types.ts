@@ -101,10 +101,8 @@ export interface FeedMetadata {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
+   * Determines how the attribute is used on the storefront. * `CATALOG`: Product attribute is visible in product
+   * listing, detail, and compare pages. * `SEARCH`: Product attribute is visible on Search Results Page.
    *
    * @memberof FeedMetadata
    * @type {FeedMetadataVisibleInEnum[]}
@@ -201,10 +199,8 @@ export interface FeedMetadataUpdate {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
+   * Determines how the attribute is used on the storefront. * `SEARCH`: Product attribute is visible on Search Results
+   * Page. * `CATALOG`: Product is visible in Product Listing, Detail, and Compare pages.
    *
    * @memberof FeedMetadataUpdate
    * @type {FeedMetadataUpdateVisibleInEnum[]}
@@ -322,9 +318,10 @@ export interface FeedPrices {
    * Active discounts
    *
    * @memberof FeedPrices
-   * @type {FeedPricesDiscountsInner[]}
+   * @type {Array & lt;
+   * FeedPricesDiscountsInner & gt}
    */
-  discounts?: FeedPricesDiscountsInner[];
+  discounts?: Array<FeedPricesDiscountsInner>;
 }
 /**
  * Delete product price information.
@@ -401,9 +398,10 @@ export interface FeedPricesUpdate {
    * Active discounts
    *
    * @memberof FeedPricesUpdate
-   * @type {FeedPricesDiscountsInner[]}
+   * @type {Array & lt;
+   * FeedPricesDiscountsInner & gt}
    */
-  discounts?: FeedPricesDiscountsInner[];
+  discounts?: Array<FeedPricesDiscountsInner>;
 }
 /**
  * @export
@@ -472,53 +470,60 @@ export interface FeedProduct {
    * Meta attributes that are specified in <meta> tags.
    *
    * @memberof FeedProduct
-   * @type {ProductMetaAttribute[]}
+   * @type {Array & lt;
+   * ProductMetaAttribute & gt}
    */
-  metaTags?: ProductMetaAttribute[];
+  metaTags?: Array<ProductMetaAttribute>;
   /**
    * A list of product attributes.
    *
    * @memberof FeedProduct
-   * @type {ProductAttribute[]}
+   * @type {Array & lt;
+   * ProductAttribute & gt}
    */
-  attributes?: ProductAttribute[];
+  attributes?: Array<ProductAttribute>;
   /**
    * A list of product images.
    *
    * @memberof FeedProduct
-   * @type {ProductImage[]}
+   * @type {Array & lt;
+   * ProductImage & gt}
    */
-  images?: ProductImage[];
+  images?: Array<ProductImage>;
   /**
    * A list of linked SKUs.
    *
    * @memberof FeedProduct
-   * @type {ProductLink[]}
+   * @type {Array & lt;
+   * ProductLink & gt}
    */
-  links?: ProductLink[];
+  links?: Array<ProductLink>;
   /**
    * A list of product routes.
    *
    * @memberof FeedProduct
-   * @type {ProductRoutes[]}
+   * @type {Array & lt;
+   * ProductRoutes & gt}
    */
-  routes?: ProductRoutes[];
+  routes?: Array<ProductRoutes>;
   /**
    * Composite products, such as configurable products, must provide a list of product options that a shopper can select
    * (for example, "color", "size", etc.).
    *
    * @memberof FeedProduct
-   * @type {ProductConfiguration[]}
+   * @type {Array & lt;
+   * ProductConfiguration & gt}
    */
-  configurations?: ProductConfiguration[];
+  configurations?: Array<ProductConfiguration>;
   /**
    * Composite products, such as bundle products, must include a list of individual products that are part of the
    * bundle, organized into groups (for example, "shirts", "pants", "accessories").
    *
    * @memberof FeedProduct
-   * @type {ProductBundle[]}
+   * @type {Array & lt;
+   * ProductBundle & gt}
    */
-  bundles?: ProductBundle[];
+  bundles?: Array<ProductBundle>;
 }
 /**
  * @export
@@ -605,55 +610,62 @@ export interface FeedProductUpdate {
    * Meta attributes that are specified in <meta> tags.
    *
    * @memberof FeedProductUpdate
-   * @type {ProductMetaAttribute[]}
+   * @type {Array & lt;
+   * ProductMetaAttribute & gt}
    */
-  metaTags?: ProductMetaAttribute[];
+  metaTags?: Array<ProductMetaAttribute>;
   /**
    * A list of product attributes.
    *
    * @memberof FeedProductUpdate
-   * @type {ProductAttribute[]}
+   * @type {Array & lt;
+   * ProductAttribute & gt}
    */
-  attributes?: ProductAttribute[];
+  attributes?: Array<ProductAttribute>;
   /**
    * A list of product images.
    *
    * @memberof FeedProductUpdate
-   * @type {ProductImage[]}
+   * @type {Array & lt;
+   * ProductImage & gt}
    */
-  images?: ProductImage[];
+  images?: Array<ProductImage>;
   /**
    * A list of linked SKUs. For product variants, this is a required field that establishes a link between a product
    * variant and the corresponding configurable product. `VARIANT_OF` link type must be specified to establish a
    * connection to the configurable product SKU.
    *
    * @memberof FeedProductUpdate
-   * @type {ProductLink[]}
+   * @type {Array & lt;
+   * ProductLink & gt}
    */
-  links?: ProductLink[];
+  links?: Array<ProductLink>;
   /**
    * A list of product routes.
    *
    * @memberof FeedProductUpdate
-   * @type {ProductRoutes[]}
+   * @type {Array & lt;
+   * ProductRoutes & gt}
    */
-  routes?: ProductRoutes[];
+  routes?: Array<ProductRoutes>;
   /**
    * Composite products, such as configurable products, must provide a list of product options that a shopper can select
    * (for example, "color", "size", etc.).
    *
    * @memberof FeedProductUpdate
-   * @type {ProductConfiguration[]}
+   * @type {Array & lt;
+   * ProductConfiguration & gt}
    */
-  configurations?: ProductConfiguration[];
+  configurations?: Array<ProductConfiguration>;
   /**
    * Composite products, such as bundle products, must include a list of individual products that are part of the
    * bundle, organized into groups (for example, "shirts", "pants", "accessories").
    *
    * @memberof FeedProductUpdate
-   * @type {ProductBundle[]}
+   * @type {Array & lt;
+   * ProductBundle & gt}
    */
-  bundles?: ProductBundle[];
+  bundles?: Array<ProductBundle>;
 }
 /**
  * @export
@@ -712,9 +724,44 @@ export interface Model400ProcessFeedResponse {
    * List of items that did not pass validation. Fix the payload for invalid items before resubmitting the request.
    *
    * @memberof Model400ProcessFeedResponse
-   * @type {FeedItemFailedValidationResult[]}
+   * @type {Array & lt;
+   * FeedItemFailedValidationResult & gt}
    */
-  errors?: FeedItemFailedValidationResult[];
+  errors?: Array<FeedItemFailedValidationResult>;
+}
+/**
+ * @export
+ * @interface Model401Response
+ */
+export interface Model401Response {
+  /**
+   * Error title
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  title?: string;
+  /**
+   * Error status code
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  status?: string;
+  /**
+   * Error code
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  errorCode?: string;
+  /**
+   * Error message
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  message?: string;
 }
 /**
  * @export
@@ -722,6 +769,20 @@ export interface Model400ProcessFeedResponse {
  */
 export interface Model403Response {
   /**
+   * Error title
+   *
+   * @memberof Model403Response
+   * @type {string}
+   */
+  title?: string;
+  /**
+   * Error status code
+   *
+   * @memberof Model403Response
+   * @type {string}
+   */
+  status?: string;
+  /**
    * Error code
    *
    * @memberof Model403Response
@@ -732,80 +793,6 @@ export interface Model403Response {
    * Error message
    *
    * @memberof Model403Response
-   * @type {string}
-   */
-  message?: string;
-  /**
-   * @memberof Model403Response
-   * @type {Model403UnauthorizedError}
-   */
-  error?: Model403UnauthorizedError;
-}
-/**
- * @export
- * @interface Model403Unauthorized
- */
-export interface Model403Unauthorized {
-  /**
-   * @memberof Model403Unauthorized
-   * @type {Model403UnauthorizedError}
-   */
-  error?: Model403UnauthorizedError;
-}
-/**
- * @export
- * @interface Model403UnauthorizedError
- */
-export interface Model403UnauthorizedError {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedError
-   * @type {string}
-   */
-  code?: string;
-  /**
-   * Error message
-   *
-   * @memberof Model403UnauthorizedError
-   * @type {string}
-   */
-  message?: string;
-  /**
-   * @memberof Model403UnauthorizedError
-   * @type {Model403UnauthorizedErrorDetails}
-   */
-  details?: Model403UnauthorizedErrorDetails;
-}
-/**
- * @export
- * @interface Model403UnauthorizedErrorDetails
- */
-export interface Model403UnauthorizedErrorDetails {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedErrorDetails
-   * @type {string}
-   */
-  errorCode?: string;
-}
-/**
- * @export
- * @interface Model403UnauthorizedInvalidJWT
- */
-export interface Model403UnauthorizedInvalidJWT {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedInvalidJWT
-   * @type {string}
-   */
-  errorCode?: string;
-  /**
-   * Error message
-   *
-   * @memberof Model403UnauthorizedInvalidJWT
    * @type {string}
    */
   message?: string;
@@ -856,9 +843,10 @@ export interface ProductAttribute {
    * A list of value(s) associated with a specified attribute code.
    *
    * @memberof ProductAttribute
-   * @type {string[]}
+   * @type {Array & lt;
+   * string & gt}
    */
-  values: string[];
+  values: Array<string>;
   /**
    * The variant reference ID establishes a link between a product variant and the corresponding [Option Value
    * ID](#operation/ProductsPost!path=options/values/id&t=request) in a configurable product. A variant reference ID can
@@ -901,17 +889,19 @@ export interface ProductBundle {
    * A list of default product SKUs that are selected in this bundle group.
    *
    * @memberof ProductBundle
-   * @type {string[]}
+   * @type {Array & lt;
+   * string & gt}
    */
-  defaultItemSkus?: string[];
+  defaultItemSkus?: Array<string>;
   /**
    * A list of individual products that are part of the bundle. Each item in the list represents a product that can be
    * selected as part of the bundle.
    *
    * @memberof ProductBundle
-   * @type {ProductBundleItem[]}
+   * @type {Array & lt;
+   * ProductBundleItem & gt}
    */
-  items: ProductBundleItem[];
+  items: Array<ProductBundleItem>;
 }
 /**
  * @export
@@ -980,9 +970,10 @@ export interface ProductConfiguration {
    * A list of option values. Defines option values available to shoppers (for example, "red" color or "large" size).
    *
    * @memberof ProductConfiguration
-   * @type {ProductOptionValue[]}
+   * @type {Array & lt;
+   * ProductOptionValue & gt}
    */
-  values: ProductOptionValue[];
+  values: Array<ProductOptionValue>;
 }
 /**
  * @export
@@ -1018,9 +1009,10 @@ export interface ProductImage {
    * Custom image role. Merchants can define custom roles in addition to the predefined values.
    *
    * @memberof ProductImage
-   * @type {string[]}
+   * @type {Array & lt;
+   * string & gt}
    */
-  customRoles?: string[];
+  customRoles?: Array<string>;
 }
 /**
  * Product association
@@ -1062,9 +1054,10 @@ export interface ProductMetaAttribute {
    * A meta keywords
    *
    * @memberof ProductMetaAttribute
-   * @type {string[]}
+   * @type {Array & lt;
+   * string & gt}
    */
-  keywords?: string[];
+  keywords?: Array<string>;
   /**
    * A meta description
    *
@@ -1153,10 +1146,8 @@ export interface Scope {
  * @enum {string}
  */
 export enum FeedMetadataVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
+  Catalog = 'CATALOG',
+  Search = 'SEARCH',
 }
 /**
  * Enum for FeedMetadata.dataType
@@ -1188,10 +1179,8 @@ export enum FeedMetadataSearchTypesEnum {
  * @enum {string}
  */
 export enum FeedMetadataUpdateVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
+  Catalog = 'CATALOG',
+  Search = 'SEARCH',
 }
 /**
  * Enum for FeedMetadataUpdate.dataType
