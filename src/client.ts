@@ -46,86 +46,89 @@ export interface Client {
    * attribute. - Use the `searchTypes` field to define the search type for the product attribute. To update existing
    * product attribute metadata, use the update operation.
    *
-   * @param data - FeedMetadata[] payload
+   * @param data - Array<FeedMetadata> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  createProductMetadata(data: FeedMetadata[]): Promise<ProcessFeedResponse>;
+  createProductMetadata(data: Array<FeedMetadata>): Promise<ProcessFeedResponse>;
   /**
    * Delete product attributes metadata. Remove product attribute metadata resources from the catalog data.
    *
-   * @param data - FeedMetadataDelete[] payload
+   * @param data - Array<FeedMetadataDelete> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deleteProductMetadata(data: FeedMetadataDelete[]): Promise<ProcessFeedResponse>;
+  deleteProductMetadata(data: Array<FeedMetadataDelete>): Promise<ProcessFeedResponse>;
   /**
    * Update product attribute metadata. Update existing product attribute metadata with new values. When the update is
    * processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy
    * is used to apply changes for fields in an `array`.
    *
-   * @param data - FeedMetadataUpdate[] payload
+   * @param data - Array<FeedMetadataUpdate> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ProcessFeedResponse>;
+  updateProductMetadata(data: Array<FeedMetadataUpdate>): Promise<ProcessFeedResponse>;
   /**
    * Create price books. Create or replace existing price books. Use the update operation to modify values for existing
    * price books.
    *
-   * @param data - FeedPricebook[] payload
+   * @param data - Array<FeedPricebook> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  createPriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse>;
+  createPriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse>;
   /**
-   * Delete price books. Delete existing price books. Note that you cannot delete the default price book with id `main`.
+   * Delete price books. Delete existing price books. When you delete a price book, all associated prices assigned to
+   * the `priceBookId` are also deleted. If a product does not have any other price books assigned, the prices default
+   * to the pricing schedule defined in the default, `main` price book. Note that you cannot delete the default price
+   * book with id `main`.
    *
-   * @param data - FeedPricebook[] payload
+   * @param data - Array<FeedPricebook> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deletePriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse>;
+  deletePriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse>;
   /**
    * Update price books. Update existing price books to change the name or the currency used for pricing. When the
    * update is processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace
    * strategy is used to apply changes for fields in an `array`. To update the currency for the default price book, use
    * the price book id `main`.
    *
-   * @param data - FeedPricebook[] payload
+   * @param data - Array<FeedPricebook> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  updatePriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse>;
+  updatePriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse>;
   /**
    * Create prices.<h3>Simple Products</h3> Create or replace existing product prices. A price must be associated with
    * at least the default price book with id `main`. <h3>Configurable Products</h3> Because configurable product price
    * is calculated based on the price of the selected product variant, you don't need to send price data for
    * configurable product skus. Sending price data for these skus can cause incorrect price calculations.
    *
-   * @param data - FeedPrices[] payload
+   * @param data - Array<FeedPrices> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  createPrices(data: FeedPrices[]): Promise<ProcessFeedResponse>;
+  createPrices(data: Array<FeedPrices>): Promise<ProcessFeedResponse>;
   /**
    * Delete prices. Delete existing product prices
    *
-   * @param data - FeedPricesDelete[] payload
+   * @param data - Array<FeedPricesDelete> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deletePrices(data: FeedPricesDelete[]): Promise<ProcessFeedResponse>;
+  deletePrices(data: Array<FeedPricesDelete>): Promise<ProcessFeedResponse>;
   /**
    * Update prices. Change existing product prices. When the update is processed, the merge strategy is used to apply
    * changes to `scalar` and `object` type fields. The replace strategy is used to apply changes for fields in an
    * `array`.
    *
-   * @param data - FeedPricesUpdate[] payload
+   * @param data - Array<FeedPricesUpdate> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  updatePrices(data: FeedPricesUpdate[]): Promise<ProcessFeedResponse>;
+  updatePrices(data: Array<FeedPricesUpdate>): Promise<ProcessFeedResponse>;
   /**
    * Create or replace products You can create different types of products, such as simple products and configurable
    * products. When creating products: - Each product requires a unique SKU identifier. - Products must have a defined
@@ -168,29 +171,29 @@ export interface Client {
    * API](#operation/ProductsPatch) to modify the groups and items in the bundle. - Use [Delete Product
    * API](#operation/ProductsDelete) to remove items from the bundle.
    *
-   * @param data - FeedProduct[] payload
+   * @param data - Array<FeedProduct> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  createProducts(data: FeedProduct[]): Promise<ProcessFeedResponse>;
+  createProducts(data: Array<FeedProduct>): Promise<ProcessFeedResponse>;
   /**
    * Delete products. Delete products with specified "sku" and "scope".
    *
-   * @param data - FeedProductDelete[] payload
+   * @param data - Array<FeedProductDelete> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deleteProducts(data: FeedProductDelete[]): Promise<ProcessFeedResponse>;
+  deleteProducts(data: Array<FeedProductDelete>): Promise<ProcessFeedResponse>;
   /**
    * Update products. Update products with specified "sku" and "scope" to replace existing field data with the data
    * supplied in the request. When the update is processed, the merge strategy is used to apply changes to `scalar` and
    * `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
    *
-   * @param data - FeedProductUpdate[] payload
+   * @param data - Array<FeedProductUpdate> payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  updateProducts(data: FeedProductUpdate[]): Promise<ProcessFeedResponse>;
+  updateProducts(data: Array<FeedProductUpdate>): Promise<ProcessFeedResponse>;
 }
 
 /**
@@ -228,84 +231,84 @@ export function createClient(clientConfig: ClientConfig): Client {
   const http = createHttpClient(auth, tenantId, region, environment, process.env.BASE_URL_OVERRIDE ?? undefined);
 
   return {
-    async createProductMetadata(data: FeedMetadata[]): Promise<ProcessFeedResponse> {
+    async createProductMetadata(data: Array<FeedMetadata>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/metadata`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async deleteProductMetadata(data: FeedMetadataDelete[]): Promise<ProcessFeedResponse> {
+    async deleteProductMetadata(data: Array<FeedMetadataDelete>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/metadata/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ProcessFeedResponse> {
+    async updateProductMetadata(data: Array<FeedMetadataUpdate>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/metadata`, {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
     },
 
-    async createPriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse> {
+    async createPriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/price-books`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async deletePriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse> {
+    async deletePriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/price-books/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async updatePriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse> {
+    async updatePriceBooks(data: Array<FeedPricebook>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/price-books`, {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
     },
 
-    async createPrices(data: FeedPrices[]): Promise<ProcessFeedResponse> {
+    async createPrices(data: Array<FeedPrices>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/prices`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async deletePrices(data: FeedPricesDelete[]): Promise<ProcessFeedResponse> {
+    async deletePrices(data: Array<FeedPricesDelete>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/prices/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async updatePrices(data: FeedPricesUpdate[]): Promise<ProcessFeedResponse> {
+    async updatePrices(data: Array<FeedPricesUpdate>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/prices`, {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
     },
 
-    async createProducts(data: FeedProduct[]): Promise<ProcessFeedResponse> {
+    async createProducts(data: Array<FeedProduct>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async deleteProducts(data: FeedProductDelete[]): Promise<ProcessFeedResponse> {
+    async deleteProducts(data: Array<FeedProductDelete>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async updateProducts(data: FeedProductUpdate[]): Promise<ProcessFeedResponse> {
+    async updateProducts(data: Array<FeedProductUpdate>): Promise<ProcessFeedResponse> {
       return await http.request<ProcessFeedResponse>(`/v1/catalog/products`, {
         method: 'PATCH',
         body: JSON.stringify(data),
