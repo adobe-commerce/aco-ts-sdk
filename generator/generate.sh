@@ -24,9 +24,6 @@ printf "########################\n"
 printf "\nDownloading latest OpenAPI spec from Adobe Docs repo (%s)...\n" "$SPEC_FILE_URL"
 curl -o "$TEMP_SPEC" "$SPEC_FILE_URL"
 
-printf "\nCleaning OpenAPI spec file...\n"
-./clean-openapi-spec.sh "$TEMP_SPEC"
-
 # Check if the spec has changed, unless force flag is set
 if [ "$FORCE" = false ] && [ -f "$CURRENT_SPEC" ] && cmp -s "$TEMP_SPEC" "$CURRENT_SPEC"; then
     printf "\nNo changes detected in OpenAPI spec. Skipping generation.\n"
@@ -55,8 +52,9 @@ if ! "$GENERATOR_CLI" generate -c "$(pwd)/generator-config.yaml" -i "$(pwd)/$CUR
 fi
 
 printf "\nFormatting generated code...\n\n"
+cd .. || exit 1
 # Post-process generated files to fix formatting issues
-FILES=($(find ../src ../test -name "*.ts" 2>/dev/null))
+FILES=($(find "$(pwd)/src" "$(pwd)/test" -name "*.ts" 2>/dev/null))
 for FILE in "${FILES[@]}"; do
     # Step 1: Fix encoded angle brackets in JSDoc comments
     sed -i '' 's/&lt;/</g' "$FILE"
@@ -78,7 +76,6 @@ for FILE in "${FILES[@]}"; do
 done
 
 # Running prettier to fix formatting issues
-cd .. || exit 1
 pnpm format
 
 printf "\nLinting generated code...\n\n"

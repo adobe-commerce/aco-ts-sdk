@@ -77,10 +77,10 @@ export function createHttpClient(
             headers,
           });
           return response;
-        } catch (error) {
-          if (attempt === maxRetries) throw error;
+        } catch (error: unknown) {
+          if (attempt === maxRetries) throw new ApiError('Could not execute API request: Max retries reached');
 
-          if (error instanceof ApiError && error.statusCode >= 400 && error.statusCode < 500) {
+          if (error instanceof ApiError && error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
             throw error;
           }
 
@@ -88,7 +88,7 @@ export function createHttpClient(
         }
       }
 
-      throw new ApiError('Could not execute request', 0);
+      throw new ApiError('Could not execute API request');
     },
   };
 }

@@ -34,7 +34,7 @@ export class InvalidInputError extends CommerceSdkError {
 export class ApiError extends CommerceSdkError {
   constructor(
     message: string,
-    public statusCode: number,
+    public statusCode?: number,
     public response?: unknown,
   ) {
     super(message);
