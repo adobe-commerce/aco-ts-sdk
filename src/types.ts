@@ -101,10 +101,8 @@ export interface FeedMetadata {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
+   * Determines how the attribute is used on the storefront. * `CATALOG`: Product attribute is visible in product
+   * listing, detail, and compare pages. * `SEARCH`: Product attribute is visible on Search Results Page.
    *
    * @memberof FeedMetadata
    * @type {FeedMetadataVisibleInEnum[]}
@@ -201,10 +199,8 @@ export interface FeedMetadataUpdate {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
+   * Determines how the attribute is used on the storefront. * `SEARCH`: Product attribute is visible on Search Results
+   * Page. * `CATALOG`: Product is visible in Product Listing, Detail, and Compare pages.
    *
    * @memberof FeedMetadataUpdate
    * @type {FeedMetadataUpdateVisibleInEnum[]}
@@ -718,10 +714,58 @@ export interface Model400ProcessFeedResponse {
 }
 /**
  * @export
+ * @interface Model401Response
+ */
+export interface Model401Response {
+  /**
+   * Error title
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  title?: string;
+  /**
+   * Error status code
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  status?: string;
+  /**
+   * Error code
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  errorCode?: string;
+  /**
+   * Error message
+   *
+   * @memberof Model401Response
+   * @type {string}
+   */
+  message?: string;
+}
+/**
+ * @export
  * @interface Model403Response
  */
 export interface Model403Response {
   /**
+   * Error title
+   *
+   * @memberof Model403Response
+   * @type {string}
+   */
+  title?: string;
+  /**
+   * Error status code
+   *
+   * @memberof Model403Response
+   * @type {string}
+   */
+  status?: string;
+  /**
    * Error code
    *
    * @memberof Model403Response
@@ -732,80 +776,6 @@ export interface Model403Response {
    * Error message
    *
    * @memberof Model403Response
-   * @type {string}
-   */
-  message?: string;
-  /**
-   * @memberof Model403Response
-   * @type {Model403UnauthorizedError}
-   */
-  error?: Model403UnauthorizedError;
-}
-/**
- * @export
- * @interface Model403Unauthorized
- */
-export interface Model403Unauthorized {
-  /**
-   * @memberof Model403Unauthorized
-   * @type {Model403UnauthorizedError}
-   */
-  error?: Model403UnauthorizedError;
-}
-/**
- * @export
- * @interface Model403UnauthorizedError
- */
-export interface Model403UnauthorizedError {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedError
-   * @type {string}
-   */
-  code?: string;
-  /**
-   * Error message
-   *
-   * @memberof Model403UnauthorizedError
-   * @type {string}
-   */
-  message?: string;
-  /**
-   * @memberof Model403UnauthorizedError
-   * @type {Model403UnauthorizedErrorDetails}
-   */
-  details?: Model403UnauthorizedErrorDetails;
-}
-/**
- * @export
- * @interface Model403UnauthorizedErrorDetails
- */
-export interface Model403UnauthorizedErrorDetails {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedErrorDetails
-   * @type {string}
-   */
-  errorCode?: string;
-}
-/**
- * @export
- * @interface Model403UnauthorizedInvalidJWT
- */
-export interface Model403UnauthorizedInvalidJWT {
-  /**
-   * Error code
-   *
-   * @memberof Model403UnauthorizedInvalidJWT
-   * @type {string}
-   */
-  errorCode?: string;
-  /**
-   * Error message
-   *
-   * @memberof Model403UnauthorizedInvalidJWT
    * @type {string}
    */
   message?: string;
@@ -1153,10 +1123,8 @@ export interface Scope {
  * @enum {string}
  */
 export enum FeedMetadataVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
+  Catalog = 'CATALOG',
+  Search = 'SEARCH',
 }
 /**
  * Enum for FeedMetadata.dataType
@@ -1188,10 +1156,8 @@ export enum FeedMetadataSearchTypesEnum {
  * @enum {string}
  */
 export enum FeedMetadataUpdateVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
+  Catalog = 'CATALOG',
+  Search = 'SEARCH',
 }
 /**
  * Enum for FeedMetadataUpdate.dataType
