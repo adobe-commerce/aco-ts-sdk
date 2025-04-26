@@ -79,7 +79,10 @@ export interface Client {
    */
   createPriceBooks(data: FeedPricebook[]): Promise<ProcessFeedResponse>;
   /**
-   * Delete price books. Delete existing price books. Note that you cannot delete the default price book with id `main`.
+   * Delete price books. Delete existing price books. When you delete a price book, all associated prices assigned to
+   * the `priceBookId` are also deleted. If a product does not have any other price books assigned, the prices default
+   * to the pricing schedule defined in the default, `main` price book. Note that you cannot delete the default price
+   * book with id `main`.
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ProcessFeedResponse>} Feed response indicating the number of accepted items
