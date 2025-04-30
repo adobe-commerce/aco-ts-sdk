@@ -27,6 +27,7 @@ pnpm-lock.yaml
 .pnpm-debug.log 
 
 # OpenAPI Generator
+.openapi-generator/
 openapitools.json
 generator/openapitools.json
 
