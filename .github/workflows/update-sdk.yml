@@ -73,6 +73,11 @@ jobs:
             git checkout -b $BRANCH_NAME
             git config --local user.email "action@github.com"
             git config --local user.name "GitHub Action"
+            
+            # Increment patch version in package.json
+            npm version patch --no-git-tag-version
+            echo "Incremented package.json version"
+            
             git add .
             git status
             git commit -m "chore: update SDK from OpenAPI spec"

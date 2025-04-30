@@ -217,7 +217,7 @@ const response = await client.deleteProductMetadata([metadataDelete]);
 import { FeedPricebook } from '@adobe-commerce/aco-ts-sdk';
 
 const pricebook: FeedPricebook = {
-  code: 'default',
+  priceBookId: 'default',
   name: 'Default Price Book',
   currency: 'USD',
 };
@@ -232,7 +232,7 @@ const response = await client.createPriceBooks([pricebook]);
 import { FeedPricebook } from './src/types';
 
 const pricebookUpdate: FeedPricebook = {
-  code: 'default',
+  priceBookId: 'default',
   name: 'Updated Price Book Name',
 };
 
@@ -246,7 +246,7 @@ const response = await client.updatePriceBooks([pricebookUpdate]);
 import { FeedPricebook } from '@adobe-commerce/aco-ts-sdk';
 
 const pricebookDelete: FeedPricebook = {
-  code: 'default',
+  priceBookId: 'default',
 };
 
 const response = await client.deletePriceBooks([pricebookDelete]);
@@ -262,9 +262,8 @@ import { FeedPrices } from '@adobe-commerce/aco-ts-sdk';
 
 const price: FeedPrices = {
   sku: 'EXAMPLE-SKU-001',
-  scope: { locale: 'en-US' },
-  pricebook: 'default',
-  price: 99.99,
+  priceBookId: 'default',
+  regular: 99.99,
 };
 
 const response = await client.createPrices([price]);
@@ -278,9 +277,8 @@ import { FeedPricesUpdate } from '@adobe-commerce/aco-ts-sdk';
 
 const priceUpdate: FeedPricesUpdate = {
   sku: 'EXAMPLE-SKU-001',
-  scope: { locale: 'en-US' },
-  pricebook: 'default',
-  price: 89.99,
+  priceBookId: 'default',
+  regular: 99.99,
 };
 
 const response = await client.updatePrices([priceUpdate]);
@@ -294,8 +292,8 @@ import { FeedPricesDelete } from '@adobe-commerce/aco-ts-sdk';
 
 const priceDelete: FeedPricesDelete = {
   sku: 'EXAMPLE-SKU-001',
-  scope: { locale: 'en-US' },
-  pricebook: 'default',
+  priceBookId: 'default',
+  regular: 84.49,
 };
 
 const response = await client.deletePrices([priceDelete]);
