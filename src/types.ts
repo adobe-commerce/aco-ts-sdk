@@ -101,8 +101,10 @@ export interface FeedMetadata {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `CATALOG`: Product attribute is visible in product
-   * listing, detail, and compare pages. * `SEARCH`: Product attribute is visible on Search Results Page.
+   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
+   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
+   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
+   * Compare Page.
    *
    * @memberof FeedMetadata
    * @type {FeedMetadataVisibleInEnum[]}
@@ -199,8 +201,10 @@ export interface FeedMetadataUpdate {
    */
   scope: Scope;
   /**
-   * Determines how the attribute is used on the storefront. * `SEARCH`: Product attribute is visible on Search Results
-   * Page. * `CATALOG`: Product is visible in Product Listing, Detail, and Compare pages.
+   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
+   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
+   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
+   * Compare Page.
    *
    * @memberof FeedMetadataUpdate
    * @type {FeedMetadataUpdateVisibleInEnum[]}
@@ -1123,8 +1127,10 @@ export interface Scope {
  * @enum {string}
  */
 export enum FeedMetadataVisibleInEnum {
-  Catalog = 'CATALOG',
-  Search = 'SEARCH',
+  ProductDetail = 'PRODUCT_DETAIL',
+  ProductListing = 'PRODUCT_LISTING',
+  SearchResults = 'SEARCH_RESULTS',
+  ProductCompare = 'PRODUCT_COMPARE',
 }
 /**
  * Enum for FeedMetadata.dataType
@@ -1156,8 +1162,10 @@ export enum FeedMetadataSearchTypesEnum {
  * @enum {string}
  */
 export enum FeedMetadataUpdateVisibleInEnum {
-  Catalog = 'CATALOG',
-  Search = 'SEARCH',
+  ProductDetail = 'PRODUCT_DETAIL',
+  ProductListing = 'PRODUCT_LISTING',
+  SearchResults = 'SEARCH_RESULTS',
+  ProductCompare = 'PRODUCT_COMPARE',
 }
 /**
  * Enum for FeedMetadataUpdate.dataType
