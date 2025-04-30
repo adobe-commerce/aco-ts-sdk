@@ -16,22 +16,22 @@
  */
 
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { createClient } from '../src/client';
-import { createHttpClient } from '../src/http-client';
-import { createAuthService } from '../src/auth';
+import { createClient } from '../../src/client';
+import { createHttpClient } from '../../src/http-client';
+import { createAuthService } from '../../src/auth';
 import {
-  ProcessFeedResponse,
+  ApiResponse,
   ClientConfig,
   FeedMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   FeedMetadataVisibleInEnum,
   ProductAttributeTypeEnum,
-} from '../src/types';
+} from '../../src/types';
 
 // Mock the dependencies
-vi.mock('../src/http-client');
-vi.mock('../src/auth');
+vi.mock('../../src/http-client');
+vi.mock('../../src/auth');
 
 describe('Client', () => {
   const mockCredentials = {
@@ -184,9 +184,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('createProductMetadata');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -211,9 +216,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('deleteProductMetadata');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -238,9 +248,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('updateProductMetadata');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -265,9 +280,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('createPriceBooks');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -292,9 +312,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('deletePriceBooks');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -319,9 +344,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('updatePriceBooks');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -346,9 +376,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('createPrices');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -373,9 +408,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('deletePrices');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -400,9 +440,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('updatePrices');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -427,9 +472,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('createProducts');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -454,9 +504,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('deleteProducts');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
@@ -481,9 +536,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('updateProducts');
-      const mockResponse: ProcessFeedResponse = {
-        status: 'ACCEPTED',
-        acceptedCount: 1,
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);

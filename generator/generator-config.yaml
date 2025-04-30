@@ -10,4 +10,4 @@ files:
     destinationFilename: src/types.ts
   client.test.mustache:
     templateType: SupportingFiles
-    destinationFilename: test/client.test.ts
+    destinationFilename: test/unit/client.test.ts

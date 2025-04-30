@@ -12,10 +12,10 @@
 
 import { ApiError } from './errors';
 import type { AuthService } from './auth';
-import type { Environment, Region } from './types';
+import type { ApiResponse, Environment, Region } from './types';
 
 export interface HttpClient {
-  request<T>(endpoint: string, options?: RequestInit): Promise<T>;
+  request(endpoint: string, options?: RequestInit): Promise<ApiResponse>;
 }
 
 export function createHttpClient(
@@ -45,7 +45,7 @@ export function createHttpClient(
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
-  const executeRequest = async <T>(endpoint: string, options: RequestInit): Promise<T> => {
+  const executeRequest = async (endpoint: string, options: RequestInit): Promise<ApiResponse> => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -60,19 +60,24 @@ export function createHttpClient(
         throw new ApiError(`API request failed: ${response.statusText}`, response.status, JSON.stringify(errorData));
       }
 
-      return response.json();
+      return {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText,
+        data: await response.json(),
+      };
     } finally {
       clearTimeout(timeoutId);
     }
   };
 
   return {
-    async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    async request(endpoint: string, options?: RequestInit): Promise<ApiResponse> {
       const headers = await getHeaders(options?.headers);
 
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-          const response = await executeRequest<T>(endpoint, {
+          const response = await executeRequest(endpoint, {
             ...options,
             headers,
           });

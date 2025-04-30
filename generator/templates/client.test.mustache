@@ -1,26 +1,27 @@
 {{>licenseInfo}}
 
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
-import { createClient } from '../src/client';
-import { createHttpClient } from '../src/http-client';
-import { createAuthService } from '../src/auth';
+import { createClient } from '../../src/client';
+import { createHttpClient } from '../../src/http-client';
+import { createAuthService } from '../../src/auth';
 import {
 {{#models}}
 {{#model}}
   {{classname}},
 {{/model}}
 {{/models}}
+  ApiResponse,
   ClientConfig,
   FeedMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   FeedMetadataVisibleInEnum,
   ProductAttributeTypeEnum,
-} from '../src/types';
+} from '../../src/types';
 
 // Mock the dependencies
-vi.mock('../src/http-client');
-vi.mock('../src/auth');
+vi.mock('../../src/http-client');
+vi.mock('../../src/auth');
 
 describe('Client', () => {
   const mockCredentials = {
@@ -163,9 +164,14 @@ describe('Client', () => {
       };
       const client = createClient(config);
       const mockData = createMockData('{{nickname}}');
-      const mockResponse: {{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}ProcessFeedResponse{{/returnType}} = { 
-        status: 'ACCEPTED',
-        acceptedCount: 1 
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
       };
 
       mockHttpClient.request.mockResolvedValue(mockResponse);

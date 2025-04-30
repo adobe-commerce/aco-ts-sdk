@@ -1,6 +1,6 @@
 {
   "name": "@adobe-commerce/aco-ts-sdk",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "TypeScript Client SDK for the Adobe Commerce Optimizer API",
   "repository": {
     "type": "git",
@@ -17,9 +17,11 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "vitest",
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest --config vitest.unit.config.ts",
+    "test:run": "vitest --config vitest.unit.config.ts run",
+    "test:run:unit": "vitest --config vitest.unit.config.ts run",
+    "test:run:integration": "vitest --config vitest.integration.config.ts run",
+    "test:coverage": "vitest --config vitest.unit.config.ts run --coverage",
     "lint": "eslint src/**/*.ts test/**/*.ts",
     "lint:fix": "eslint src/**/*.ts test/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.{ts,json}\" \"test/**/*.{ts,json}\"",
