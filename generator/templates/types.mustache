@@ -107,3 +107,18 @@ export interface ClientConfig {
   region: Region;
   environment: Environment;
 }
+
+/**
+ * API response
+ *
+ * @param ok - Whether the request was successful
+ * @param status - The status code of the response
+ * @param statusText - The status text of the response
+ * @param data - The processed feed response data
+ */
+export interface ApiResponse {
+  ok: boolean;
+  status: number;
+  statusText: string;
+  data: ProcessFeedResponse;
+}

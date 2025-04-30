@@ -6,6 +6,7 @@ import {
   Region,
   Environment,
   ClientConfig,
+  ApiResponse,
 {{#models}}
 {{#model}}
   {{classname}},
@@ -26,10 +27,10 @@ export interface Client {
    * {{&notes}}
    {{/notes}}
    * @param data - {{#allParams}}{{#isBodyParam}}{{{dataType}}}{{/isBodyParam}}{{/allParams}} payload
-   * @returns {Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>} feed response indicating the number of accepted items
+   * @returns {Promise<ApiResponse>} feed response indicating the number of accepted items
    * @throws {Error} if the API request fails
    */
-  {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>;
+  {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<ApiResponse>;
 {{/operation}}
 {{/operations}}
 {{/apis}}
@@ -75,8 +76,8 @@ export function createClient(clientConfig: ClientConfig): Client {
 {{#apis}}
 {{#operations}}
 {{#operation}}
-    async {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}> {
-      return await http.request<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}FeedResponse{{/returnType}}>(`{{{path}}}`, {
+    async {{nickname}}({{#allParams}}{{#isBodyParam}}data: {{{dataType}}}{{/isBodyParam}}{{/allParams}}): Promise<ApiResponse> {
+      return await http.request(`{{{path}}}`, {
         method: '{{httpMethod}}',
         {{#hasBodyParam}}
         body: JSON.stringify(data),

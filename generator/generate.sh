@@ -57,22 +57,22 @@ cd .. || exit 1
 FILES=($(find "$(pwd)/src" "$(pwd)/test" -name "*.ts" 2>/dev/null))
 for FILE in "${FILES[@]}"; do
     # Step 1: Fix encoded angle brackets in JSDoc comments
-    sed -i 's/&lt;/</g' "$FILE"
-    sed -i 's/& lt;/</g' "$FILE"
-    sed -i 's/&gt;/>/g' "$FILE"
-    sed -i 's/& gt;/>/g' "$FILE"
-    sed -i 's/& gt}/>/g' "$FILE"
+    sed -i '' 's/&lt;/</g' "$FILE"
+    sed -i '' 's/& lt;/</g' "$FILE"
+    sed -i '' 's/&gt;/>/g' "$FILE"
+    sed -i '' 's/& gt;/>/g' "$FILE"
+    sed -i '' 's/& gt}/>/g' "$FILE"
     # Step 2: Convert Array<T> to T[] in JSDoc comments
-    sed -i 's/@type {Array<\([^>]*\)>}/@type {\1[]}/g' "$FILE"
-    sed -i 's/@param \([a-zA-Z0-9_]*\) - Array<\([^>]*\)>/@param \1 - \2[]/g' "$FILE"
+    sed -i '' 's/@type {Array<\([^>]*\)>}/@type {\1[]}/g' "$FILE"
+    sed -i '' 's/@param \([a-zA-Z0-9_]*\) - Array<\([^>]*\)>/@param \1 - \2[]/g' "$FILE"
     # Step 3: Convert Array<T> to T[] in TypeScript code
     # Property types and type definitions
-    sed -i 's/: Array<\([^>]*\)>/: \1[]/g' "$FILE"
-    sed -i 's/\?: Array<\([^>]*\)>/\?: \1[]/g' "$FILE"
-    sed -i 's/export type \([a-zA-Z0-9_]*\) = Array<\([^>]*\)>;/export type \1 = \2[];/g' "$FILE"
+    sed -i '' 's/: Array<\([^>]*\)>/: \1[]/g' "$FILE"
+    sed -i '' 's/\?: Array<\([^>]*\)>/\?: \1[]/g' "$FILE"
+    sed -i '' 's/export type \([a-zA-Z0-9_]*\) = Array<\([^>]*\)>;/export type \1 = \2[];/g' "$FILE"
     # Function parameters with generic patterns
-    sed -i 's/\([a-zA-Z0-9_]*\)(data: Array<\([^>]*\)>)/\1(data: \2[])/g' "$FILE"
-    sed -i 's/\([a-zA-Z0-9_]*\)(\([a-zA-Z0-9_]*\): Array<\([^>]*\)>)/\1(\2: \3[])/g' "$FILE"
+    sed -i '' 's/\([a-zA-Z0-9_]*\)(data: Array<\([^>]*\)>)/\1(data: \2[])/g' "$FILE"
+    sed -i '' 's/\([a-zA-Z0-9_]*\)(\([a-zA-Z0-9_]*\): Array<\([^>]*\)>)/\1(\2: \3[])/g' "$FILE"
 done
 
 # Running prettier to fix formatting issues

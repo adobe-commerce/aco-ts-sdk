@@ -126,7 +126,7 @@ const product2: FeedProduct = {
 };
 
 const response = await client.createProducts([product1, product2]);
-// Response: { status: 'ACCEPTED', acceptedCount: 2 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
 ```
 
 #### Update Products
@@ -141,7 +141,7 @@ const productUpdate: FeedProductUpdate = {
 };
 
 const response = await client.updateProducts([productUpdate]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Delete Products
@@ -155,7 +155,7 @@ const productDelete: FeedProductDelete = {
 };
 
 const response = await client.deleteProducts([productDelete]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 ### Product Metadata Operations
@@ -177,7 +177,7 @@ const metadata: FeedMetadata = {
 };
 
 const response = await client.createProductMetadata([metadata]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Update Product Metadata
@@ -192,7 +192,7 @@ const metadataUpdate: FeedMetadataUpdate = {
 };
 
 const response = await client.updateProductMetadata([metadataUpdate]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Delete Product Metadata
@@ -206,7 +206,7 @@ const metadataDelete: FeedMetadataDelete = {
 };
 
 const response = await client.deleteProductMetadata([metadataDelete]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 ### Price Book Operations
@@ -223,7 +223,7 @@ const pricebook: FeedPricebook = {
 };
 
 const response = await client.createPriceBooks([pricebook]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Update Price Books
@@ -237,7 +237,7 @@ const pricebookUpdate: FeedPricebook = {
 };
 
 const response = await client.updatePriceBooks([pricebookUpdate]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Delete Price Books
@@ -250,7 +250,7 @@ const pricebookDelete: FeedPricebook = {
 };
 
 const response = await client.deletePriceBooks([pricebookDelete]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 ### Price Operations
@@ -267,7 +267,7 @@ const price: FeedPrices = {
 };
 
 const response = await client.createPrices([price]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Update Prices
@@ -282,7 +282,7 @@ const priceUpdate: FeedPricesUpdate = {
 };
 
 const response = await client.updatePrices([priceUpdate]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 #### Delete Prices
@@ -297,7 +297,7 @@ const priceDelete: FeedPricesDelete = {
 };
 
 const response = await client.deletePrices([priceDelete]);
-// Response: { status: 'ACCEPTED', acceptedCount: 1 }
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
 ## Types
