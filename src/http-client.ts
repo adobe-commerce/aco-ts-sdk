@@ -30,7 +30,7 @@ export function createHttpClient(
     `https://${region.toLowerCase()}${environment.toLowerCase() === 'production' ? '' : '-sandbox'}.api.commerce.adobe.com`;
   const timeout = 10000;
   const maxRetries = 3;
-  const retryDelay = 1000;
+  const initialRetryDelay = 1000;
 
   const getHeaders = async (additionalHeaders?: HeadersInit): Promise<HeadersInit> => {
     const headers = {
@@ -43,6 +43,10 @@ export function createHttpClient(
 
   const delay = async (ms: number): Promise<void> => {
     return new Promise(resolve => setTimeout(resolve, ms));
+  };
+
+  const calculateBackoffDelay = (attempt: number): number => {
+    return initialRetryDelay * Math.pow(2, attempt - 1);
   };
 
   const executeRequest = async (endpoint: string, options: RequestInit): Promise<ApiResponse> => {
@@ -83,13 +87,31 @@ export function createHttpClient(
           });
           return response;
         } catch (error: unknown) {
-          if (attempt === maxRetries) throw new ApiError('Could not execute API request: Max retries reached');
-
-          if (error instanceof ApiError && error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+          if (attempt === maxRetries) {
             throw error;
           }
 
-          await delay(retryDelay * attempt);
+          if (error instanceof ApiError) {
+            if (error.statusCode === 429) {
+              const retryDelayMs = calculateBackoffDelay(attempt);
+              // eslint-disable-next-line no-console
+              console.log(
+                `Rate limit exceeded. Status Code: ${error.statusCode}. Message: ${error.message}. Attempt ${attempt}/${maxRetries}: retrying in ${retryDelayMs}ms.`,
+              );
+              await delay(retryDelayMs);
+              continue;
+            }
+
+            if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+              throw error;
+            }
+          }
+
+          // Retry for 5xx errors
+          const retryDelayMs = calculateBackoffDelay(attempt);
+          // eslint-disable-next-line no-console
+          console.log(`Request failed. Attempt ${attempt}/${maxRetries}: retrying in ${retryDelayMs}ms.`);
+          await delay(retryDelayMs);
         }
       }
 
