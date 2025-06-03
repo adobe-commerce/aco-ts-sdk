@@ -835,8 +835,8 @@ export interface ProductAttribute {
   values: string[];
   /**
    * The variant reference ID establishes a link between a product variant and the corresponding [Option Value
-   * ID](#operation/ProductsPost!path=options/values/id&t=request) in a configurable product. A variant reference ID can
-   * be specified only for a product that represents a variant of a configurable product.
+   * ID](#operation/createProducts!path=options/values/id&t=request) in a configurable product. A variant reference ID
+   * can be specified only for a product that represents a variant of a configurable product.
    *
    * @memberof ProductAttribute
    * @type {string}
@@ -921,7 +921,7 @@ export interface ProductBundleItem {
 export interface ProductConfiguration {
   /**
    * Product option attribute code. For `CONFIGURABLE` or `SWATCH` option types, this ID must match the ["attribute
-   * code"](#operation/ProductsPost!path=attributes/code&t=request) used for the configurable product (for example,
+   * code"](#operation/createProducts!path=attributes/code&t=request) used for the configurable product (for example,
    * "color").
    *
    * @memberof ProductConfiguration
@@ -1054,8 +1054,8 @@ export interface ProductMetaAttribute {
 export interface ProductOptionValue {
   /**
    * Option value ID. For `CONFIGURABLE` or `SWATCH` option types, this ID must match the
-   * ["variantReferenceId"](#operation/ProductsPost!path=attributes/variantReferenceId&t=request) defined in the product
-   * variant.
+   * ["variantReferenceId"](#operation/createProducts!path=attributes/variantReferenceId&t=request) defined in the
+   * product variant.
    *
    * @memberof ProductOptionValue
    * @type {string}
