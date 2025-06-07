@@ -74,6 +74,7 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
           retry: {
             limit: MAX_RETRIES,
             methods: ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace'],
+            statusCodes: RETRYABLE_STATUS_CODES,
           },
           hooks: {
             afterResponse: [
