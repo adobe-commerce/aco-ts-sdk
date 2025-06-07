@@ -99,7 +99,7 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
                   }
 
                   const errorData = await response.json().catch(() => ({}));
-                  const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached.' : 'API request failed';
+                  const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached' : 'API request failed';
                   const error = new ApiError(
                     `${errorPrefix}: ${response.statusText}`,
                     response.status,
