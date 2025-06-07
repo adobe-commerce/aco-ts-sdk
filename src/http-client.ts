@@ -12,7 +12,7 @@
 
 import { ApiError } from './errors';
 import type { AuthService } from './auth';
-import type { ApiResponse, Environment, Logger, Region } from './types';
+import type { ApiResponse, Environment, Logger, ProcessFeedResponse, Region } from './types';
 import ky, { BeforeRetryState } from 'ky';
 
 export interface HttpClient {
@@ -56,6 +56,12 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
       const headers = await getHeaders(options?.headers);
 
       try {
+        logger.debug('Sending request to ACO API', {
+          url: `${baseUrl}/${tenantId}/${endpoint}`,
+          headers,
+          options,
+        });
+
         const res = await ky(`${baseUrl}/${tenantId}/${endpoint}`, {
           ...options,
           headers,
@@ -86,18 +92,33 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
               async (request, options, res): Promise<void> => {
                 if (!res.ok) {
                   const errorData = await res.json().catch(() => ({}));
-                  throw new ApiError(`API request failed: ${res.statusText}`, res.status, JSON.stringify(errorData));
+                  const error = new ApiError(
+                    `API request failed: ${res.statusText}`,
+                    res.status,
+                    JSON.stringify(errorData),
+                  );
+                  logger.error(error.message, error);
+                  throw error;
                 }
               },
             ],
           },
         });
 
+        const data: ProcessFeedResponse = await res.json();
+
+        logger.debug('Received response from ACO API', {
+          url: `${baseUrl}/${tenantId}/${endpoint}`,
+          status: res.status,
+          statusText: res.statusText,
+          data,
+        });
+
         return {
           ok: res.ok,
           status: res.status,
           statusText: res.statusText,
-          data: await res.json(),
+          data,
         };
       } catch (error) {
         if (error instanceof ApiError) {
