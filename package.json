@@ -28,7 +28,8 @@
     "format:check": "prettier --check \"src/**/*.{ts,json}\" \"test/**/*.{ts,json}\""
   },
   "dependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "ky": "^1.8.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",

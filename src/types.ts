@@ -1288,12 +1288,14 @@ export type Environment = 'production' | 'sandbox';
  * @param tenantId - The tenant ID for the API requests
  * @param region - The region for the API endpoint (e.g., 'us', 'eu')
  * @param environment - The environment to use ('production' or 'sandbox')
+ * @param logger - Optional logger for customizing logging behavior
  */
 export interface ClientConfig {
   credentials: AdobeCredentials;
   tenantId: string;
   region: Region;
   environment: Environment;
+  logger?: Logger;
 }
 
 /**
@@ -1309,4 +1311,34 @@ export interface ApiResponse {
   status: number;
   statusText: string;
   data: ProcessFeedResponse;
+}
+
+/**
+ * Logger interface for customizing logging behavior
+ *
+ * @param debug - Log a debug message
+ * @param info - Log an info message
+ * @param warn - Log a warning message
+ * @param error - Log an error message
+ */
+export interface Logger {
+  debug(message: string, meta?: Record<string, unknown>): void;
+  info(message: string, meta?: Record<string, unknown>): void;
+  warn(message: string, meta?: Record<string, unknown>): void;
+  error(message: string, error?: Error, meta?: Record<string, unknown>): void;
+}
+
+/**
+ * Log level
+ *
+ * @param DEBUG - Debug log level
+ * @param INFO - Info log level
+ * @param WARN - Warning log level
+ * @param ERROR - Error log level
+ */
+export enum LogLevel {
+  DEBUG = 0,
+  INFO = 1,
+  WARN = 2,
+  ERROR = 3,
 }
