@@ -17,7 +17,7 @@
 
 import { config } from 'dotenv';
 import { createAuthService } from './auth';
-import { createHttpClient, HttpClientConfig } from './http-client';
+import { createHttpClient, DEFAULT_TIMEOUT_MS, HttpClientConfig } from './http-client';
 import { consoleLogger } from './logger';
 import {
   ClientConfig,
@@ -223,7 +223,14 @@ export interface Client {
  * @returns {Client} A client instance with methods for interacting with the API
  */
 export function createClient(clientConfig: ClientConfig): Client {
-  const { credentials, tenantId, region, environment, logger = consoleLogger } = clientConfig;
+  const {
+    credentials,
+    tenantId,
+    region,
+    environment,
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+    logger = consoleLogger(),
+  } = clientConfig;
 
   // Read .env overrides if present
   config();
@@ -233,6 +240,7 @@ export function createClient(clientConfig: ClientConfig): Client {
     tenantId,
     region,
     environment,
+    timeoutMs,
     logger,
   };
   const http = createHttpClient(httpConfig);

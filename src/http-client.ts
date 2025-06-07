@@ -1,13 +1,12 @@
 /**
- * ADOBE CONFIDENTIAL
+ * Copyright 2025 Adobe. All Rights Reserved.
  *
- * Copyright 2025 Adobe All Rights Reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
  *
- * NOTICE: All information contained herein is, and remains the property of Adobe and its suppliers, if any. The
- * intellectual and technical concepts contained herein are proprietary to Adobe and its suppliers and are protected by
- * all applicable intellectual property laws, including trade secret and copyright laws. Dissemination of this
- * information or reproduction of this material is strictly forbidden unless prior written permission is obtained from
- * Adobe.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, either express or implied. See the License for
+ * the specific language governing permissions and limitations under the License.
  */
 
 import { ApiError } from './errors';
@@ -24,17 +23,17 @@ export interface HttpClientConfig {
   tenantId: string;
   region: Region;
   environment: Environment;
+  timeoutMs: number;
   logger: Logger;
   baseUrlOverride?: string;
 }
 
-const TIMEOUT_MS = 10000;
-const BACKOFF_LIMIT_MS = 10000;
+export const DEFAULT_TIMEOUT_MS = 10000;
 const MAX_RETRIES = 3;
 const INITIAL_RETRY_DELAY_MS = 1000;
 
 export function createHttpClient(config: HttpClientConfig): HttpClient {
-  const { auth, tenantId, region, environment, logger, baseUrlOverride } = config;
+  const { auth, tenantId, region, environment, timeoutMs, logger, baseUrlOverride } = config;
   const baseUrl =
     baseUrlOverride ||
     `https://${region.toLowerCase()}${environment.toLowerCase() === 'production' ? '' : '-sandbox'}.api.commerce.adobe.com`;
@@ -51,6 +50,15 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
     };
   };
 
+  const maskSensitiveHeaders = (headers: HeadersInit): HeadersInit => {
+    const authHeader = 'Authorization';
+    const maskedHeaders = { ...headers };
+    if (authHeader in maskedHeaders) {
+      maskedHeaders[authHeader] = 'Bearer ***';
+    }
+    return maskedHeaders;
+  };
+
   return {
     async request(endpoint: string, options?: RequestInit): Promise<ApiResponse> {
       const headers = await getHeaders(options?.headers);
@@ -58,18 +66,17 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
       try {
         logger.debug('Sending request to ACO API', {
           url: `${baseUrl}/${tenantId}/${endpoint}`,
-          headers,
+          headers: maskSensitiveHeaders(headers),
           options,
         });
 
         const res = await ky(`${baseUrl}/${tenantId}/${endpoint}`, {
           ...options,
           headers,
-          timeout: TIMEOUT_MS,
+          timeout: timeoutMs,
           retry: {
             limit: MAX_RETRIES,
             methods: ['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace'],
-            backoffLimit: BACKOFF_LIMIT_MS,
             delay: calculateRetryDelay,
           },
           hooks: {
@@ -89,9 +96,9 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
             ],
             afterResponse: [
               // eslint-disable-next-line unused-imports/no-unused-vars
-              async (request, options, res): Promise<void> => {
-                if (!res.ok) {
-                  const errorData = await res.json().catch(() => ({}));
+              async (request, options, response): Promise<void> => {
+                if (!response.ok) {
+                  const errorData = await response.json().catch(() => ({}));
                   const error = new ApiError(
                     `API request failed: ${res.statusText}`,
                     res.status,

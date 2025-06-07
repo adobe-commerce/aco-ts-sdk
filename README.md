@@ -293,7 +293,6 @@ import { FeedPricesDelete } from '@adobe-commerce/aco-ts-sdk';
 const priceDelete: FeedPricesDelete = {
   sku: 'EXAMPLE-SKU-001',
   priceBookId: 'default',
-  regular: 84.49,
 };
 
 const response = await client.deletePrices([priceDelete]);

@@ -1288,6 +1288,7 @@ export type Environment = 'production' | 'sandbox';
  * @param tenantId - The tenant ID for the API requests
  * @param region - The region for the API endpoint (e.g., 'us', 'eu')
  * @param environment - The environment to use ('production' or 'sandbox')
+ * @param timeoutMs - The timeout for the API requests
  * @param logger - Optional logger for customizing logging behavior
  */
 export interface ClientConfig {
@@ -1295,6 +1296,7 @@ export interface ClientConfig {
   tenantId: string;
   region: Region;
   environment: Environment;
+  timeoutMs?: number;
   logger?: Logger;
 }
 

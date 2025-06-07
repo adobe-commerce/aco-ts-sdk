@@ -10,7 +10,9 @@ import {
   Environment,
   Region,
   ClientConfig,
+  LogLevel,
 } from '../../src/types';
+import { consoleLogger } from '../../src/logger';
 
 config();
 
@@ -78,6 +80,7 @@ describe('Products Integration Tests', () => {
       tenantId: process.env.TENANT_ID!,
       region: process.env.REGION as Region,
       environment: process.env.ENVIRONMENT as Environment,
+      logger: consoleLogger(LogLevel.DEBUG),
     };
 
     client = createClient(config);
