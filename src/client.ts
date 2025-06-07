@@ -35,7 +35,7 @@ import { config } from 'dotenv';
 
 export interface Client {
   /**
-   * Create product attribute metadata. To ensure product data is indexed for discovery, create or replace existing
+   * Create product attribute metadata To ensure product data is indexed for discovery, create or replace existing
    * product attribute metadata resources before creating products. For each Commerce project, you must define metadata
    * for the following attributes for each scope (`locale`): - `sku` - `name` - `description` - `shortDescription` -
    * `price` Also, you can define metadata for custom attributes. When creating product attribute metadata: - Each
@@ -52,7 +52,7 @@ export interface Client {
    */
   createProductMetadata(data: FeedMetadata[]): Promise<ApiResponse>;
   /**
-   * Delete product attributes metadata. Remove product attribute metadata resources from the catalog data.
+   * Delete product attributes metadata Remove product attribute metadata resources from the catalog data.
    *
    * @param data - FeedMetadataDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -60,7 +60,7 @@ export interface Client {
    */
   deleteProductMetadata(data: FeedMetadataDelete[]): Promise<ApiResponse>;
   /**
-   * Update product attribute metadata. Update existing product attribute metadata with new values. When the update is
+   * Update product attribute metadata Update existing product attribute metadata with new values. When the update is
    * processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy
    * is used to apply changes for fields in an `array`.
    *
@@ -70,8 +70,8 @@ export interface Client {
    */
   updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ApiResponse>;
   /**
-   * Create price books. Create or replace existing price books. Use the update operation to modify values for existing
-   * price books.
+   * Create price books Create or replace existing price books. Use the [update price books
+   * operation](#operation/updatePriceBooks) to modify values for existing price books.
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -79,10 +79,10 @@ export interface Client {
    */
   createPriceBooks(data: FeedPricebook[]): Promise<ApiResponse>;
   /**
-   * Delete price books. Delete existing price books. When you delete a price book, all associated prices assigned to
-   * the `priceBookId` are also deleted. If a product does not have any other price books assigned, the prices default
-   * to the pricing schedule defined in the default, `main` price book. Note that you cannot delete the default price
-   * book with id `main`.
+   * Delete price books Delete existing price books When you delete a price book, all associated prices assigned to the
+   * `priceBookId` are also deleted. If a product does not have any other price books assigned, the prices default to
+   * the pricing schedule defined in the default, `main` price book. Note that you cannot delete the default price book
+   * with id `main`.
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -90,8 +90,8 @@ export interface Client {
    */
   deletePriceBooks(data: FeedPricebook[]): Promise<ApiResponse>;
   /**
-   * Update price books. Update existing price books to change the name or the currency used for pricing. When the
-   * update is processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace
+   * Update price books Update existing price books to change the name or the currency used for pricing. When the update
+   * is processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace
    * strategy is used to apply changes for fields in an `array`. To update the currency for the default price book, use
    * the price book id `main`.
    *
@@ -101,10 +101,10 @@ export interface Client {
    */
   updatePriceBooks(data: FeedPricebook[]): Promise<ApiResponse>;
   /**
-   * Create prices.<h3>Simple Products</h3> Create or replace existing product prices. A price must be associated with
-   * at least the default price book with id `main`. <h3>Configurable Products</h3> Because configurable product price
-   * is calculated based on the price of the selected product variant, you don't need to send price data for
-   * configurable product skus. Sending price data for these skus can cause incorrect price calculations.
+   * Create prices Create or replace existing product prices. A price must be associated with at least the default price
+   * book with id `main`. <h3>Configurable Products</h3> Because configurable product price is calculated based on the
+   * price of the selected product variant, you don't need to send price data for configurable product skus. Sending
+   * price data for these skus can cause incorrect price calculations.
    *
    * @param data - FeedPrices[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -112,7 +112,7 @@ export interface Client {
    */
   createPrices(data: FeedPrices[]): Promise<ApiResponse>;
   /**
-   * Delete prices. Delete existing product prices
+   * Delete prices Delete existing product prices
    *
    * @param data - FeedPricesDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -120,7 +120,7 @@ export interface Client {
    */
   deletePrices(data: FeedPricesDelete[]): Promise<ApiResponse>;
   /**
-   * Update prices. Change existing product prices. When the update is processed, the merge strategy is used to apply
+   * Update prices Change existing product prices When the update is processed, the merge strategy is used to apply
    * changes to `scalar` and `object` type fields. The replace strategy is used to apply changes for fields in an
    * `array`.
    *
@@ -136,40 +136,39 @@ export interface Client {
    * fields such as descriptions, images, and custom attributes as needed. - Use the `links` field to define
    * relationships between products, such as linking a product variant to its parent configurable product. - You can
    * create multiple products in a single request, and also create product variants for configurable products in the
-   * same request. <h3>Simple Products</h3> Create products or replace existing products with a specified `sku` and
-   * `scope`. If a product with the same data exists with the same SKU and scope, the product update request is ignored.
-   * Use the [update operation](#operation/ProductsPatch) to modify values for an existing product. <h3>Configurable
-   * Products</h3> A configurable product is a product that offers multiple options, such as color and size. Each unique
-   * combination of these options, like 'color green' and 'size large,' defines a product variant. This variant is an
-   * independent product with its own SKU, price, and inventory. The configurable product acts as a container for these
-   * product variants. To create a configurable product, you need the following: - [Product
-   * attributes](#operation/ProductMetadataPut): Define the product attributes used to define a configurable product,
-   * such as "color", "size", etc. - [Configurable product](#operation/ProductsPost): Define the configurable product.
-   * [Configurations](#operation/ProductsPost!path=configurations&t=request) is a required field. It defines the choices
-   * that a shopper can select. - [Product variant](#operation/ProductsPost): Define a product variant for a
-   * configurable product. ["Attributes"](#operation/ProductsPost!path=attributes) with
-   * ["variantReferenceId"](#operation/ProductsPost!path=attributes/variantReferenceId&t=request) and
-   * ["links"](#operation/ProductsPost!path=links&t=request) of type `VARIANT_OF` must be defined for product variants.
-   * Each product variant links back to the configurable product through its `variantReferenceId`, which corresponds to
-   * specific `configurations[].values[].variantReferenceId` in the configurable product. To unassign a product variant
-   * from a configurable product, do one of the following: - Use [Delete Product API](#operation/ProductsDelete) to
-   * delete the product variant. - Use [Update Product API](#operation/ProductsPatch) to set the
-   * ["variantReferenceId"](#operation/ProductsPost!path=attributes/variantReferenceId&t=request) to `null` and unassign
-   * the product variant from the configurable product by removing the
-   * ["links"](#operation/ProductsPost!path=links&t=request) association. <h3>Bundle Products</h3> A bundle product
+   * same request. <h3 id="simpleProducts">Simple Products</h3> Create products or replace existing products with a
+   * specified `sku` and `scope`. If a product with the same data exists with the same SKU and scope, the product update
+   * request is ignored. Use the [update operation](#operation/updateProducts) to modify values for an existing
+   * product.<h3 id="configurableProducts">Configurable Products</h3> A configurable product is a product that offers
+   * multiple options, such as color and size. Each unique combination of these options, like 'color green' and 'size
+   * large,' defines a product variant. This variant is an independent product with its own SKU, price, and inventory.
+   * The configurable product acts as a container for these product variants. To create a configurable product, you need
+   * the following: - [Product attributes](#operation/ProductMetadataPut): Define the product attributes used to define
+   * a configurable product, such as "color", "size", etc. - Configurable product: Define the configurable product.
+   * [Configurations](#operation/createProducts!path=configurations&t=request) is a required field. It defines the
+   * choices that a shopper can select. - [Product variant](#operation/createProducts): Define a product variant for a
+   * configurable product. The variant definition must have [Attributes](createProducts!path=attributes&t=request) with
+   * [variantReferenceId](#operation/createProducts!path=attributes/variantReferenceId&t=request) and
+   * [links](#operation/createProducts!path=links&t=request) of type `VARIANT_OF`. Each product variant links back to
+   * the configurable product through its `variantReferenceId`, which corresponds to specific
+   * `configurations[].values[].variantReferenceId` in the configurable product. To unassign a product variant from a
+   * configurable product, do one of the following: - Use the [Delete products API](#operation/deleteProducts) to delete
+   * the product variant. - Use the [Update products API](#operation/updateProducts)to set the
+   * ["variantReferenceId"](#operation/createProducts!path=attributes/variantReferenceId&t=request) to `null` and
+   * unassign the product variant from the configurable product by removing the
+   * ["links"](#operation/createProducts!path=links&t=request) association. <h3>Bundle Products</h3> A bundle product
    * combines several simple products into one sellable unit. Items within the bundle can be categorized into logical
    * categories (groups) like`tops`, `bottoms`, and `accessories`. Each group can have multiple items, and shoppers can
    * select items from each group to create a customized bundle. To create a bundle product, you need the following: -
-   * [Bundle product](#operation/ProductsPost): Define the bundle product.
-   * [Bundles](#operation/ProductsPost!path=bundles&t=request) is a required field that defines the groups and items
-   * included in the bundle. - [Simple products](#operation/ProductsPost): Define the simple products that are included
-   * in the bundle. Each simple product must be created separately using the create product API. In the field
-   * ["links"](#operation/ProductsPost!path=links&t=request), the type `IN_BUNDLE` must be defined for simple products
-   * that belong to bundle products with reference to it. <strong>Note:</strong> A simple product can be included only
-   * once in each bundle. If the same item is specified in multiple groups, the API returns a `Duplicate SKU found in
-   * bundle items` error. To update a bundle product, do one of the following: - Use [Update Product
-   * API](#operation/ProductsPatch) to modify the groups and items in the bundle. - Use [Delete Product
-   * API](#operation/ProductsDelete) to remove items from the bundle.
+   * Bundle product: Use the Create products API to define the bundle product.
+   * [Bundles](#operation/createProducts!path=bundles&t=request) is a required field that defines the groups and items
+   * included in the bundle. - [Simple products](#simpleProducts): Define the simple products that are included in the
+   * bundle. Each simple product must be created separately using the create product API. In the field ["links"](#), the
+   * type `IN_BUNDLE` must be defined for simple products that belong to bundle products with reference to it.
+   * <strong>Note:</strong> A simple product can be included only once in each bundle. If the same item is specified in
+   * multiple groups, the API returns a `Duplicate SKU found in bundle items` error. To update a bundle product, do one
+   * of the following: - Use [Update products API](#operation/updateProducts) to modify the groups and items in the
+   * bundle. - Use [Delete products API](#operation/deleteProducts) to remove items from the bundle.
    *
    * @param data - FeedProduct[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -177,7 +176,7 @@ export interface Client {
    */
   createProducts(data: FeedProduct[]): Promise<ApiResponse>;
   /**
-   * Delete products. Delete products with specified "sku" and "scope".
+   * Delete products Delete products with specified "sku" and "scope".
    *
    * @param data - FeedProductDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -185,7 +184,7 @@ export interface Client {
    */
   deleteProducts(data: FeedProductDelete[]): Promise<ApiResponse>;
   /**
-   * Update products. Update products with specified "sku" and "scope" to replace existing field data with the data
+   * Update products Update products with specified "sku" and "scope" to replace existing field data with the data
    * supplied in the request. When the update is processed, the merge strategy is used to apply changes to `scalar` and
    * `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
    *
