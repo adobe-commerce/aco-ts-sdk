@@ -2,7 +2,7 @@
 
 import { config } from 'dotenv';
 import { createAuthService } from './auth';
-import { createHttpClient, HttpClientConfig } from './http-client';
+import { createHttpClient, DEFAULT_TIMEOUT_MS, HttpClientConfig } from './http-client';
 import { consoleLogger } from './logger';
 import {
   AdobeCredentials,
