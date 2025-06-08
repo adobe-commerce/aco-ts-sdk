@@ -1,6 +1,9 @@
 {{>licenseInfo}}
 
-import { createHttpClient } from './http-client';
+import { config } from 'dotenv';
+import { createAuthService } from './auth';
+import { createHttpClient, DEFAULT_TIMEOUT_MS, HttpClientConfig } from './http-client';
+import { consoleLogger } from './logger';
 import {
   AdobeCredentials,
   Region,
@@ -13,8 +16,6 @@ import {
 {{/model}}
 {{/models}}
 } from './types';
-import { createAuthService } from './auth';
-import { config } from 'dotenv';
 
 export interface Client {
 {{#apiInfo}}
@@ -64,12 +65,27 @@ export interface Client {
  * @returns {Client} A client instance with methods for interacting with the API
  */
 export function createClient(clientConfig: ClientConfig): Client {
-  const { credentials, tenantId, region, environment } = clientConfig;
+  const {
+    credentials,
+    tenantId,
+    region,
+    environment,
+    timeoutMs = DEFAULT_TIMEOUT_MS,
+    logger = consoleLogger(),
+  } = clientConfig;
 
   // Read .env overrides if present
   config();
   const auth = createAuthService(credentials, process.env.IMS_BASE_URL_OVERRIDE ?? undefined);
-  const http = createHttpClient(auth, tenantId, region, environment, process.env.BASE_URL_OVERRIDE ?? undefined);
+  const httpConfig: HttpClientConfig = {
+    auth,
+    tenantId,
+    region,
+    environment,
+    timeoutMs,
+    logger,
+  };
+  const http = createHttpClient(httpConfig);
 
   return {
 {{#apiInfo}}
