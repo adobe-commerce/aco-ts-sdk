@@ -350,7 +350,7 @@ use the default console logger or implement your own logger that matches the int
 The default console logger that can be used like this:
 
 ```typescript
-import { consoleLogger, LogLevel } from '@adobe-commerce/aco-ts-sdk';
+import { consoleLogger, ClientConfig, LogLevel } from '@adobe-commerce/aco-ts-sdk';
 
 const config: ClientConfig = {
   // ... other config options ...
@@ -393,4 +393,71 @@ export enum LogLevel {
   WARN = 2,
   ERROR = 3,
 }
+```
+
+##### Using Winston
+
+The [Winston Logger](https://github.com/winstonjs/winston) interface matches the SDK's `Logger` interface and is a
+drop-in logger override.
+
+```typescript
+import winston from 'winston';
+
+const logger = winston.createLogger({
+  level: 'debug',
+  format: winston.format.json(),
+  transports: [new winston.transports.Console()],
+});
+// ...
+const config: ClientConfig = {
+  // ... other config options ...
+  logger, // Uses winston logger from your application
+};
+```
+
+##### Using Pino
+
+The [Pino Logger](https://getpino.io) interface does not exactly match the SDK's `Logger` interface, but can be easily
+adapted to be provided as a logger override.
+
+```typescript
+import pino from 'pino';
+
+// Create a simple adaptor for the Pino logger interface
+const createPinoAdapter = pinoInstance => {
+  const logWithMetadata = (level, message, ...args) => {
+    const metadata = args[0];
+    if (metadata && typeof metadata === 'object' && metadata !== null) {
+      pinoInstance[level](metadata, message);
+    } else {
+      pinoInstance[level](message, ...args);
+    }
+  };
+
+  return {
+    debug: (message, ...args) => logWithMetadata('debug', message, ...args),
+    info: (message, ...args) => logWithMetadata('info', message, ...args),
+    warn: (message, ...args) => logWithMetadata('warn', message, ...args),
+    error: (message, error, ...args) => {
+      if (error instanceof Error) {
+        const metadata = args[0];
+        if (metadata && typeof metadata === 'object' && metadata !== null) {
+          pinoInstance.error({ ...metadata, err: error }, message);
+        } else {
+          pinoInstance.error({ err: error }, message);
+        }
+      } else if (error && typeof error === 'object') {
+        pinoInstance.error(error, message);
+      } else {
+        pinoInstance.error(message);
+      }
+    },
+  };
+};
+const logger = createPinoAdapter(pino({ level: 'debug' }));
+// ...
+const config: ClientConfig = {
+  // ... other config options ...
+  logger, // Uses pino logger from your application
+};
 ```

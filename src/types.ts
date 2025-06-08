@@ -1323,10 +1323,10 @@ export interface ApiResponse {
  * @param error - Log an error message
  */
 export interface Logger {
-  debug(message: string, meta?: Record<string, unknown>): void;
-  info(message: string, meta?: Record<string, unknown>): void;
-  warn(message: string, meta?: Record<string, unknown>): void;
-  error(message: string, error?: Error, meta?: Record<string, unknown>): void;
+  debug(message: string, ...args: unknown[]): void;
+  info(message: string, ...args: unknown[]): void;
+  warn(message: string, ...args: unknown[]): void;
+  error(message: string, error?: Error, ...args: unknown[]): void;
 }
 
 /**
