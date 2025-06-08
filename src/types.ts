@@ -1287,8 +1287,8 @@ export type Environment = 'production' | 'sandbox';
  * @param tenantId - The tenant ID for the API requests
  * @param region - The region for the API endpoint (e.g., 'us', 'eu')
  * @param environment - The environment to use ('production' or 'sandbox')
- * @param timeoutMs - The timeout for the API requests
- * @param logger - Optional logger for customizing logging behavior
+ * @param timeoutMs - The timeout for the API requests. Default is 10000ms.
+ * @param logger - Optional logger for customizing logging behavior. Default is consoleLogger(LogLevel.INFO).
  */
 export interface ClientConfig {
   credentials: AdobeCredentials;

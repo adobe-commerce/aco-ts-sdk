@@ -51,7 +51,7 @@ environment type is `production`, then the `environment` will be omitted from th
 ### Example:
 
 ```typescript
-import { createClient, Client, ClientConfig, Environment, Region } from '@adobe-commerce/aco-ts-sdk';
+import { createClient, Client, ClientConfig, Environment, Region, consoleLogger } from '@adobe-commerce/aco-ts-sdk';
 
 // Define your configuration
 const config: ClientConfig = {
@@ -62,6 +62,8 @@ const config: ClientConfig = {
   tenantId: 'my-tenant-id', // Your instance's tenant id found in Commerce Cloud Manager UI
   region: 'na1' as Region, // Your instance's region found in Commerce Cloud Manager UI
   environment: 'sandbox' as Environment, // Your instance's environment type: sandbox or production
+  timeoutMs: 30000, // Optional. HTTP timeout override in ms. Default is 10000ms
+  logger: consoleLogger(), // Optional. Pass in your existing logger. If not provided, a default console logger is used. See Types -> Logger section below.
 };
 
 // Initialize the client instance
@@ -303,3 +305,84 @@ const response = await client.deletePrices([priceDelete]);
 
 See the [types.ts](https://github.com/adobe-commerce/aco-ts-sdk/blob/main/src/types.ts) file for all exported type
 definitions.
+
+### Client Config
+
+The `ClientConfig` object is required to be passed into the `createClient` function. It configures how the SDK client
+will interact with Adobe Commerce Optimizer services.
+
+```typescript
+/**
+ * Client configuration
+ *
+ * @param credentials - Adobe IMS credentials for authentication
+ * @param tenantId - The tenant ID for the API requests
+ * @param region - The region for the API endpoint (e.g., 'us', 'eu')
+ * @param environment - The environment to use ('production' or 'sandbox')
+ * @param timeoutMs - The timeout for the API requests
+ * @param logger - Optional logger for customizing logging behavior
+ */
+export interface ClientConfig {
+  credentials: AdobeCredentials;
+  tenantId: string;
+  region: Region;
+  environment: Environment;
+  timeoutMs?: number;
+  logger?: Logger;
+}
+```
+
+### Logger
+
+The Adobe Commerce Optimizer SDK provides flexible logging capabilities through the `Logger` interface. You can either
+use the default console logger or implement your own logger that matches the interface.
+
+#### Default Logger
+
+The default console logger that can be used like this:
+
+```typescript
+import { consoleLogger, LogLevel } from '@adobe-commerce/aco-ts-sdk';
+
+const config: ClientConfig = {
+  // ... other config options ...
+  logger: consoleLogger(LogLevel.INFO), // Uses default console logger
+};
+```
+
+#### Custom Logger
+
+You can implement your own logger by creating an object that implements the `Logger` interface. This is useful for
+integrating with your existing logging infrastructure and customizing log formats.
+
+```typescript
+/**
+ * Logger interface for customizing logging behavior
+ *
+ * @param debug - Log a debug message
+ * @param info - Log an info message
+ * @param warn - Log a warning message
+ * @param error - Log an error message
+ */
+export interface Logger {
+  debug(message: string, meta?: Record<string, unknown>): void;
+  info(message: string, meta?: Record<string, unknown>): void;
+  warn(message: string, meta?: Record<string, unknown>): void;
+  error(message: string, error?: Error, meta?: Record<string, unknown>): void;
+}
+
+/**
+ * Log level
+ *
+ * @param DEBUG - Debug log level
+ * @param INFO - Info log level
+ * @param WARN - Warning log level
+ * @param ERROR - Error log level
+ */
+export enum LogLevel {
+  DEBUG = 0,
+  INFO = 1,
+  WARN = 2,
+  ERROR = 3,
+}
+```
