@@ -51,7 +51,15 @@ environment type is `production`, then the `environment` will be omitted from th
 ### Example:
 
 ```typescript
-import { createClient, Client, ClientConfig, Environment, Region, consoleLogger } from '@adobe-commerce/aco-ts-sdk';
+import {
+  createClient,
+  consoleLogger,
+  Client,
+  ClientConfig,
+  Environment,
+  LogLevel,
+  Region,
+} from '@adobe-commerce/aco-ts-sdk';
 
 // Define your configuration
 const config: ClientConfig = {
@@ -63,7 +71,7 @@ const config: ClientConfig = {
   region: 'na1' as Region, // Your instance's region found in Commerce Cloud Manager UI
   environment: 'sandbox' as Environment, // Your instance's environment type: sandbox or production
   timeoutMs: 30000, // Optional. HTTP timeout override in ms. Default is 10000ms
-  logger: consoleLogger(), // Optional. Pass in your existing logger. If not provided, a default console logger is used. See Types -> Logger section below.
+  logger: consoleLogger(LogLevel.DEBUG), // Optional. Pass in your existing logger. If not provided, a default console logger is used. See Types -> Logger section below.
 };
 
 // Initialize the client instance
