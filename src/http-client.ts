@@ -55,6 +55,28 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
     return maskedHeaders;
   };
 
+  const handleRetryableError = (response: Response, attempt: number): void => {
+    const retryAfter = response.headers.get('retry-after');
+    const retryAfterInfo = retryAfter ? ` Retrying after ${retryAfter}s.` : '';
+
+    if (response.status === 429) {
+      logger.info(
+        `Rate limit exceeded. Status Code: ${response.status}. Message: ${response.statusText}. Attempt ${attempt}/${MAX_RETRIES}.${retryAfterInfo}`,
+      );
+    } else {
+      logger.info(
+        `Request failed. Status Code: ${response.status}. Message: ${response.statusText}. Attempt ${attempt}/${MAX_RETRIES}.`,
+      );
+    }
+  };
+
+  const handleNonRetryableError = (response: Response, errorData: unknown, attempt: number): void => {
+    const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached' : 'API request failed';
+    const error = new ApiError(`${errorPrefix}: ${response.statusText}`, response.status, JSON.stringify(errorData));
+    logger.error(error.message, error);
+    throw error;
+  };
+
   return {
     async request(endpoint: string, options?: RequestInit): Promise<ApiResponse> {
       const headers = await getHeaders(options?.headers);
@@ -65,8 +87,8 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
           headers: maskSensitiveHeaders(headers),
           options,
         });
-        let attempt = 1;
 
+        let attempt = 1;
         const res = await ky(`${baseUrl}/${tenantId}/${endpoint}`, {
           ...options,
           headers,
@@ -82,31 +104,12 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
               async (request, options, response): Promise<void> => {
                 if (!response.ok) {
                   if (RETRYABLE_STATUS_CODES.includes(response.status) && attempt <= MAX_RETRIES) {
-                    const retryAfter = response.headers.get('retry-after');
-                    const retryAfterInfo = retryAfter ? ` Retrying after ${retryAfter}s.` : '';
-
-                    if (response.status === 429) {
-                      logger.info(
-                        `Rate limit exceeded. Status Code: ${response.status}. Message: ${response.statusText}. Attempt ${attempt}/${MAX_RETRIES}.${retryAfterInfo}`,
-                      );
-                    } else {
-                      logger.info(
-                        `Request failed. Status Code: ${response.status}. Message: ${response.statusText}. Attempt ${attempt}/${MAX_RETRIES}.`,
-                      );
-                    }
+                    handleRetryableError(response, attempt);
                     attempt++;
                     return;
                   }
-
                   const errorData = await response.json().catch(() => ({}));
-                  const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached' : 'API request failed';
-                  const error = new ApiError(
-                    `${errorPrefix}: ${response.statusText}`,
-                    response.status,
-                    JSON.stringify(errorData),
-                  );
-                  logger.error(error.message, error);
-                  throw error;
+                  handleNonRetryableError(response, errorData, attempt);
                 }
               },
             ],

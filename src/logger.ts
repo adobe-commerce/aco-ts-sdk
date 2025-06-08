@@ -28,28 +28,28 @@ import { Logger, LogLevel } from './types';
  */
 export function consoleLogger(level: LogLevel = LogLevel.INFO): Logger {
   return {
-    debug: (message: string, meta?: Record<string, unknown>): void => {
+    debug: (message: string, ...args: unknown[]): void => {
       if (level <= LogLevel.DEBUG) {
         // eslint-disable-next-line no-console
-        console.debug(message, meta);
+        console.debug(message, ...args);
       }
     },
-    info: (message: string, meta?: Record<string, unknown>): void => {
+    info: (message: string, ...args: unknown[]): void => {
       if (level <= LogLevel.INFO) {
         // eslint-disable-next-line no-console
-        console.info(message, meta);
+        console.info(message, ...args);
       }
     },
-    warn: (message: string, meta?: Record<string, unknown>): void => {
+    warn: (message: string, ...args: unknown[]): void => {
       if (level <= LogLevel.WARN) {
         // eslint-disable-next-line no-console
-        console.warn(message, meta);
+        console.warn(message, ...args);
       }
     },
-    error: (message: string, error?: Error, meta?: Record<string, unknown>): void => {
+    error: (message: string, ...args: unknown[]): void => {
       if (level <= LogLevel.ERROR) {
         // eslint-disable-next-line no-console
-        console.error(message, error, meta);
+        console.error(message, ...args);
       }
     },
   };
