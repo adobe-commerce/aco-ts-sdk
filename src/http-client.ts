@@ -12,7 +12,7 @@
 import { ApiError } from './errors';
 import type { AuthService } from './auth';
 import type { ApiResponse, Environment, Logger, ProcessFeedResponse, Region } from './types';
-import ky from 'ky';
+// ky is imported dynamically below to avoid CJS bundling issues with the ESM-only ky package
 
 export interface HttpClient {
   request(endpoint: string, options?: RequestInit): Promise<ApiResponse>;
@@ -83,13 +83,14 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
 
       try {
         logger.debug('Sending request to ACO API', {
-          url: `${baseUrl}/${tenantId}/${endpoint}`,
+          url: `${baseUrl}/${tenantId}${endpoint}`,
           headers: maskSensitiveHeaders(headers),
           options,
         });
 
         let attempt = 1;
-        const res = await ky(`${baseUrl}/${tenantId}/${endpoint}`, {
+        const ky = (await import('ky')).default;
+        const res = await ky(`${baseUrl}/${tenantId}${endpoint}`, {
           ...options,
           headers,
           timeout: timeoutMs,
@@ -119,7 +120,7 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
         const data: ProcessFeedResponse = await res.json();
 
         logger.debug('Received response from ACO API', {
-          url: `${baseUrl}/${tenantId}/${endpoint}`,
+          url: `${baseUrl}/${tenantId}${endpoint}`,
           status: res.status,
           statusText: res.statusText,
           data,
@@ -132,10 +133,11 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
           data,
         };
       } catch (error) {
+        logger.error('Error executing API request', error as Error);
         if (error instanceof ApiError) {
           throw error;
         }
-        throw new ApiError('Could not execute API request');
+        throw new ApiError('Could not execute API request', undefined, error as Error);
       }
     },
   };
