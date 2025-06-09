@@ -241,6 +241,7 @@ export function createClient(clientConfig: ClientConfig): Client {
     environment,
     timeoutMs,
     logger,
+    baseUrlOverride: process.env.BASE_URL_OVERRIDE ?? undefined,
   };
   const http = createHttpClient(httpConfig);
 
