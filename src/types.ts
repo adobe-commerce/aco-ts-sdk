@@ -268,7 +268,7 @@ export interface FeedMetadataUpdate {
  */
 export interface FeedPricebook {
   /**
-   * Price book id
+   * Child price book id
    *
    * @memberof FeedPricebook
    * @type {string}
@@ -280,14 +280,36 @@ export interface FeedPricebook {
    * @memberof FeedPricebook
    * @type {string}
    */
-  name?: string;
+  name: string;
   /**
    * Price book currency
    *
    * @memberof FeedPricebook
    * @type {string}
    */
-  currency?: string;
+  currency: string;
+  /**
+   * Base price book id
+   *
+   * @memberof FeedPricebook
+   * @type {string}
+   */
+  parentId: string;
+}
+/**
+ * Price book information
+ *
+ * @export
+ * @interface FeedPricebookDelete
+ */
+export interface FeedPricebookDelete {
+  /**
+   * Price book id
+   *
+   * @memberof FeedPricebookDelete
+   * @type {string}
+   */
+  priceBookId: string;
 }
 /**
  * Product price information.
@@ -782,6 +804,60 @@ export interface Model403Response {
    * @type {string}
    */
   message?: string;
+}
+/**
+ * @export
+ * @interface PriceBookBase
+ */
+export interface PriceBookBase {
+  /**
+   * Base price book id
+   *
+   * @memberof PriceBookBase
+   * @type {string}
+   */
+  priceBookId: string;
+  /**
+   * Price book name
+   *
+   * @memberof PriceBookBase
+   * @type {string}
+   */
+  name: string;
+  /**
+   * Price book currency
+   *
+   * @memberof PriceBookBase
+   * @type {string}
+   */
+  currency: string;
+}
+/**
+ * @export
+ * @interface PriceBookChild
+ */
+export interface PriceBookChild {
+  /**
+   * Child price book id
+   *
+   * @memberof PriceBookChild
+   * @type {string}
+   */
+  priceBookId: string;
+  /**
+   * Price book name
+   *
+   * @memberof PriceBookChild
+   * @type {string}
+   */
+  name: string;
+  /**
+   * Base price book id
+   *
+   * @memberof PriceBookChild
+   * @type {string}
+   */
+  parentId: string;
 }
 /**
  * @export
