@@ -263,39 +263,10 @@ export interface FeedMetadataUpdate {
 /**
  * Price book information
  *
+ * @type FeedPricebook
  * @export
- * @interface FeedPricebook
  */
-export interface FeedPricebook {
-  /**
-   * Child price book id
-   *
-   * @memberof FeedPricebook
-   * @type {string}
-   */
-  priceBookId: string;
-  /**
-   * Price book name
-   *
-   * @memberof FeedPricebook
-   * @type {string}
-   */
-  name: string;
-  /**
-   * Price book currency
-   *
-   * @memberof FeedPricebook
-   * @type {string}
-   */
-  currency: string;
-  /**
-   * Base price book id
-   *
-   * @memberof FeedPricebook
-   * @type {string}
-   */
-  parentId: string;
-}
+export type FeedPricebook = PriceBookBase | PriceBookChild;
 /**
  * Price book information
  *

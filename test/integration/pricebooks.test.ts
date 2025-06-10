@@ -17,7 +17,7 @@
 import { config } from 'dotenv';
 import { describe, test, beforeAll, expect } from 'vitest';
 import { Client, createClient } from '../../src/client';
-import { FeedPricebook, Environment, Region, ClientConfig, LogLevel } from '../../src/types';
+import { FeedPricebook, Environment, Region, ClientConfig, LogLevel, FeedPricebookDelete } from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
 config();
@@ -33,16 +33,16 @@ for (const envVar of requiredEnvVars) {
 describe('Pricebooks Integration Tests', () => {
   let client: Client;
 
-  const pricebook1: FeedPricebook = {
+  const parentPricebook: FeedPricebook = {
     priceBookId: 'default',
     name: 'Default Price Book',
     currency: 'USD',
   };
 
-  const pricebook2: FeedPricebook = {
+  const childPricebook: FeedPricebook = {
     priceBookId: 'vip',
     name: 'VIP Price Book',
-    currency: 'USD',
+    parentId: 'default',
   };
 
   beforeAll(() => {
@@ -61,7 +61,7 @@ describe('Pricebooks Integration Tests', () => {
   });
 
   test('should create priceBooks', async () => {
-    const response = await client.createPriceBooks([pricebook1, pricebook2]);
+    const response = await client.createPriceBooks([parentPricebook, childPricebook]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
@@ -71,17 +71,19 @@ describe('Pricebooks Integration Tests', () => {
   });
 
   test('should update priceBooks', async () => {
-    const pricebookUpdate1: FeedPricebook = {
+    const parentPricebookUpdate: FeedPricebook = {
       priceBookId: 'default',
       name: 'Default Price Book Updated',
+      currency: 'USD',
     };
 
-    const pricebookUpdate2: FeedPricebook = {
+    const childPricebookUpdate: FeedPricebook = {
       priceBookId: 'vip',
       name: 'VIP Price Book Updated',
+      parentId: 'default',
     };
 
-    const response = await client.updatePriceBooks([pricebookUpdate1, pricebookUpdate2]);
+    const response = await client.updatePriceBooks([parentPricebookUpdate, childPricebookUpdate]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
@@ -91,10 +93,13 @@ describe('Pricebooks Integration Tests', () => {
   });
 
   test('should delete priceBooks', async () => {
-    const response = await client.deletePriceBooks([
-      { priceBookId: pricebook1.priceBookId },
-      { priceBookId: pricebook2.priceBookId },
-    ]);
+    const parentPricebookDelete: FeedPricebookDelete = {
+      priceBookId: parentPricebook.priceBookId,
+    };
+    const childPricebookDelete: FeedPricebookDelete = {
+      priceBookId: childPricebook.priceBookId,
+    };
+    const response = await client.deletePriceBooks([parentPricebookDelete, childPricebookDelete]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
