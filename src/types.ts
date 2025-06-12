@@ -96,9 +96,9 @@ export interface FeedMetadata {
   code: string;
   /**
    * @memberof FeedMetadata
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
   /**
    * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
    * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
@@ -176,9 +176,9 @@ export interface FeedMetadataDelete {
   code: string;
   /**
    * @memberof FeedMetadataDelete
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
 }
 /**
  * Metadata information for a product attribute.
@@ -196,9 +196,9 @@ export interface FeedMetadataUpdate {
   code: string;
   /**
    * @memberof FeedMetadataUpdate
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
   /**
    * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
    * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
@@ -411,9 +411,9 @@ export interface FeedProduct {
   sku: string;
   /**
    * @memberof FeedProduct
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
   /**
    * Product name
    *
@@ -526,9 +526,9 @@ export interface FeedProductDelete {
   sku: string;
   /**
    * @memberof FeedProductDelete
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
 }
 /**
  * @export
@@ -544,9 +544,9 @@ export interface FeedProductUpdate {
   sku: string;
   /**
    * @memberof FeedProductUpdate
-   * @type {Scope}
+   * @type {Source}
    */
-  scope: Scope;
+  source: Source;
   /**
    * Product name
    *
@@ -863,16 +863,6 @@ export interface ProductAttribute {
    */
   code: string;
   /**
-   * Type of attribute value to be applied during the rendering phase. Validation occurs only when the code is rendered.
-   * Invalid values are ignored. - `BOOLEAN`: Accept single value: "true" or false - `NUMBER`: Accept single number,e.g.
-   * "85", "0.42", etc. - `STRING`: Accept single string,e.g. "Great day, yall!" - `ARRAY`: Accept list of strings ,e.g.
-   * ["red", "green", "blue"] - `OBJECT`: Accept JSON object `\"{\"name\": \"swatch\", \"color\": \"red\"}\"`
-   *
-   * @memberof ProductAttribute
-   * @type {ProductAttributeTypeEnum}
-   */
-  type: ProductAttributeTypeEnum;
-  /**
    * A list of value(s) associated with a specified attribute code.
    *
    * @memberof ProductAttribute
@@ -1150,16 +1140,16 @@ export interface ProductRoutes {
   position?: number;
 }
 /**
- * Scope of the entity. For example it's locale "English"
+ * Source of the entity. For example it's locale "English"
  *
  * @export
- * @interface Scope
+ * @interface Source
  */
-export interface Scope {
+export interface Source {
   /**
    * A single value that represents content locale, for example, English.
    *
-   * @memberof Scope
+   * @memberof Source
    * @type {string}
    */
   locale: string;
@@ -1275,19 +1265,6 @@ export enum FeedProductUpdateStatusEnum {
 export enum FeedProductUpdateVisibleInEnum {
   Catalog = 'CATALOG',
   Search = 'SEARCH',
-}
-/**
- * Enum for ProductAttribute.type
- *
- * @export
- * @enum {string}
- */
-export enum ProductAttributeTypeEnum {
-  Boolean = 'BOOLEAN',
-  Number = 'NUMBER',
-  String = 'STRING',
-  Array = 'ARRAY',
-  Object = 'OBJECT',
 }
 /**
  * Enum for ProductConfiguration.type

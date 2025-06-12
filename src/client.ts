@@ -38,14 +38,14 @@ export interface Client {
   /**
    * Create product attribute metadata To ensure product data is indexed for discovery, create or replace existing
    * product attribute metadata resources before creating products. For each Commerce project, you must define metadata
-   * for the following attributes for each scope (`locale`): - `sku` - `name` - `description` - `shortDescription` -
-   * `price` Also, you can define metadata for custom attributes. When creating product attribute metadata: - Each
-   * product attribute requires a unique `code` and `scope`. - Use the `dataType` field to define the data type for the
-   * product attribute. - Use the `visibleIn` field to define where the product attribute is displayed on the
-   * storefront. - Use the `filterable`, `sortable`, and `searchable` fields to define how the product attribute is used
-   * for filtering, sorting, and searching. - Use the `searchWeight` field to define the search weight for the product
-   * attribute. - Use the `searchTypes` field to define the search type for the product attribute. To update existing
-   * product attribute metadata, use the update operation.
+   * for the following attributes for each catalog source (`locale`): - `sku` - `name` - `description` -
+   * `shortDescription` - `price` Also, you can define metadata for custom attributes. When creating product attribute
+   * metadata: - Each product attribute requires a unique `code` and `source`. - Use the `dataType` field to define the
+   * data type for the product attribute. - Use the `visibleIn` field to define where the product attribute is displayed
+   * on the storefront. - Use the `filterable`, `sortable`, and `searchable` fields to define how the product attribute
+   * is used for filtering, sorting, and searching. - Use the `searchWeight` field to define the search weight for the
+   * product attribute. - Use the `searchTypes` field to define the search type for the product attribute. To update
+   * existing product attribute metadata, use the update operation.
    *
    * @param data - FeedMetadata[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -136,20 +136,19 @@ export interface Client {
   /**
    * Create or replace products You can create different types of products, such as simple products and configurable
    * products. When creating products: - Each product requires a unique SKU identifier. - Products must have a defined
-   * scope, for example `locale`. - Add values for the required `name`, `slug`, and `status` fields. - Define optional
-   * fields such as descriptions, images, and custom attributes as needed. - Use the `links` field to define
+   * catalog source, for example `locale`. - Add values for the required `name`, `slug`, and `status` fields. - Define
+   * optional fields such as descriptions, images, and custom attributes as needed. - Use the `links` field to define
    * relationships between products, such as linking a product variant to its parent configurable product. - You can
    * create multiple products in a single request, and also create product variants for configurable products in the
    * same request. <h3 id="simpleProducts">Simple Products</h3> Create products or replace existing products with
-   * specified `sku` and `scope` values. If a product with the same data exists with the same SKU and scope, the product
-   * update request is ignored. Use the <strong>[update operation](#operation/updateProducts)</strong> to modify values
-   * for an existing product. <h3>Configurable Products</h3> A configurable product is a parent product that allows
-   * customers to select from multiple predefined attributes such as color, size, and material. Each unique combination
-   * of these attribute values (for example, `color=green`, `size=large`) represents a product variant. Each variant is
-   * treated as a distinct child product with its own SKU, price, and inventory. These variants are stored as separate
-   * entities in the database and linked to the parent configurable product. The configurable product itself acts as a
-   * container or abstraction layer, enabling a unified frontend experience while maintaining granular control over each
-   * variant on the backend. To create a configurable product, you need the following: * <strong>Product
+   * specified `sku` and `source` values. Use the <strong>[update operation](#operation/updateProducts)</strong> to
+   * modify values for an existing product. <h3>Configurable Products</h3> A configurable product is a parent product
+   * that allows customers to select from multiple predefined attributes such as color, size, and material. Each unique
+   * combination of these attribute values (for example, `color=green`, `size=large`) represents a product variant. Each
+   * variant is treated as a distinct child product with its own SKU, price, and inventory. These variants are stored as
+   * separate entities in the database and linked to the parent configurable product. The configurable product itself
+   * acts as a container or abstraction layer, enabling a unified frontend experience while maintaining granular control
+   * over each variant on the backend. To create a configurable product, you need the following: * <strong>Product
    * attributes</strong>—<a href="#operation/createProductMetadata">Create product attributes</a> (for example, "color",
    * "size") that will be used to differentiate product variants. These attributes must be registered in the system
    * before they can be referenced in product definitions. * <strong>Configurable product</strong>—Define the parent
@@ -161,12 +160,12 @@ export interface Client {
    * [attributes](#operation/createProducts!path=attributes&t=request) array. * Reference the parent configurable
    * product using variantReferenceId. * Include a [links](#operation/createProducts!path=links&t=request) array with a
    * link of type `VARIANT_OF` pointing to the configurable product. For example: <pre> { "sku": "pants-red-32",
-   * "attributes": [ { "code": "color", "type": "STRING", "values": ["Red"], "variantReferenceId": "pants-color-red" }
-   * ], "links": [ { "type": "VARIANT_OF", "sku": "pants" } ] } </pre> Each product variant links back to the
-   * configurable product through its `variantReferenceId`, which corresponds to specific
-   * `configurations[].values[].variantReferenceId` in the configurable product. To unassign a product variant from a
-   * configurable product, do one of the following: - Use [Delete Product API](#operation/deleteProducts) to delete the
-   * product variant. - Use [Update Product API](#operation/updateProducts) to set the
+   * "attributes": [ { "code": "color", "values": ["Red"], "variantReferenceId": "pants-color-red" } ], "links": [ {
+   * "type": "VARIANT_OF", "sku": "pants" } ] } </pre> Each product variant links back to the configurable product
+   * through its `variantReferenceId`, which corresponds to specific `configurations[].values[].variantReferenceId` in
+   * the configurable product. To unassign a product variant from a configurable product, do one of the following: - Use
+   * [Delete Product API](#operation/deleteProducts) to delete the product variant. - Use [Update Product
+   * API](#operation/updateProducts) to set the
    * ["variantReferenceId"](#operation/createProducts!path=attributes/variantReferenceId&t=request) to `null` and
    * unassign the product variant from the configurable product by removing the
    * ["links"](#operation/createProducts!path=links&t=request) association. <h3>Bundle Products</h3> A bundle product
@@ -192,7 +191,7 @@ export interface Client {
    */
   createProducts(data: FeedProduct[]): Promise<ApiResponse>;
   /**
-   * Delete products Delete products with specified `sku`` and `scope`` values
+   * Delete products Delete products with specified `sku`` and `source`` values
    *
    * @param data - FeedProductDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -200,7 +199,7 @@ export interface Client {
    */
   deleteProducts(data: FeedProductDelete[]): Promise<ApiResponse>;
   /**
-   * Update products Update products with specified `sku` and `scope` values to replace existing field data with the
+   * Update products Update products with specified `sku` and `source` values to replace existing field data with the
    * data supplied in the request. When the update is processed, the merge strategy is used to apply changes to `scalar`
    * and `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
    *
