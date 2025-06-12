@@ -25,7 +25,6 @@ import {
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
   FeedMetadataVisibleInEnum,
-  ProductAttributeTypeEnum,
 } from '../../src/types';
 
 // Mock the dependencies
@@ -49,7 +48,7 @@ describe('Client', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createMockData = (operationName: string): any[] => {
     const baseMock = {
-      scope: { locale: 'en-US' },
+      source: { locale: 'en-US' },
     };
 
     switch (operationName) {
@@ -93,12 +92,10 @@ describe('Client', () => {
             attributes: [
               {
                 code: 'brand',
-                type: ProductAttributeTypeEnum.String,
                 values: ['Test Brand'],
               },
               {
                 code: 'category',
-                type: ProductAttributeTypeEnum.String,
                 values: ['Electronics'],
               },
             ],

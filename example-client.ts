@@ -8,7 +8,6 @@ import {
   FeedProduct,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
-  ProductAttributeTypeEnum,
 } from './src/types';
 
 // Load environment variables from .env file
@@ -41,7 +40,7 @@ async function main(): Promise<void> {
   // Define a couple of products
   const product1: FeedProduct = {
     sku: 'EXAMPLE-SKU-001',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     name: 'Example Product 1',
     slug: 'example-product-1',
     description: 'This is an example product created via the SDK',
@@ -50,12 +49,10 @@ async function main(): Promise<void> {
     attributes: [
       {
         code: 'brand',
-        type: ProductAttributeTypeEnum.String,
         values: ['Example Brand'],
       },
       {
         code: 'category',
-        type: ProductAttributeTypeEnum.String,
         values: ['Electronics'],
       },
     ],
@@ -63,7 +60,7 @@ async function main(): Promise<void> {
 
   const product2: FeedProduct = {
     sku: 'EXAMPLE-SKU-002',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     name: 'Example Product 2',
     slug: 'example-product-2',
     description: 'This is another example product created via the SDK',
@@ -72,12 +69,10 @@ async function main(): Promise<void> {
     attributes: [
       {
         code: 'brand',
-        type: ProductAttributeTypeEnum.String,
         values: ['Example Brand'],
       },
       {
         code: 'category',
-        type: ProductAttributeTypeEnum.String,
         values: ['Electronics'],
       },
     ],

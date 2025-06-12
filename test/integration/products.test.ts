@@ -21,7 +21,6 @@ import {
   FeedProduct,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
-  ProductAttributeTypeEnum,
   FeedProductUpdate,
   Environment,
   Region,
@@ -45,7 +44,7 @@ describe('Products Integration Tests', () => {
 
   const product1: FeedProduct = {
     sku: 'EXAMPLE-SKU-001',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     name: 'Example Product 1',
     slug: 'example-product-1',
     description: 'This is an example product created via the SDK',
@@ -54,12 +53,10 @@ describe('Products Integration Tests', () => {
     attributes: [
       {
         code: 'brand',
-        type: ProductAttributeTypeEnum.String,
         values: ['Example Brand'],
       },
       {
         code: 'category',
-        type: ProductAttributeTypeEnum.String,
         values: ['Electronics'],
       },
     ],
@@ -67,7 +64,7 @@ describe('Products Integration Tests', () => {
 
   const product2: FeedProduct = {
     sku: 'EXAMPLE-SKU-002',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     name: 'Example Product 2',
     slug: 'example-product-2',
     description: 'This is another example product created via the SDK',
@@ -76,12 +73,10 @@ describe('Products Integration Tests', () => {
     attributes: [
       {
         code: 'brand',
-        type: ProductAttributeTypeEnum.String,
         values: ['Example Brand'],
       },
       {
         code: 'category',
-        type: ProductAttributeTypeEnum.String,
         values: ['Electronics'],
       },
     ],
@@ -115,13 +110,13 @@ describe('Products Integration Tests', () => {
   test('should update products', async () => {
     const productUpdate1: FeedProductUpdate = {
       sku: 'EXAMPLE-SKU-001',
-      scope: { locale: 'en-US' },
+      source: { locale: 'en-US' },
       name: 'Updated Product Name',
     };
 
     const productUpdate2: FeedProductUpdate = {
       sku: 'EXAMPLE-SKU-002',
-      scope: { locale: 'en-US' },
+      source: { locale: 'en-US' },
       name: 'Updated Product Name 2',
     };
 
@@ -136,8 +131,8 @@ describe('Products Integration Tests', () => {
 
   test('should delete products', async () => {
     const response = await client.deleteProducts([
-      { sku: product1.sku, scope: product1.scope },
-      { sku: product2.sku, scope: product2.scope },
+      { sku: product1.sku, source: product1.source },
+      { sku: product2.sku, source: product2.source },
     ]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);

@@ -44,7 +44,7 @@ describe('Product Metadata Integration Tests', () => {
 
   const metadata1: FeedMetadata = {
     code: 'color',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     label: 'Color',
     dataType: FeedMetadataDataTypeEnum.Text,
     visibleIn: [
@@ -60,7 +60,7 @@ describe('Product Metadata Integration Tests', () => {
 
   const metadata2: FeedMetadata = {
     code: 'size',
-    scope: { locale: 'en-US' },
+    source: { locale: 'en-US' },
     label: 'Size',
     dataType: FeedMetadataDataTypeEnum.Text,
     visibleIn: [
@@ -102,12 +102,12 @@ describe('Product Metadata Integration Tests', () => {
   test('should update product metadata', async () => {
     const metadataUpdate1: FeedMetadataUpdate = {
       code: 'color',
-      scope: { locale: 'en-US' },
+      source: { locale: 'en-US' },
       label: 'Color Updated',
     };
     const metadataUpdate2: FeedMetadataUpdate = {
       code: 'size',
-      scope: { locale: 'en-US' },
+      source: { locale: 'en-US' },
       label: 'Size Updated',
     };
 
@@ -122,8 +122,8 @@ describe('Product Metadata Integration Tests', () => {
 
   test('should delete product metadata', async () => {
     const response = await client.deleteProductMetadata([
-      { code: metadata1.code, scope: metadata1.scope },
-      { code: metadata2.code, scope: metadata2.scope },
+      { code: metadata1.code, source: metadata1.source },
+      { code: metadata2.code, source: metadata2.source },
     ]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
