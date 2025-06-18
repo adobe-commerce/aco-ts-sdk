@@ -12,6 +12,7 @@
 import { ApiError } from './errors';
 import type { AuthService } from './auth';
 import type { ApiResponse, Environment, Logger, ProcessFeedResponse, Region } from './types';
+import { HTTPError } from 'ky';
 // ky is imported dynamically below to avoid CJS bundling issues with the ESM-only ky package
 
 export interface HttpClient {
@@ -70,16 +71,10 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
     }
   };
 
-  const handleNonRetryableError = (response: Response, errorData: unknown, attempt: number): void => {
-    const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached' : 'API request failed';
-    const error = new ApiError(`${errorPrefix}: ${response.statusText}`, response.status, JSON.stringify(errorData));
-    logger.error(error.message, error);
-    throw error;
-  };
-
   return {
     async request(endpoint: string, options?: RequestInit): Promise<ApiResponse> {
       const headers = await getHeaders(options?.headers);
+      let attempt = 1;
 
       try {
         logger.debug('Sending request to ACO API', {
@@ -88,7 +83,6 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
           options,
         });
 
-        let attempt = 1;
         const ky = (await import('ky')).default;
         const res = await ky(`${baseUrl}/${tenantId}${endpoint}`, {
           ...options,
@@ -103,14 +97,10 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
             afterResponse: [
               // eslint-disable-next-line unused-imports/no-unused-vars
               async (request, options, response): Promise<void> => {
-                if (!response.ok) {
-                  if (RETRYABLE_STATUS_CODES.includes(response.status) && attempt <= MAX_RETRIES) {
-                    handleRetryableError(response, attempt);
-                    attempt++;
-                    return;
-                  }
-                  const errorData = await response.json().catch(() => ({}));
-                  handleNonRetryableError(response, errorData, attempt);
+                if (!response.ok && RETRYABLE_STATUS_CODES.includes(response.status) && attempt <= MAX_RETRIES) {
+                  handleRetryableError(response, attempt);
+                  attempt++;
+                  return;
                 }
               },
             ],
@@ -133,10 +123,21 @@ export function createHttpClient(config: HttpClientConfig): HttpClient {
           data,
         };
       } catch (error) {
-        logger.error('Error executing API request', error as Error);
-        if (error instanceof ApiError) {
-          throw error;
+        // Handle ky HTTPError
+        if (error instanceof HTTPError) {
+          const response = error.response as Response;
+          const errorPrefix = attempt > MAX_RETRIES ? 'Maximum retry attempts reached' : 'API request failed';
+          const errorData = await response.json().catch(() => ({}));
+          const apiError = new ApiError(
+            `${errorPrefix}: ${response.statusText}`,
+            response.status,
+            JSON.stringify(errorData),
+          );
+          logger.error(apiError.message, apiError);
+          throw apiError;
         }
+
+        logger.error('Error executing API request', error as Error);
         throw new ApiError('Could not execute API request', undefined, error as Error);
       }
     },
