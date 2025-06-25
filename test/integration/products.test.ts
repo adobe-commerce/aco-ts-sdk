@@ -26,6 +26,7 @@ import {
   Region,
   ClientConfig,
   LogLevel,
+  ProductConfigurationTypeEnum,
 } from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
@@ -42,12 +43,12 @@ for (const envVar of requiredEnvVars) {
 describe('Products Integration Tests', () => {
   let client: Client;
 
-  const product1: FeedProduct = {
-    sku: 'EXAMPLE-SKU-001',
+  const simpleProduct1: FeedProduct = {
+    sku: 'SIMPLE-SKU-001',
     source: { locale: 'en-US' },
-    name: 'Example Product 1',
-    slug: 'example-product-1',
-    description: 'This is an example product created via the SDK',
+    name: 'Simple Product 1',
+    slug: 'simple-product-1',
+    description: 'This is a simple product created via the SDK',
     status: FeedProductStatusEnum.Enabled,
     visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
     attributes: [
@@ -62,12 +63,12 @@ describe('Products Integration Tests', () => {
     ],
   };
 
-  const product2: FeedProduct = {
-    sku: 'EXAMPLE-SKU-002',
+  const simpleProduct2: FeedProduct = {
+    sku: 'SIMPLE-SKU-002',
     source: { locale: 'en-US' },
-    name: 'Example Product 2',
-    slug: 'example-product-2',
-    description: 'This is another example product created via the SDK',
+    name: 'Simple Product 2',
+    slug: 'simple-product-2',
+    description: 'This is another simple product created via the SDK',
     status: FeedProductStatusEnum.Enabled,
     visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
     attributes: [
@@ -80,6 +81,131 @@ describe('Products Integration Tests', () => {
         values: ['Electronics'],
       },
     ],
+  };
+
+  const configurableProduct1: FeedProduct = {
+    sku: 'CONFIGURABLE-SKU-001',
+    source: { locale: 'en-US' },
+    name: 'Configurable Product 1',
+    slug: 'configurable-product-1',
+    description: 'This is an example configurable product created via the SDK',
+    status: FeedProductStatusEnum.Enabled,
+    visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+    attributes: [
+      {
+        code: 'brand',
+        values: ['Example Brand'],
+      },
+      {
+        code: 'category',
+        values: ['Electronics'],
+      },
+    ],
+    configurations: [
+      {
+        attributeCode: 'color',
+        label: 'Color',
+        type: ProductConfigurationTypeEnum.Swatch,
+        values: [
+          {
+            variantReferenceId: 'CONFIGURABLE-VARIANT-RED',
+            label: 'Red',
+            colorHex: '#FF0000',
+          },
+          {
+            variantReferenceId: 'CONFIGURABLE-VARIANT-BLUE',
+            label: 'Blue',
+            colorHex: '#0000FF',
+          },
+        ],
+      },
+    ],
+  };
+
+  const configurableVariant1: FeedProduct = {
+    sku: 'CONFIGURABLE-SKU-001-RED',
+    source: { locale: 'en-US' },
+    name: 'Configurable Product 1 - Red',
+    slug: 'configurable-product-1-red',
+    description: 'Red variant of Configurable Product 1',
+    status: FeedProductStatusEnum.Enabled,
+    attributes: [{ code: 'color', values: ['Red'], variantReferenceId: 'CONFIGURABLE-VARIANT-RED' }],
+    links: [{ type: 'VARIANT_OF', sku: 'CONFIGURABLE-SKU-001' }],
+  };
+
+  const configurableVariant2: FeedProduct = {
+    sku: 'CONFIGURABLE-SKU-001-BLUE',
+    source: { locale: 'en-US' },
+    name: 'Configurable Product 1 - Blue',
+    slug: 'configurable-product-1-blue',
+    description: 'Blue variant of Configurable Product 1',
+    status: FeedProductStatusEnum.Enabled,
+    attributes: [{ code: 'color', values: ['Blue'], variantReferenceId: 'CONFIGURABLE-VARIANT-BLUE' }],
+    links: [{ type: 'VARIANT_OF', sku: 'CONFIGURABLE-SKU-001' }],
+  };
+
+  const bundleProduct1: FeedProduct = {
+    sku: 'BUNDLE-SKU-001',
+    source: { locale: 'en-US' },
+    name: 'Bundle Product 1',
+    slug: 'bundle-product-1',
+    description: 'This is an example bundle product created via the SDK',
+    status: FeedProductStatusEnum.Enabled,
+    visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+    attributes: [
+      { code: 'brand', values: ['Example Brand'] },
+      { code: 'category', values: ['Electronics'] },
+    ],
+    bundles: [
+      {
+        group: 'items',
+        required: true,
+        multiSelect: false,
+        defaultItemSkus: ['BUNDLE-ITEM-001'],
+        items: [
+          {
+            sku: 'BUNDLE-ITEM-001',
+            qty: 1,
+            userDefinedQty: false,
+          },
+          {
+            sku: 'BUNDLE-ITEM-002',
+            qty: 1,
+            userDefinedQty: false,
+          },
+        ],
+      },
+    ],
+  };
+
+  const bundleItem1: FeedProduct = {
+    sku: 'BUNDLE-ITEM-001',
+    source: { locale: 'en-US' },
+    name: 'Bundle Item 1',
+    slug: 'bundle-item-1',
+    description: 'This is an example bundle item created via the SDK',
+    status: FeedProductStatusEnum.Enabled,
+    visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+    attributes: [
+      { code: 'brand', values: ['Example Brand'] },
+      { code: 'category', values: ['Electronics'] },
+    ],
+    links: [{ type: 'IN_BUNDLE', sku: 'BUNDLE-SKU-001' }],
+  };
+
+  const bundleItem2: FeedProduct = {
+    sku: 'BUNDLE-ITEM-002',
+    source: { locale: 'en-US' },
+    name: 'Bundle Item 2',
+    slug: 'bundle-item-2',
+    description: 'This is an example bundle item created via the SDK',
+    status: FeedProductStatusEnum.Enabled,
+    visibleIn: [FeedProductVisibleInEnum.Catalog, FeedProductVisibleInEnum.Search],
+    attributes: [
+      { code: 'brand', values: ['Example Brand'] },
+      { code: 'category', values: ['Electronics'] },
+    ],
+    links: [{ type: 'IN_BUNDLE', sku: 'BUNDLE-SKU-001' }],
   };
 
   beforeAll(() => {
@@ -97,8 +223,8 @@ describe('Products Integration Tests', () => {
     client = createClient(config);
   });
 
-  test('should create products', async () => {
-    const response = await client.createProducts([product1, product2]);
+  test('should create simple products', async () => {
+    const response = await client.createProducts([simpleProduct1, simpleProduct2]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
@@ -107,17 +233,37 @@ describe('Products Integration Tests', () => {
     expect(response.data.acceptedCount).toBe(2);
   });
 
+  test('should create configurable product and variants', async () => {
+    const response = await client.createProducts([configurableProduct1, configurableVariant1, configurableVariant2]);
+    expect(response).toBeDefined();
+    expect(response.ok).toBe(true);
+    expect(response.status).toBe(200);
+    expect(response.statusText).toBe('OK');
+    expect(response.data.status).toBe('ACCEPTED');
+    expect(response.data.acceptedCount).toBe(3);
+  });
+
+  test('should create bundle product and items', async () => {
+    const response = await client.createProducts([bundleProduct1, bundleItem1, bundleItem2]);
+    expect(response).toBeDefined();
+    expect(response.ok).toBe(true);
+    expect(response.status).toBe(200);
+    expect(response.statusText).toBe('OK');
+    expect(response.data.status).toBe('ACCEPTED');
+    expect(response.data.acceptedCount).toBe(3);
+  });
+
   test('should update products', async () => {
     const productUpdate1: FeedProductUpdate = {
-      sku: 'EXAMPLE-SKU-001',
+      sku: 'SIMPLE-SKU-001',
       source: { locale: 'en-US' },
-      name: 'Updated Product Name',
+      name: 'Updated Simple Product 1',
     };
 
     const productUpdate2: FeedProductUpdate = {
-      sku: 'EXAMPLE-SKU-002',
+      sku: 'SIMPLE-SKU-002',
       source: { locale: 'en-US' },
-      name: 'Updated Product Name 2',
+      name: 'Updated Simple Product 2',
     };
 
     const response = await client.updateProducts([productUpdate1, productUpdate2]);
@@ -131,14 +277,20 @@ describe('Products Integration Tests', () => {
 
   test('should delete products', async () => {
     const response = await client.deleteProducts([
-      { sku: product1.sku, source: product1.source },
-      { sku: product2.sku, source: product2.source },
+      { sku: simpleProduct1.sku, source: simpleProduct1.source },
+      { sku: simpleProduct2.sku, source: simpleProduct2.source },
+      { sku: configurableProduct1.sku, source: configurableProduct1.source },
+      { sku: configurableVariant1.sku, source: configurableVariant1.source },
+      { sku: configurableVariant2.sku, source: configurableVariant2.source },
+      { sku: bundleProduct1.sku, source: bundleProduct1.source },
+      { sku: bundleItem1.sku, source: bundleItem1.source },
+      { sku: bundleItem2.sku, source: bundleItem2.source },
     ]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(2);
+    expect(response.data.acceptedCount).toBe(8);
   });
 });
