@@ -23,12 +23,12 @@ export interface DiscountsFinalPrice {
    * @memberof DiscountsFinalPrice
    * @type {string}
    */
-  code?: string;
+  code: string;
   /**
    * @memberof DiscountsFinalPrice
    * @type {number}
    */
-  price?: number;
+  price: number;
 }
 /**
  * @export
@@ -39,12 +39,12 @@ export interface DiscountsPercentage {
    * @memberof DiscountsPercentage
    * @type {string}
    */
-  code?: string;
+  code: string;
   /**
    * @memberof DiscountsPercentage
    * @type {number}
    */
-  percentage?: number;
+  percentage: number;
 }
 /**
  * @export
@@ -349,17 +349,17 @@ export interface FeedPricesDiscountsInner {
    * @memberof FeedPricesDiscountsInner
    * @type {string}
    */
-  code?: string;
+  code: string;
   /**
    * @memberof FeedPricesDiscountsInner
    * @type {number}
    */
-  price?: number;
+  price: number;
   /**
    * @memberof FeedPricesDiscountsInner
    * @type {number}
    */
-  percentage?: number;
+  percentage: number;
 }
 /**
  * Product price information.
@@ -461,12 +461,10 @@ export interface FeedProduct {
    */
   visibleIn?: FeedProductVisibleInEnum[];
   /**
-   * Meta attributes that are specified in <meta> tags.
-   *
    * @memberof FeedProduct
-   * @type {ProductMetaAttribute[]}
+   * @type {ProductMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute[];
+  metaTags?: ProductMetaAttribute;
   /**
    * A list of product attributes.
    *
@@ -511,6 +509,13 @@ export interface FeedProduct {
    * @type {ProductBundle[]}
    */
   bundles?: ProductBundle[];
+  /**
+   * A list of external IDs for the product.
+   *
+   * @memberof FeedProduct
+   * @type {ProductExternalId[]}
+   */
+  externalIds?: ProductExternalId[];
 }
 /**
  * @export
@@ -594,12 +599,10 @@ export interface FeedProductUpdate {
    */
   visibleIn?: FeedProductUpdateVisibleInEnum[];
   /**
-   * Meta attributes that are specified in <meta> tags.
-   *
    * @memberof FeedProductUpdate
-   * @type {ProductMetaAttribute[]}
+   * @type {ProductMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute[];
+  metaTags?: ProductMetaAttribute;
   /**
    * A list of product attributes.
    *
@@ -646,6 +649,13 @@ export interface FeedProductUpdate {
    * @type {ProductBundle[]}
    */
   bundles?: ProductBundle[];
+  /**
+   * A list of external IDs for the product.
+   *
+   * @memberof FeedProductUpdate
+   * @type {ProductExternalId[]}
+   */
+  externalIds?: ProductExternalId[];
 }
 /**
  * @export
@@ -996,6 +1006,27 @@ export interface ProductConfiguration {
 }
 /**
  * @export
+ * @interface ProductExternalId
+ */
+export interface ProductExternalId {
+  /**
+   * External ID of the product.
+   *
+   * @memberof ProductExternalId
+   * @type {string}
+   */
+  id: string;
+  /**
+   * External ID origin. Specifies the system that generated the external ID, such as Adobe Commerce, Google Product
+   * Ratings, etc.
+   *
+   * @memberof ProductExternalId
+   * @type {string}
+   */
+  origin: string;
+}
+/**
+ * @export
  * @interface ProductImage
  */
 export interface ProductImage {
@@ -1057,6 +1088,8 @@ export interface ProductLink {
   sku: string;
 }
 /**
+ * Meta attributes that are specified in <meta> tags.
+ *
  * @export
  * @interface ProductMetaAttribute
  */
