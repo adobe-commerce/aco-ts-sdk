@@ -18,7 +18,7 @@ export interface AuthService {
 
 const IMS_BASE_URL = 'https://ims-na1.adobelogin.com';
 const TOKEN_BUFFER_SECONDS = 300; // 5 minutes
-const DEFAULT_SCOPES = 'adobeio_api,openid,AdobeID,read_organizations';
+const DEFAULT_SCOPES = 'openid,AdobeID,commerce.aco.ingestion,email,profile';
 
 interface TokenResponse {
   access_token: string;
