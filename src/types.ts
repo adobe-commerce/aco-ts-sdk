@@ -341,26 +341,10 @@ export interface FeedPricesDelete {
   priceBookId: string;
 }
 /**
+ * @type FeedPricesDiscountsInner
  * @export
- * @interface FeedPricesDiscountsInner
  */
-export interface FeedPricesDiscountsInner {
-  /**
-   * @memberof FeedPricesDiscountsInner
-   * @type {string}
-   */
-  code: string;
-  /**
-   * @memberof FeedPricesDiscountsInner
-   * @type {number}
-   */
-  price: number;
-  /**
-   * @memberof FeedPricesDiscountsInner
-   * @type {number}
-   */
-  percentage: number;
-}
+export type FeedPricesDiscountsInner = DiscountsFinalPrice | DiscountsPercentage;
 /**
  * Product price information.
  *

@@ -17,7 +17,15 @@
 import { config } from 'dotenv';
 import { describe, test, beforeAll, expect } from 'vitest';
 import { Client, createClient } from '../../src/client';
-import { FeedPrices, Environment, Region, ClientConfig, LogLevel } from '../../src/types';
+import {
+  FeedPrices,
+  Environment,
+  Region,
+  ClientConfig,
+  LogLevel,
+  DiscountsFinalPrice,
+  DiscountsPercentage,
+} from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
 config();
@@ -45,6 +53,23 @@ describe('Prices Integration Tests', () => {
     regular: 79.99,
   };
 
+  const finalPriceDiscount: DiscountsFinalPrice = {
+    code: 'DISCOUNT-CODE-001',
+    price: 59.99,
+  };
+
+  const percentageDiscount: DiscountsPercentage = {
+    code: 'DISCOUNT-CODE-001',
+    percentage: 10,
+  };
+
+  const discountPrice: FeedPrices = {
+    sku: 'EXAMPLE-SKU-001',
+    priceBookId: 'vip',
+    regular: 59.99,
+    discounts: [finalPriceDiscount, percentageDiscount],
+  };
+
   beforeAll(() => {
     const config: ClientConfig = {
       credentials: {
@@ -61,13 +86,13 @@ describe('Prices Integration Tests', () => {
   });
 
   test('should create prices', async () => {
-    const response = await client.createPrices([price1, price2]);
+    const response = await client.createPrices([price1, price2, discountPrice]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(2);
+    expect(response.data.acceptedCount).toBe(3);
   });
 
   test('should update prices', async () => {
@@ -83,25 +108,33 @@ describe('Prices Integration Tests', () => {
       regular: 59.99,
     };
 
-    const response = await client.updatePrices([priceUpdate1, priceUpdate2]);
+    const discountPriceUpdate: FeedPrices = {
+      sku: 'EXAMPLE-SKU-001',
+      priceBookId: 'vip',
+      regular: 159.99,
+      discounts: [finalPriceDiscount, percentageDiscount],
+    };
+
+    const response = await client.updatePrices([priceUpdate1, priceUpdate2, discountPriceUpdate]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(2);
+    expect(response.data.acceptedCount).toBe(3);
   });
 
   test('should delete prices', async () => {
     const response = await client.deletePrices([
       { sku: price1.sku, priceBookId: price1.priceBookId },
       { sku: price2.sku, priceBookId: price2.priceBookId },
+      { sku: discountPrice.sku, priceBookId: discountPrice.priceBookId },
     ]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(2);
+    expect(response.data.acceptedCount).toBe(3);
   });
 });
