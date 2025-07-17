@@ -41,7 +41,18 @@ export enum {{classname}} {
 export type {{classname}} = {{#oneOf}}{{.}}{{^-last}} | {{/-last}}{{/oneOf}};
 {{/-first}}
 {{/oneOf}}
+{{#anyOf}}
+{{#-first}}
+/**
+ * {{{description}}}
+ * @export
+ * @type {{{classname}}}
+ */
+export type {{classname}} = {{#anyOf}}{{.}}{{^-last}} | {{/-last}}{{/anyOf}};
+{{/-first}}
+{{/anyOf}}
 {{^oneOf}}
+{{^anyOf}}
 /**
  * {{{description}}}
  * @export
@@ -57,6 +68,7 @@ export interface {{classname}} {
   {{#isReadOnly}}readonly {{/isReadOnly}}{{name}}{{^required}}?{{/required}}: {{#isEnum}}{{#isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum[]{{/isArray}}{{^isArray}}{{classname}}{{#lambda.titlecase}}{{name}}{{/lambda.titlecase}}Enum{{/isArray}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
 {{/vars}}
 }
+{{/anyOf}}
 {{/oneOf}}
 {{/isEnum}}
 {{/model}}
