@@ -15,6 +15,8 @@
  */
 
 /**
+ * Final discount price.
+ *
  * @export
  * @interface DiscountsFinalPrice
  */
@@ -31,6 +33,8 @@ export interface DiscountsFinalPrice {
   price: number;
 }
 /**
+ * Discount percentage of the regular price. Example $100 with a 20% discount is $80 final price.
+ *
  * @export
  * @interface DiscountsPercentage
  */
@@ -263,25 +267,25 @@ export interface FeedMetadataUpdate {
 /**
  * Price book information
  *
- * @type FeedPricebook
  * @export
+ * @interface FeedPriceBookDelete
  */
-export type FeedPricebook = PriceBookBase | PriceBookChild;
-/**
- * Price book information
- *
- * @export
- * @interface FeedPricebookDelete
- */
-export interface FeedPricebookDelete {
+export interface FeedPriceBookDelete {
   /**
    * Price book id
    *
-   * @memberof FeedPricebookDelete
+   * @memberof FeedPriceBookDelete
    * @type {string}
    */
   priceBookId: string;
 }
+/**
+ * Price book information
+ *
+ * @type FeedPricebook
+ * @export
+ */
+export type FeedPricebook = PriceBookBase | PriceBookChild;
 /**
  * Product price information.
  *
@@ -317,6 +321,13 @@ export interface FeedPrices {
    * @type {FeedPricesDiscountsInner[]}
    */
   discounts?: FeedPricesDiscountsInner[];
+  /**
+   * Tier prices for quantities greater-than one
+   *
+   * @memberof FeedPrices
+   * @type {FeedPricesTierPricesInner[]}
+   */
+  tierPrices?: FeedPricesTierPricesInner[];
 }
 /**
  * Delete product price information.
@@ -345,6 +356,11 @@ export interface FeedPricesDelete {
  * @export
  */
 export type FeedPricesDiscountsInner = DiscountsFinalPrice | DiscountsPercentage;
+/**
+ * @type FeedPricesTierPricesInner
+ * @export
+ */
+export type FeedPricesTierPricesInner = TierFinalPrice | TierPercentage;
 /**
  * Product price information.
  *
@@ -1170,6 +1186,46 @@ export interface Source {
    * @type {string}
    */
   locale: string;
+}
+/**
+ * Final price for a given quantity.
+ *
+ * @export
+ * @interface TierFinalPrice
+ */
+export interface TierFinalPrice {
+  /**
+   * Must be a value greater-than 1
+   *
+   * @memberof TierFinalPrice
+   * @type {number}
+   */
+  qty: number;
+  /**
+   * @memberof TierFinalPrice
+   * @type {number}
+   */
+  price: number;
+}
+/**
+ * Discount percentage of the regular price for a given quantity. Example $100 with a 20% discount is $80 final price.
+ *
+ * @export
+ * @interface TierPercentage
+ */
+export interface TierPercentage {
+  /**
+   * Must be a value greater-than 1
+   *
+   * @memberof TierPercentage
+   * @type {number}
+   */
+  qty: number;
+  /**
+   * @memberof TierPercentage
+   * @type {number}
+   */
+  percentage: number;
 }
 
 // Manually define any enum types that are referenced but not generated

@@ -24,8 +24,8 @@ import {
   FeedMetadata,
   FeedMetadataDelete,
   FeedMetadataUpdate,
+  FeedPriceBookDelete,
   FeedPricebook,
-  FeedPricebookDelete,
   FeedPrices,
   FeedPricesDelete,
   FeedPricesUpdate,
@@ -90,11 +90,11 @@ export interface Client {
    * of the price books and prices are restored to the status and price values assigned when the price book was
    * deleted.
    *
-   * @param data - FeedPricebookDelete[] payload
+   * @param data - FeedPriceBookDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deletePriceBooks(data: FeedPricebookDelete[]): Promise<ApiResponse>;
+  deletePriceBooks(data: FeedPriceBookDelete[]): Promise<ApiResponse>;
   /**
    * Update price books Change the name of a base or child price book, or change the currency assigned to the base price
    * book. When you submit the update request for a child price book, include the correct `parentId`. If the request
@@ -289,7 +289,7 @@ export function createClient(clientConfig: ClientConfig): Client {
       });
     },
 
-    async deletePriceBooks(data: FeedPricebookDelete[]): Promise<ApiResponse> {
+    async deletePriceBooks(data: FeedPriceBookDelete[]): Promise<ApiResponse> {
       return await http.request(`/v1/catalog/price-books/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
