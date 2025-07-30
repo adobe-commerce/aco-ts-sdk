@@ -25,6 +25,9 @@ import {
   LogLevel,
   DiscountsFinalPrice,
   DiscountsPercentage,
+  TierFinalPrice,
+  TierPercentage,
+  FeedPricesUpdate,
 } from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
@@ -64,10 +67,27 @@ describe('Prices Integration Tests', () => {
   };
 
   const discountPrice: FeedPrices = {
-    sku: 'EXAMPLE-SKU-001',
+    sku: 'EXAMPLE-SKU-002',
     priceBookId: 'vip',
     regular: 59.99,
     discounts: [finalPriceDiscount, percentageDiscount],
+  };
+
+  const tierFinalPrice: TierFinalPrice = {
+    qty: 25,
+    price: 39.99,
+  };
+
+  const tierPercentagePrice: TierPercentage = {
+    qty: 10,
+    percentage: 10,
+  };
+
+  const tieredPrice: FeedPrices = {
+    sku: 'EXAMPLE-SKU-003',
+    priceBookId: 'default',
+    regular: 59.99,
+    tierPrices: [tierFinalPrice, tierPercentagePrice],
   };
 
   beforeAll(() => {
@@ -86,42 +106,49 @@ describe('Prices Integration Tests', () => {
   });
 
   test('should create prices', async () => {
-    const response = await client.createPrices([price1, price2, discountPrice]);
+    const response = await client.createPrices([price1, price2, discountPrice, tieredPrice]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(3);
+    expect(response.data.acceptedCount).toBe(4);
   });
 
   test('should update prices', async () => {
-    const priceUpdate1: FeedPrices = {
+    const priceUpdate1: FeedPricesUpdate = {
       sku: 'EXAMPLE-SKU-001',
       priceBookId: 'default',
       regular: 109.99,
     };
 
-    const priceUpdate2: FeedPrices = {
+    const priceUpdate2: FeedPricesUpdate = {
       sku: 'EXAMPLE-SKU-001',
       priceBookId: 'vip',
       regular: 59.99,
     };
 
-    const discountPriceUpdate: FeedPrices = {
-      sku: 'EXAMPLE-SKU-001',
+    const discountPriceUpdate: FeedPricesUpdate = {
+      sku: 'EXAMPLE-SKU-002',
       priceBookId: 'vip',
       regular: 159.99,
       discounts: [finalPriceDiscount, percentageDiscount],
     };
 
-    const response = await client.updatePrices([priceUpdate1, priceUpdate2, discountPriceUpdate]);
+    const tieredPriceUpdate: FeedPricesUpdate = {
+      sku: 'EXAMPLE-SKU-003',
+      priceBookId: 'default',
+      regular: 69.99,
+      tierPrices: [tierFinalPrice, tierPercentagePrice],
+    };
+
+    const response = await client.updatePrices([priceUpdate1, priceUpdate2, discountPriceUpdate, tieredPriceUpdate]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(3);
+    expect(response.data.acceptedCount).toBe(4);
   });
 
   test('should delete prices', async () => {
@@ -129,12 +156,13 @@ describe('Prices Integration Tests', () => {
       { sku: price1.sku, priceBookId: price1.priceBookId },
       { sku: price2.sku, priceBookId: price2.priceBookId },
       { sku: discountPrice.sku, priceBookId: discountPrice.priceBookId },
+      { sku: tieredPrice.sku, priceBookId: tieredPrice.priceBookId },
     ]);
     expect(response).toBeDefined();
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
     expect(response.statusText).toBe('OK');
     expect(response.data.status).toBe('ACCEPTED');
-    expect(response.data.acceptedCount).toBe(3);
+    expect(response.data.acceptedCount).toBe(4);
   });
 });

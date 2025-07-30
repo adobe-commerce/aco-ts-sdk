@@ -106,9 +106,19 @@ export interface Client {
    */
   updatePriceBooks(data: FeedPricebook[]): Promise<ApiResponse>;
   /**
-   * Create prices Create or replace existing product prices. <h3>Configurable Products</h3> Because configurable
-   * product price is calculated based on the price of the selected product variant, you don't need to send price data
-   * for configurable product skus. Sending price data for these skus can cause incorrect price calculations.
+   * Create prices Create or replace existing product prices with support for regular pricing, discounts, and tiered
+   * pricing. <h3>Pricing structure</h3> Each price record can include: * **Regular Price** - The base price for the
+   * product SKU * **Discounts** - Percentage or fixed amount discounts applied to the regular price * **Tiered
+   * Pricing** - Quantity-based pricing for bulk purchases <h3>Discount configuration</h3> Discounts can be configured
+   * in two ways: * **Fixed Amount Discounts** - Use `price` field to specify a fixed discount amount (e.g., 10.00 for
+   * $10 off) * **Percentage Discounts** - Use `percentage` field to specify a discount percentage (e.g., 20 for 20%
+   * off) Each discount requires a unique `code` identifier to distinguish between different discount types. <h3>Tiered
+   * pricing</h3> Tiered pricing offers different prices based on purchase quantity: * **Tier Fixed Prices** - Use
+   * `price` field with `qty` to specify quantity-based fixed prices * **Tier Percentage Discounts** - Use `percentage`
+   * field with `qty` to specify quantity-based percentage discounts Tier quantities must be greater than 1. <h3>Pricing
+   * for configurable products</h3> Because configurable product price is calculated based on the price of the selected
+   * product variant, you don't need to send price data for configurable product SKUs. Sending price data for these SKUs
+   * can cause incorrect price calculations.
    *
    * @param data - FeedPrices[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -124,9 +134,16 @@ export interface Client {
    */
   deletePrices(data: FeedPricesDelete[]): Promise<ApiResponse>;
   /**
-   * Update prices Change existing product prices When the update is processed, the merge strategy is used to apply
-   * changes to `scalar` and `object` type fields. The replace strategy is used to apply changes for fields in an
-   * `array`.
+   * Update prices Change existing product prices, discounts, and tiered pricing. When the update is processed, the
+   * merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply
+   * changes for fields in an `array`. <h3>Update strategies</h3> * **Regular Price** - Updated using merge strategy *
+   * **Discounts Array** - Updated using replace strategy (entire array is replaced) * **Tiered Pricing Array** -
+   * Updated using replace strategy (entire array is replaced) <h3>Discount and tier pricing updates</h3> When updating
+   * discounts or tiered pricing: * Include all desired discounts/tiers in the array * The entire array replaces the
+   * existing configuration * To remove all discounts/tiers, send an empty array * To add new discounts/tiers, include
+   * both existing and new items <h3>Best practices</h3> * Always include the complete array of discounts/tiers when
+   * updating * Use descriptive discount codes for easier management * Ensure tier quantities are in ascending order *
+   * Test updates in a development environment first
    *
    * @param data - FeedPricesUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -140,20 +157,21 @@ export interface Client {
    * optional fields such as descriptions, images, and custom attributes as needed. - Use the `links` field to define
    * relationships between products, such as linking a product variant to its parent configurable product. - You can
    * create multiple products in a single request, and also create product variants for configurable products in the
-   * same request. <h3 id="simpleProducts">Simple Products</h3> Create products or replace existing products with
+   * same request. <h3 id="simpleProducts">Simple products</h3> Create products or replace existing products with
    * specified `sku` and `source` values. Use the <strong>[update operation](#operation/updateProducts)</strong> to
-   * modify values for an existing product. <h3>Configurable Products</h3> A configurable product is a parent product
-   * that allows customers to select from multiple predefined attributes such as color, size, and material. Each unique
-   * combination of these attribute values (for example, `color=green`, `size=large`) represents a product variant. Each
-   * variant is treated as a distinct child product with its own SKU, price, and inventory. These variants are stored as
-   * separate entities in the database and linked to the parent configurable product. The configurable product itself
-   * acts as a container or abstraction layer, enabling a unified frontend experience while maintaining granular control
-   * over each variant on the backend. To create a configurable product, you need the following: * <strong>Product
-   * attributes</strong>—<a href="#operation/createProductMetadata">Create product attributes</a> (for example, "color",
-   * "size") that will be used to differentiate product variants. These attributes must be registered in the system
-   * before they can be referenced in product definitions. * <strong>Configurable product</strong>—Define the parent
-   * product and include a [configurations](#operation/createProducts!path=configurations&t=request) array that
-   * specifies the selectable options and maps each option to a set of possible values. Each value must include a
+   * modify values for an existing product. <h3 id="configurableProducts">Configurable products</h3> A configurable
+   * product is a parent product that allows customers to select from multiple predefined attributes such as color,
+   * size, and material. Each unique combination of these attribute values (for example, `color=green`, `size=large`)
+   * represents a product variant. Each variant is treated as a distinct child product with its own SKU, price, and
+   * inventory. These variants are stored as separate entities in the database and linked to the parent configurable
+   * product. The configurable product itself acts as a container or abstraction layer, enabling a unified frontend
+   * experience while maintaining granular control over each variant on the backend. To create a configurable product,
+   * you need the following: * <strong>Product attributes</strong>—<a href="#operation/createProductMetadata">Create
+   * product attributes</a> (for example, "color", "size") that will be used to differentiate product variants. These
+   * attributes must be registered in the system before they can be referenced in product definitions. *
+   * <strong>Configurable product</strong>—Define the parent product and include a
+   * [configurations](#operation/createProducts!path=configurations&t=request) array that specifies the selectable
+   * options and maps each option to a set of possible values. Each value must include a
    * [variantReferenceId](#operation/createProducts!path=configurations/values/variantReferenceId&t=request), which
    * links to a specific variant. * <strong>Product variants</strong>—Define a product variant for each valid
    * combination of attribute values. Each variant must: * Include relevant attribute values in an
@@ -168,7 +186,7 @@ export interface Client {
    * API](#operation/updateProducts) to set the
    * ["variantReferenceId"](#operation/createProducts!path=attributes/variantReferenceId&t=request) to `null` and
    * unassign the product variant from the configurable product by removing the
-   * ["links"](#operation/createProducts!path=links&t=request) association. <h3>Bundle Products</h3> A bundle product
+   * ["links"](#operation/createProducts!path=links&t=request) association. <h3>Bundle products</h3> A bundle product
    * combines several simple products into one sellable unit. Items within the bundle can be categorized into logical
    * groups like `tops`, `bottoms`, and `accessories`. Each group can have multiple items, and shoppers can select items
    * from each group to create a customized bundle. To create a bundle product, you need the following: * <strong>Bundle
