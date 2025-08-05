@@ -15,32 +15,49 @@
  */
 
 /**
+ * Fixed amount discount that reduces the regular price by a specific monetary value. Example: $100 regular price with a
+ * $10 fixed discount results in $90 final price.
+ *
  * @export
  * @interface DiscountsFinalPrice
  */
 export interface DiscountsFinalPrice {
   /**
+   * Unique identifier for the discount. Must be unique within the price record. Use descriptive codes for easier
+   * management (e.g., "loyalty_discount", "holiday_sale").
+   *
    * @memberof DiscountsFinalPrice
    * @type {string}
    */
   code: string;
   /**
+   * Fixed discount amount in the same currency as the price book. Must be a positive number less than the regular
+   * price.
+   *
    * @memberof DiscountsFinalPrice
    * @type {number}
    */
   price: number;
 }
 /**
+ * Percentage discount that reduces the regular price by a specified percentage. Example: $100 regular price with a 20%
+ * discount results in $80 final price.
+ *
  * @export
  * @interface DiscountsPercentage
  */
 export interface DiscountsPercentage {
   /**
+   * Unique identifier for the discount. Must be unique within the price record. Use descriptive codes for easier
+   * management (e.g., "seasonal_sale", "vip_member").
+   *
    * @memberof DiscountsPercentage
    * @type {string}
    */
   code: string;
   /**
+   * Discount percentage as a positive number. Valid range is 0.01 to 99.99 (1% to 99.99%).
+   *
    * @memberof DiscountsPercentage
    * @type {number}
    */
@@ -263,60 +280,74 @@ export interface FeedMetadataUpdate {
 /**
  * Price book information
  *
- * @type FeedPricebook
  * @export
+ * @interface FeedPriceBookDelete
  */
-export type FeedPricebook = PriceBookBase | PriceBookChild;
-/**
- * Price book information
- *
- * @export
- * @interface FeedPricebookDelete
- */
-export interface FeedPricebookDelete {
+export interface FeedPriceBookDelete {
   /**
    * Price book id
    *
-   * @memberof FeedPricebookDelete
+   * @memberof FeedPriceBookDelete
    * @type {string}
    */
   priceBookId: string;
 }
 /**
- * Product price information.
+ * Price book information
+ *
+ * @type FeedPricebook
+ * @export
+ */
+export type FeedPricebook = PriceBookBase | PriceBookChild;
+/**
+ * Product price information with support for regular pricing, discounts, and tiered pricing. Each price record must
+ * reference an existing price book and can include multiple discount types and tiered pricing levels for different
+ * quantity thresholds.
  *
  * @export
  * @interface FeedPrices
  */
 export interface FeedPrices {
   /**
-   * Product SKU
+   * Product SKU identifier. Must match an existing product in the catalog. For configurable products, use the variant
+   * SKU, not the parent SKU.
    *
    * @memberof FeedPrices
    * @type {string}
    */
   sku: string;
   /**
-   * Price book id
+   * Price book identifier. Must reference an existing price book. Prices referencing non-existing price books are
+   * ignored.
    *
    * @memberof FeedPrices
    * @type {string}
    */
   priceBookId: string;
   /**
-   * Regular price
+   * Base price for the product SKU in the specified price book. This is the price before any discounts or tiered
+   * pricing are applied.
    *
    * @memberof FeedPrices
    * @type {number}
    */
   regular: number;
   /**
-   * Active discounts
+   * Array of active discounts applied to the regular price. Each discount requires a unique code identifier. Supports
+   * both percentage and fixed amount discounts.
    *
    * @memberof FeedPrices
    * @type {FeedPricesDiscountsInner[]}
    */
   discounts?: FeedPricesDiscountsInner[];
+  /**
+   * Array of tiered pricing for quantity-based discounts. Quantities must be greater than 1 and should be in ascending
+   * order. Supports both percentage and fixed price tiers.
+   *
+   * @memberof FeedPrices
+   * @type {FeedPricesTierPricesInner[]}
+   */
+  tierPrices?: FeedPricesTierPricesInner[];
 }
 /**
  * Delete product price information.
@@ -345,6 +376,11 @@ export interface FeedPricesDelete {
  * @export
  */
 export type FeedPricesDiscountsInner = DiscountsFinalPrice | DiscountsPercentage;
+/**
+ * @type FeedPricesTierPricesInner
+ * @export
+ */
+export type FeedPricesTierPricesInner = TierFinalPrice | TierPercentage;
 /**
  * Product price information.
  *
@@ -380,6 +416,13 @@ export interface FeedPricesUpdate {
    * @type {FeedPricesDiscountsInner[]}
    */
   discounts?: FeedPricesDiscountsInner[];
+  /**
+   * Tier prices for quantities greater-than one
+   *
+   * @memberof FeedPricesUpdate
+   * @type {FeedPricesTierPricesInner[]}
+   */
+  tierPrices?: FeedPricesTierPricesInner[];
 }
 /**
  * @export
@@ -640,40 +683,6 @@ export interface FeedProductUpdate {
    * @type {ProductExternalId[]}
    */
   externalIds?: ProductExternalId[];
-}
-/**
- * @export
- * @interface ItemFailedValidationResult
- */
-export interface ItemFailedValidationResult {
-  /**
-   * Code for the validation error.
-   *
-   * @memberof ItemFailedValidationResult
-   * @type {string}
-   */
-  code?: string;
-  /**
-   * Index of the conflicting item
-   *
-   * @memberof ItemFailedValidationResult
-   * @type {number}
-   */
-  itemIndex?: number;
-  /**
-   * Validation error message for the item.
-   *
-   * @memberof ItemFailedValidationResult
-   * @type {string}
-   */
-  message?: string;
-  /**
-   * The value supplied to the API.
-   *
-   * @memberof ItemFailedValidationResult
-   * @type {string}
-   */
-  value?: string;
 }
 /**
  * @export
@@ -1170,6 +1179,55 @@ export interface Source {
    * @type {string}
    */
   locale: string;
+}
+/**
+ * Fixed price offered for bulk purchases at a specific quantity threshold. Example: $100 regular price with tier price
+ * of $80 for quantity of 5 or more.
+ *
+ * @export
+ * @interface TierFinalPrice
+ */
+export interface TierFinalPrice {
+  /**
+   * Minimum quantity required to qualify for this tier price. Must be greater than 1 and should be in ascending order
+   * with other tiers.
+   *
+   * @memberof TierFinalPrice
+   * @type {number}
+   */
+  qty: number;
+  /**
+   * Fixed price offered for the specified quantity threshold. Must be a positive number less than or equal to the
+   * regular price.
+   *
+   * @memberof TierFinalPrice
+   * @type {number}
+   */
+  price: number;
+}
+/**
+ * Percentage discount applied when purchasing at or above a specific quantity threshold. Example: $100 regular price
+ * with 20% discount for quantity of 10 or more.
+ *
+ * @export
+ * @interface TierPercentage
+ */
+export interface TierPercentage {
+  /**
+   * Minimum quantity required to qualify for this tier discount. Must be greater than 1 and should be in ascending
+   * order with other tiers.
+   *
+   * @memberof TierPercentage
+   * @type {number}
+   */
+  qty: number;
+  /**
+   * Discount percentage applied for the specified quantity threshold. Valid range is 0.01 to 99.99 (1% to 99.99%).
+   *
+   * @memberof TierPercentage
+   * @type {number}
+   */
+  percentage: number;
 }
 
 // Manually define any enum types that are referenced but not generated

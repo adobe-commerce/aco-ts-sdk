@@ -17,7 +17,7 @@
 import { config } from 'dotenv';
 import { describe, test, beforeAll, expect } from 'vitest';
 import { Client, createClient } from '../../src/client';
-import { FeedPricebook, Environment, Region, ClientConfig, LogLevel, FeedPricebookDelete } from '../../src/types';
+import { FeedPricebook, Environment, Region, ClientConfig, LogLevel, FeedPriceBookDelete } from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
 config();
@@ -93,10 +93,10 @@ describe('Pricebooks Integration Tests', () => {
   });
 
   test('should delete priceBooks', async () => {
-    const parentPricebookDelete: FeedPricebookDelete = {
+    const parentPricebookDelete: FeedPriceBookDelete = {
       priceBookId: parentPricebook.priceBookId,
     };
-    const childPricebookDelete: FeedPricebookDelete = {
+    const childPricebookDelete: FeedPriceBookDelete = {
       priceBookId: childPricebook.priceBookId,
     };
     const response = await client.deletePriceBooks([parentPricebookDelete, childPricebookDelete]);
