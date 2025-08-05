@@ -1,12 +1,14 @@
-# Adobe Commerce Optimizer SDK
+# Adobe Commerce Optimizer Typescript SDK
 
-The Adobe Commerce Optimizer (ACO) SDK provides an easy integration point with the Adobe Commerce Optimizer Data
-Ingestion API. With the ACO SDK, you do not need to manage the full integration with catalog ingestion APIs and IMS
+The Adobe Commerce Optimizer TypeScript SDK for Javascript/Typescript provides an easy integration point with the Adobe Commerce Optimizer Data
+Ingestion API. With this SDK, you do not need to manage the full integration with catalog ingestion APIs and IMS
 authentication methods. Simply follow the guide below to install and begin using the ACO client SDK directly in your
 codebase.
 
 For complete Merchandising Services documentation, visit the
 [Adobe Developer Documentation](https://developer-stage.adobe.com/commerce/services/composable-catalog/) site.
+
+**Note:**  Adobe also provides the [Commerce Optimizer Java SDK](https://github.com/adobe-commerce/aco-java-sdk) for Java project integrations.
 
 ## Install the SDK
 
@@ -16,7 +18,7 @@ npm install @adobe-commerce/aco-ts-sdk
 
 ## Initialize the SDK
 
-To get started ingesting your catalog into Adobe Commerce Optimizer, you first need to create the client. In order to do
+To get started ingesting your catalog into Commerce Optimizer, you first need to create the client. In order to do
 this, use the `createClient` function provided in the `@adobe-commerce/aco-ts-sdk` package. The `createClient` function
 accepts a client configuration object of type `ClientConfig`. The `ClientConfig` object requires the following:
 
@@ -78,11 +80,11 @@ const config: ClientConfig = {
 const client: Client = createClient(config);
 ```
 
-Once the `client` is initialized, you can begin ingesting your catalog data into Adobe Commerce Optimizer!
+Once the `client` is initialized, you can begin ingesting your catalog data into Commerce Optimizer!
 
 ## Ingest Catalog Data
 
-The ACO SDK Client provides the ability to easily manage the following entities in your catalog:
+The Commerce Optimizer SDK Client provides the ability to easily manage the following entities in your catalog:
 
 - Products
 - Product Metadata
