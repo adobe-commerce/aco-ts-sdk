@@ -15,7 +15,7 @@
 
 FORCE=false
 GEN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SPEC_FILE_URL="https://raw.githubusercontent.com/AdobeDocs/commerce-services/refs/heads/develop/src/openapi/data-ingestion-schema-v1.yaml"
+SPEC_FILE_URL="https://raw.githubusercontent.com/AdobeDocs/commerce-services/refs/heads/main/static/rest/data-ingestion-schema-v1.yaml"
 TEMP_SPEC="catalog-ingestion-openapi-spec.yaml.tmp"
 CURRENT_SPEC="catalog-ingestion-openapi-spec.yaml"
 
