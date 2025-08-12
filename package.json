@@ -1,6 +1,6 @@
 {
   "name": "@adobe-commerce/aco-ts-sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TypeScript Client SDK for the Adobe Commerce Optimizer API",
   "type": "module",
   "license": "Apache-2.0",
