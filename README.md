@@ -1,14 +1,15 @@
 # Adobe Commerce Optimizer Typescript SDK
 
-The Adobe Commerce Optimizer TypeScript SDK for Javascript/Typescript provides an easy integration point with the Adobe Commerce Optimizer Data
-Ingestion API. With this SDK, you do not need to manage the full integration with catalog ingestion APIs and IMS
-authentication methods. Simply follow the guide below to install and begin using the ACO client SDK directly in your
-codebase.
+The Adobe Commerce Optimizer TypeScript SDK for Javascript/Typescript provides an easy integration point with the Adobe
+Commerce Optimizer Data Ingestion API. With this SDK, you do not need to manage the full integration with catalog
+ingestion APIs and IMS authentication methods. Simply follow the guide below to install and begin using the ACO client
+SDK directly in your codebase.
 
 For complete Merchandising Services documentation, visit the
 [Adobe Developer Documentation](https://developer-stage.adobe.com/commerce/services/composable-catalog/) site.
 
-**Note:**  Adobe also provides the [Commerce Optimizer Java SDK](https://github.com/adobe-commerce/aco-java-sdk) for Java project integrations.
+**Note:** Adobe also provides the [Commerce Optimizer Java SDK](https://github.com/adobe-commerce/aco-java-sdk) for Java
+project integrations.
 
 ## Install the SDK
 
@@ -18,37 +19,86 @@ npm install @adobe-commerce/aco-ts-sdk
 
 ## Initialize the SDK
 
-To get started ingesting your catalog into Commerce Optimizer, you first need to create the client. In order to do
-this, use the `createClient` function provided in the `@adobe-commerce/aco-ts-sdk` package. The `createClient` function
+To get started ingesting your catalog into Commerce Optimizer, you first need to create the client. In order to do this,
+use the `createClient` function provided in the `@adobe-commerce/aco-ts-sdk` package. The `createClient` function
 accepts a client configuration object of type `ClientConfig`. The `ClientConfig` object requires the following:
 
 - `credentials`: The credentials object contains the IMS fields needed to authenticate with the ACO APIs
-  - `clientId`: This is your client id found in the Adobe Developer Console. See [documentation]().
-  - `clientSecret`: This is your client secret found in the Adobe Developer Console. See [documentation]().
-- `tenantId`: This is the identifier for your ACO instance. See [documentation]().
-- `region`: This is the region in which your ACO instance is deployed. Example: `na1`. See [documentation]().
+  - `clientId`: This is your client id found in the Adobe Developer Console..
+  - `clientSecret`: This is your client secret found in the Adobe Developer Console..
+- `tenantId`: This is the identifier for your ACO instance..
+- `region`: This is the region in which your ACO instance is deployed. Example: `na1`..
 - `environment`: This is your ACO instance's environment type: `sandbox` or `production`
 
-### How do I find my configuration values?
+### Get credentials and tenant ID for your instance
 
-In the [Commerce Cloud Manager](https://experience.adobe.com/#/@commerceprojectbeacon/commerce/cloud-service/instances),
-you will see a list of all of the instances you have provisioned. Find the instance you want to point the ACO SDK to and
-click the "Instance info" icon. In the popup, find the `GraphQL endpoint` URL. From this URL, we can determine the
-required `tenantId`, `region`, and `environment` configuration variables.
+You need the following values to authenticate requests to ingest data from the sample data set to your Adobe Commerce
+Optimizer instance.
 
-The URL is composed of the following: `https://{region}[-sandbox].api.commerce.adobe.com/{tenantId}/graphql` As an
-example, if your GraphQL endpoint URL is `https://na1-sandbox.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
-then your configuration variables are as follows:
+- **Tenant_ID**—Identifies the Adobe Commerce Optimizer instance targeted for data ingestion.
+- **Adobe IMS `clientId` and `clientSecret` credentials**—These authentication credentials are required to authenticate
+  API requests for data ingestion. You create these credentials from the Adobe Developer Console, which requires an
+  Adobe account with developer access to the Adobe Commerce Optimizer.
 
-- `tenantId`: `WVYj1WZf8ifzLH7n6WAVas`
+#### Get your tenant ID, region, and environment
+
+Find your tenant ID in the access URLs for your Commerce Optimizer instance in Cloud Manager.
+
+1. Log in to your [Adobe Experience Cloud](https://experience.adobe.com/) account.
+
+1. Under **Quick access**, click **Commerce** to open the Commerce Cloud Manager.
+
+   The Commerce Cloud Manager displays a list of instances that are available in your Adobe IMS organization.
+
+1. To view the access URLs including the base URL for the REST and GraphQL APIs, click the information icon next to the
+   instance name.
+
+   ![Commerce Optimizer instance details](./docs/images/instance_details.png)
+
+   **Note:** If you don't have access to the Commerce Cloud Manager, contact your system administrator.
+
+1. Your tenant ID, region, and environment are included in the endpoint details. For example, you can see it in the
+   Catalog Endpoint that follows this pattern:
+
+   `https://{region}[-sandbox].api.commerce.adobe.com/{tenantId}/v1/catalog`
+
+For example, if your endpoint URL is `https://na1-sandbox.api.commerce.adobe.com/XdAHsRLZSusTtmCu3Kzobk/v1/catalog` then
+your configuration variables are as follows:
+
+- `tenantId`: `XdAHsRLZSusTtmCu3Kzobk`
 - `region`: `na1`
 - `environment`: `sandbox`
 
 _Note:_ Only the `sandbox` environment type will have its `environment` explicitly designated in the URL. If the
 environment type is `production`, then the `environment` will be omitted from the URL. Example:
 
-- Sandbox: `https://na1-sandbox.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
-- Production: `https://na1.api.commerce.adobe.com/WVYj1WZf8ifzLH7n6WAVas/graphql`
+- Sandbox: `https://na1-sandbox.api.commerce.adobe.com/XdAHsRLZSusTtmCu3Kzobk/v1/catalog`
+- Production: `https://na1.api.commerce.adobe.com/XdAHsRLZSusTtmCu3Kzobk/v1/catalog`
+
+#### Generate the IMS credentials for API authentication
+
+You generate the `clientId` and `clientSecret` credentials from the Adobe Developer Console. You must have a system
+administrator or developer role for the Adobe Commerce Optimizer project to complete this configuration. See
+[User Management](https://helpx.adobe.com/enterprise/using/manage-developers.html) in the _Adobe Commerce Optimizer_
+documentation.
+
+1. Log in to the [Adobe Developer Console](https://developer.adobe.com/console).
+
+1. Select the Experience Cloud Organization for the integration.
+
+1. Create an API project.
+
+   - Add the **Adobe Commerce Optimizer Ingestion** API to your project. Then, click **Next**.
+
+   - Select the **Default - Cloud Manager** profile.
+
+   - Click **Save configured API**.
+
+1. In the Connected Credentials section, view API configuration details by selecting **OAUTH Server-to-Server**.
+
+   ![image](https://github.com/user-attachments/assets/34a7e7b2-9816-462b-8453-a28a22d673fa)
+
+1. Copy the Client ID and the Client Secret values to a secure location.
 
 ### Example:
 
