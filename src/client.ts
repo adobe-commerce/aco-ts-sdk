@@ -71,11 +71,19 @@ export interface Client {
    */
   updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ApiResponse>;
   /**
-   * Create price books Create or replace existing price books. Use the [update price books
-   * operation](#operation/updatePriceBooks) to modify values for existing price books. <strong>Note:</strong> After you
-   * assign a `parentId` to a price book, you cannot change the parentId value using the update operation. If you want
-   * to define a different parent-child relationship, delete the child price book and create a new one with the desired
-   * parent-child relationship.
+   * Create price books Create or replace existing price books with support for hierarchical pricing
+   * structures.<h3>Creating Base Price Books</h3> Base price books are the foundation of your pricing hierarchy: *
+   * **Required Fields**: `priceBookId`, `name`, `currency` * **Currency Definition**: Sets the currency for the entire
+   * branch of child price books * **No Parent**: Base price books cannot reference a parent price book * **Unique ID**:
+   * Must have a unique `priceBookId` across all price books <h3>Creating Child Price Books</h3> Child price books
+   * inherit from their parent and can extend the hierarchy: * **Required Fields**: `priceBookId`, `name`, `parentId` *
+   * **Parent Reference**: Must reference an existing parent price book * **Currency Inheritance**: Automatically
+   * inherits currency from parent * **Hierarchy Depth**: Can create up to 3 levels of nesting <h3>Hierarchy
+   * Management</h3> * **Parent Assignment**: Once a `parentId` is assigned, it cannot be changed via update operations
+   *
+   * - **Restructuring**: To change parent-child relationships, delete and recreate the child price book * **Validation**:
+   *   The system validates parent references and hierarchy depth limits Use the [update price books
+   *   operation](#operation/updatePriceBooks) to modify existing price book names or base price book currencies.
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -83,12 +91,20 @@ export interface Client {
    */
   createPriceBooks(data: FeedPricebook[]): Promise<ApiResponse>;
   /**
-   * Delete price books When you delete a price book, all its child price books and all prices assigned to the
-   * `priceBookId` and its children are also deleted. If a price book is deleted by mistake, you have up to one week to
-   * restore the deleted price books and their associated prices. Restoring is done by recreating the top-level parent
-   * price book that was deleted, using the same payload submitted in the original create price book request. The state
-   * of the price books and prices are restored to the status and price values assigned when the price book was
-   * deleted.
+   * Delete price books Delete price books and their associated pricing data with cascading effects on the
+   * hierarchy.<h3>Cascading Deletion</h3> When you delete a price book: * **Child Price Books**: All child price books
+   * in the hierarchy are automatically deleted * **Associated Prices**: All prices assigned to the deleted price book
+   * and its children are removed * **Hierarchy Impact**: The entire branch below the deleted price book is
+   * removed<h3>Deletion Scenarios</h3> * **Base Price Book**: Deletes entire pricing hierarchy and all associated
+   * prices * **Child Price Book**: Deletes the specific price book and its children, but preserves sibling price books
+   *
+   * - **Leaf Price Book**: Deletes only the specified price book and its associated prices <h3>Recovery Options</h3> If a
+   *   price book is deleted by mistake: * **Time Window**: You have up to one week to restore deleted price books *
+   *   **Restoration Method**: Recreate the top-level parent price book using the original create payload * **State
+   *   Recovery**: Price books and prices are restored to their state when deleted * **Hierarchy Reconstruction**: The
+   *   entire hierarchy is rebuilt from the restoration payload <h3>Best Practices</h3> * **Backup Strategy**: Keep
+   *   copies of price book configurations for recovery * **Validation**: Verify hierarchy structure before deletion *
+   *   **Impact Assessment**: Review associated prices before deleting price books
    *
    * @param data - FeedPriceBookDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -96,9 +112,17 @@ export interface Client {
    */
   deletePriceBooks(data: FeedPriceBookDelete[]): Promise<ApiResponse>;
   /**
-   * Update price books Change the name of a base or child price book, or change the currency assigned to the base price
-   * book. When you submit the update request for a child price book, include the correct `parentId`. If the request
-   * includes a different `parentId`, the value is ignored.
+   * Update price books Update existing price books with limitations on hierarchical changes. <h3>Updatable Fields</h3>
+   *
+   * - **Name**: Can be updated for both base and child price books * **Currency**: Can only be updated for base price
+   *   books (affects entire hierarchy) * **Parent ID**: Cannot be updated - use delete and recreate to change
+   *   hierarchy<h3>Update Restrictions</h3> * **Parent Assignment**: Cannot change `parentId` via update operations *
+   *   **Hierarchy Changes**: To restructure the hierarchy, delete and recreate child price books * **Currency
+   *   Inheritance**: Child price books automatically inherit currency changes from parent * **Validation**: System
+   *   validates that `parentId` references exist and hierarchy depth is maintained <h3>Update Strategies</h3> * **Base
+   *   Price Books**: Update name and currency as needed * **Child Price Books**: Include correct `parentId` in request
+   *   (will be ignored if different) * **Hierarchy Restructuring**: Delete child price book and recreate with new
+   *   parent reference
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -117,8 +141,8 @@ export interface Client {
    * `price` field with `qty` to specify quantity-based fixed prices * **Tier Percentage Discounts** - Use `percentage`
    * field with `qty` to specify quantity-based percentage discounts Tier quantities must be greater than 1. <h3>Pricing
    * for configurable products</h3> Because configurable product price is calculated based on the price of the selected
-   * product variant, you don't need to send price data for configurable product SKUs. Sending price data for these SKUs
-   * can cause incorrect price calculations.
+   * product variant, you don't need to send the price data for configurable product SKUs. Sending price data for these
+   * SKUs can cause incorrect price calculations.
    *
    * @param data - FeedPrices[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items

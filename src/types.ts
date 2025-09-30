@@ -293,7 +293,8 @@ export interface FeedPriceBookDelete {
   priceBookId: string;
 }
 /**
- * Price book information
+ * Price book information supporting hierarchical pricing structures. Use base price books to define currency and create
+ * child price books for specific pricing scenarios.
  *
  * @type FeedPricebook
  * @export
@@ -341,8 +342,8 @@ export interface FeedPrices {
    */
   discounts?: FeedPricesDiscountsInner[];
   /**
-   * Array of tiered pricing for quantity-based discounts. Quantities must be greater than 1 and should be in ascending
-   * order. Supports both percentage and fixed price tiers.
+   * Array of tiered pricing for quantity-based discounts. Quantities must be greater than 1. Supports both percentage
+   * and fixed price tiers.
    *
    * @memberof FeedPrices
    * @type {FeedPricesTierPricesInner[]}
@@ -785,21 +786,23 @@ export interface Model403Response {
  */
 export interface PriceBookBase {
   /**
-   * Base price book id
+   * Unique identifier for the base price book. Must be unique across all price books. Used to reference this price book
+   * in child price books and pricing data.
    *
    * @memberof PriceBookBase
    * @type {string}
    */
   priceBookId: string;
   /**
-   * Price book name
+   * Human-readable name for the price book. Used for display and identification purposes.
    *
    * @memberof PriceBookBase
    * @type {string}
    */
   name: string;
   /**
-   * Price book currency
+   * Currency code that applies to this price book and all its child price books in ISO format. Child price books
+   * inherit this currency and cannot override it.
    *
    * @memberof PriceBookBase
    * @type {string}
@@ -807,26 +810,31 @@ export interface PriceBookBase {
   currency: string;
 }
 /**
+ * Nested price book that inherits currency from its parent and can extend the pricing hierarchy. Child price books can
+ * have up to 3 levels of nesting from the base price book.
+ *
  * @export
  * @interface PriceBookChild
  */
 export interface PriceBookChild {
   /**
-   * Child price book id
+   * Unique identifier for the child price book. Must be unique across all price books. Used to reference this price
+   * book in pricing data and potential child price books.
    *
    * @memberof PriceBookChild
    * @type {string}
    */
   priceBookId: string;
   /**
-   * Price book name
+   * Human-readable name for the child price book. Used for display and identification purposes.
    *
    * @memberof PriceBookChild
    * @type {string}
    */
   name: string;
   /**
-   * Base price book id
+   * Reference to the parent price book ID. Must reference an existing price book. Determines the currency inheritance
+   * and hierarchy level.
    *
    * @memberof PriceBookChild
    * @type {string}
@@ -1181,7 +1189,7 @@ export interface Source {
   locale: string;
 }
 /**
- * Fixed price offered for bulk purchases at a specific quantity threshold. Example: $100 regular price with tier price
+ * Final price offered for bulk purchases at a specific quantity threshold. Example: $100 regular price with tier price
  * of $80 for quantity of 5 or more.
  *
  * @export
@@ -1189,8 +1197,7 @@ export interface Source {
  */
 export interface TierFinalPrice {
   /**
-   * Minimum quantity required to qualify for this tier price. Must be greater than 1 and should be in ascending order
-   * with other tiers.
+   * Minimum quantity required to qualify for this tier price. Must be greater than 1.
    *
    * @memberof TierFinalPrice
    * @type {number}
@@ -1206,23 +1213,22 @@ export interface TierFinalPrice {
   price: number;
 }
 /**
- * Percentage discount applied when purchasing at or above a specific quantity threshold. Example: $100 regular price
- * with 20% discount for quantity of 10 or more.
+ * Percentage discount applied to the regular price when purchasing at or above a specific quantity threshold. Example:
+ * $100 regular price with 20% discount for quantity of 10 or more.
  *
  * @export
  * @interface TierPercentage
  */
 export interface TierPercentage {
   /**
-   * Minimum quantity required to qualify for this tier discount. Must be greater than 1 and should be in ascending
-   * order with other tiers.
+   * Minimum quantity required to qualify for this tier discount. Must be greater than 1.
    *
    * @memberof TierPercentage
    * @type {number}
    */
   qty: number;
   /**
-   * Discount percentage applied for the specified quantity threshold. Valid range is 0.01 to 99.99 (1% to 99.99%).
+   * Discount percentage applied to the specified quantity threshold. Valid range is 0.01 to 99.99 (1% to 99.99%).
    *
    * @memberof TierPercentage
    * @type {number}
