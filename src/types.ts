@@ -64,6 +64,100 @@ export interface DiscountsPercentage {
   percentage: number;
 }
 /**
+ * Category information for organizing products with hierarchical structure and localization support.
+ *
+ * @export
+ * @interface FeedCategory
+ */
+export interface FeedCategory {
+  /**
+   * Category slug using hierarchical format with forward slashes to represent parent-child relationships. String can
+   * contain only lowercase letters, numbers, and hyphens. Examples: 'men', 'men/clothing', 'men/clothing/pants'
+   *
+   * @memberof FeedCategory
+   * @type {string}
+   */
+  slug: string;
+  /**
+   * @memberof FeedCategory
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Display name of the category
+   *
+   * @memberof FeedCategory
+   * @type {string}
+   */
+  name: string;
+  /**
+   * Optional array of product family identifiers that this category is associated with. Used for enhanced product
+   * organization and filtering.
+   *
+   * @memberof FeedCategory
+   * @type {string[]}
+   */
+  families?: string[];
+}
+/**
+ * Delete category information for removing categories from the catalog.
+ *
+ * @export
+ * @interface FeedCategoryDelete
+ */
+export interface FeedCategoryDelete {
+  /**
+   * Category slug using hierarchical format with forward slashes to represent parent-child relationships. Must use only
+   * lowercase letters, numbers, and hyphens. Examples: 'men', 'men/clothing', 'men/clothing/pants'
+   *
+   * @memberof FeedCategoryDelete
+   * @type {string}
+   */
+  slug: string;
+  /**
+   * @memberof FeedCategoryDelete
+   * @type {Source}
+   */
+  source: Source;
+}
+/**
+ * Category information for updating existing categories.
+ *
+ * @export
+ * @interface FeedCategoryUpdate
+ */
+export interface FeedCategoryUpdate {
+  /**
+   * Category slug using hierarchical format with forward slashes to represent parent-child relationships. String can
+   * contain only lowercase letters, numbers, and hyphens. Examples: 'men', 'men/clothing', 'men/clothing/pants'
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {string}
+   */
+  slug: string;
+  /**
+   * @memberof FeedCategoryUpdate
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Display name of the category
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {string}
+   */
+  name?: string;
+  /**
+   * Optional array of product family identifiers that this category is associated with. Used for enhanced product
+   * organization and filtering. For example, for a clothing category, you can associate it with the "apparel" family.
+   * Note: This field uses the replace strategy to replace the entire array with the new values.
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {string[]}
+   */
+  families?: string[];
+}
+/**
  * @export
  * @interface FeedItemFailedValidationResult
  */
@@ -1174,7 +1268,7 @@ export interface ProductRoutes {
   position?: number;
 }
 /**
- * Source of the entity. For example it's locale "English"
+ * Source of the entity, for example, "en-US" for US English.
  *
  * @export
  * @interface Source
