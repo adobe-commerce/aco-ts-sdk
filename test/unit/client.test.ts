@@ -170,6 +170,102 @@ describe('Client', () => {
     (createAuthService as Mock).mockReturnValue({});
   });
 
+  describe('createCategories', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('createCategories');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.createCategories(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('deleteCategories', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('deleteCategories');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.deleteCategories(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories/delete', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('updateCategories', () => {
+    it('should call the correct endpoint with PATCH method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('updateCategories');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.updateCategories(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories', {
+        method: 'PATCH',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
   describe('createProductMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
       const config: ClientConfig = {

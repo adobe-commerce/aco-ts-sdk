@@ -21,6 +21,9 @@ import { consoleLogger } from './logger';
 import {
   ClientConfig,
   ApiResponse,
+  FeedCategory,
+  FeedCategoryDelete,
+  FeedCategoryUpdate,
   FeedMetadata,
   FeedMetadataDelete,
   FeedMetadataUpdate,
@@ -35,6 +38,45 @@ import {
 } from './types';
 
 export interface Client {
+  /**
+   * Create categories Create new categories with hierarchical structure and slug-based paths. Categories organize
+   * products into logical groups and support nested hierarchies. When creating categories: - Each category requires a
+   * unique `slug` and `source`. - Use the `slug` field in a hierarchical format like men/clothing/pants' to create
+   * parent-child relationships - The category `slug` string can contain only lowercase letters, numbers, and hyphens. -
+   * Use the `name` field to define the display name for the category. - Use the optional `families` field to associate
+   * categories with product families for enhanced organization. To update existing categories, use the update
+   * operation.
+   *
+   * @param data - FeedCategory[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  createCategories(data: FeedCategory[]): Promise<ApiResponse>;
+  /**
+   * Delete categories Delete categories and all their associated children <h3>Cascading Deletion</h3> When you delete a
+   * category: * **Child categories**: All child categories in the hierarchy are deleted automatically * **Hierarchy
+   * Impact**: The entire branch below the deleted category is removed <h3>Recovery Options</h3> If a category is
+   * deleted by mistake: * **Time Window**: You have up to one week to restore deleted categories * **Restoration
+   * Method**: Recreate the top-level deleted category using the [update operation](#operation/createCategories) *
+   * **State Recovery**: Categories are restored to their exact state from the time of deletion, including all metadata,
+   * family associations, and hierarchy relationships * **Hierarchy Reconstruction**: The entire hierarchy is rebuilt
+   * from the restoration payload
+   *
+   * @param data - FeedCategoryDelete[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  deleteCategories(data: FeedCategoryDelete[]): Promise<ApiResponse>;
+  /**
+   * Update categories Update existing product categories with new values. When the update is processed, the merge
+   * strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply
+   * changes for fields in an `array`.
+   *
+   * @param data - FeedCategoryUpdate[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  updateCategories(data: FeedCategoryUpdate[]): Promise<ApiResponse>;
   /**
    * Create product attribute metadata To ensure product data is indexed for discovery, create or replace existing
    * product attribute metadata resources before creating products. For each Commerce project, you must define metadata
@@ -159,15 +201,17 @@ export interface Client {
   deletePrices(data: FeedPricesDelete[]): Promise<ApiResponse>;
   /**
    * Update prices Change existing product prices, discounts, and tiered pricing. When the update is processed, the
-   * merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply
-   * changes for fields in an `array`. <h3>Update strategies</h3> * **Regular Price** - Updated using merge strategy *
-   * **Discounts Array** - Updated using replace strategy (entire array is replaced) * **Tiered Pricing Array** -
-   * Updated using replace strategy (entire array is replaced) <h3>Discount and tier pricing updates</h3> When updating
-   * discounts or tiered pricing: * Include all desired discounts/tiers in the array * The entire array replaces the
-   * existing configuration * To remove all discounts/tiers, send an empty array * To add new discounts/tiers, include
-   * both existing and new items <h3>Best practices</h3> * Always include the complete array of discounts/tiers when
-   * updating * Use descriptive discount codes for easier management * Ensure tier quantities are in ascending order *
-   * Test updates in a development environment first
+   * merge strategy is used to apply changes to `scalar` and `object` type fields. For `array` type fields, a new value
+   * can be appended to the existing list. For an object list, you can update a specific object by matching on a key
+   * field. The following fields are supported: * `discounts` - match on `code` * `tierPrices` - match on
+   * `qty`<h3>Update strategies</h3> * **Regular Price** - Updated using merge strategy * **Discounts Array** - Updated
+   * using the append or merge strategy * **Tiered Pricing Array** - Updated using the append or merge
+   * strategy<h3>Discount and tier pricing updates</h3> When updating discounts or tiered pricing: * Include all desired
+   * discounts/tiers in the array * The entire array replaces the existing configuration * To remove all
+   * discounts/tiers, send an empty array * To add new discounts/tiers, include both existing and new items <h3>Best
+   * practices</h3> * Always include the complete array of discounts/tiers when updating * Use descriptive discount
+   * codes for easier management * Ensure tier quantities are in ascending order * Test updates in a development
+   * environment first
    *
    * @param data - FeedPricesUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -243,7 +287,11 @@ export interface Client {
   /**
    * Update products Update products with specified `sku` and `source` values to replace existing field data with the
    * data supplied in the request. When the update is processed, the merge strategy is used to apply changes to `scalar`
-   * and `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
+   * and `object` type fields. For `array` type fields, a new value can be appended to the existing list. For an object
+   * list, you can update a specific object by matching on a key field. The following fields are supported: *
+   * `attributes` - match on `code` * `images` - match on `url` * `routes` - match on `path` * `links` - match on `type`
+   * and `sku` * `bundles` match on `type` and `group` * `configurations` match on `type` and `attributeCode` *
+   * `externalIds` match on `type` and `origin`
    *
    * @param data - FeedProductUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -303,6 +351,27 @@ export function createClient(clientConfig: ClientConfig): Client {
   const http = createHttpClient(httpConfig);
 
   return {
+    async createCategories(data: FeedCategory[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async deleteCategories(data: FeedCategoryDelete[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories/delete`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async updateCategories(data: FeedCategoryUpdate[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      });
+    },
+
     async createProductMetadata(data: FeedMetadata[]): Promise<ApiResponse> {
       return await http.request(`/v1/catalog/products/metadata`, {
         method: 'POST',
