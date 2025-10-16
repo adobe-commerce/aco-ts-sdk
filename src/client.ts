@@ -41,11 +41,14 @@ export interface Client {
   /**
    * Create categories Create new categories with hierarchical structure and slug-based paths. Categories organize
    * products into logical groups and support nested hierarchies. When creating categories: - Each category requires a
-   * unique `slug` and `source`. - Use the `slug` field in a hierarchical format like men/clothing/pants' to create
-   * parent-child relationships - The category `slug` string can contain only lowercase letters, numbers, and hyphens. -
-   * Use the `name` field to define the display name for the category. - Use the optional `families` field to associate
-   * categories with product families for enhanced organization. To update existing categories, use the update
-   * operation.
+   * unique `slug` and `source`. - To create parent-child relationships, create the `slug` field in a hierarchical
+   * format, for example `men/clothing/pants\'. - A category `slug`string can contain only lowercase letters, numbers,
+   * and hyphens with`/`used as a separator for hierarchy. - Create each category as a separate entity. - Use
+   * the`name`field to define the display name for the category. - Use the optional`families`field to associate
+   * categories with product families for enhanced organization. After you create categories, link a product to a
+   * category using the`path`value for the [routes](#operation/createProducts!path=routes&t=request) field. When you
+   * create or update products. The value of`path`in the route must match the`slug` value for the category. To update
+   * existing categories, use the update operation.
    *
    * @param data - FeedCategory[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -57,10 +60,10 @@ export interface Client {
    * category: * **Child categories**: All child categories in the hierarchy are deleted automatically * **Hierarchy
    * Impact**: The entire branch below the deleted category is removed <h3>Recovery Options</h3> If a category is
    * deleted by mistake: * **Time Window**: You have up to one week to restore deleted categories * **Restoration
-   * Method**: Recreate the top-level deleted category using the [update operation](#operation/createCategories) *
-   * **State Recovery**: Categories are restored to their exact state from the time of deletion, including all metadata,
-   * family associations, and hierarchy relationships * **Hierarchy Reconstruction**: The entire hierarchy is rebuilt
-   * from the restoration payload
+   * Method**: Recreate the top-level deleted category using the [Create category
+   * operation](#operation/createCategories) * **State Recovery**: Categories are restored to their exact state from the
+   * time of deletion, including all metadata, family associations, and hierarchy relationships * **Hierarchy
+   * Reconstruction**: The entire hierarchy is rebuilt from the restoration payload
    *
    * @param data - FeedCategoryDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -225,7 +228,10 @@ export interface Client {
    * optional fields such as descriptions, images, and custom attributes as needed. - Use the `links` field to define
    * relationships between products, such as linking a product variant to its parent configurable product. - You can
    * create multiple products in a single request, and also create product variants for configurable products in the
-   * same request. <h3 id="simpleProducts">Simple products</h3> Create products or replace existing products with
+   * same request. - Use the `routes` field to set category paths. The `path` value must match an existing category
+   * slug, for example `men/clothing`. - Create a route for each category path. For example to include a product in each
+   * of the following categories `men`, `men/clothing`, and `men/clothing/pants`, specify three `path` values, one for
+   * each category. <h3 id="simpleProducts">Simple products</h3> Create products or replace existing products with
    * specified `sku` and `source` values. Use the <strong>[update operation](#operation/updateProducts)</strong> to
    * modify values for an existing product. <h3 id="configurableProducts">Configurable products</h3> A configurable
    * product is a parent product that allows customers to select from multiple predefined attributes such as color,
