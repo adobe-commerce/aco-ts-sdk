@@ -554,6 +554,70 @@ describe('Client', () => {
     });
   });
 
+  describe('createProductLayers', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('createProductLayers');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.createProductLayers(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/layers', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('deleteProductLayers', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('deleteProductLayers');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.deleteProductLayers(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/layers/delete', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
   describe('createProducts', () => {
     it('should call the correct endpoint with POST method', async () => {
       const config: ClientConfig = {

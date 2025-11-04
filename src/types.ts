@@ -659,6 +659,126 @@ export interface FeedProductDelete {
 }
 /**
  * @export
+ * @interface FeedProductLayer
+ */
+export interface FeedProductLayer {
+  /**
+   * SKU (Stock Keeping Unit) is a unique identifier for a product.
+   *
+   * @memberof FeedProductLayer
+   * @type {string}
+   */
+  sku: string;
+  /**
+   * @memberof FeedProductLayer
+   * @type {SourceLayer}
+   */
+  source: SourceLayer;
+  /**
+   * Product name
+   *
+   * @memberof FeedProductLayer
+   * @type {string}
+   */
+  name?: string;
+  /**
+   * The URL key for the product.
+   *
+   * @memberof FeedProductLayer
+   * @type {string}
+   */
+  slug?: string;
+  /**
+   * The main description for the product
+   *
+   * @memberof FeedProductLayer
+   * @type {string}
+   */
+  description?: string;
+  /**
+   * A short description of the product
+   *
+   * @memberof FeedProductLayer
+   * @type {string}
+   */
+  shortDescription?: string;
+  /**
+   * @memberof FeedProductLayer
+   * @type {ProductMetaAttribute}
+   */
+  metaTags?: ProductMetaAttribute;
+  /**
+   * A list of product attributes.
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductAttribute[]}
+   */
+  attributes?: ProductAttribute[];
+  /**
+   * A list of product images.
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductImage[]}
+   */
+  images?: ProductImage[];
+  /**
+   * A list of linked SKUs.
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductLink[]}
+   */
+  links?: ProductLink[];
+  /**
+   * A list of product routes.
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductRoutes[]}
+   */
+  routes?: ProductRoutes[];
+  /**
+   * Composite products, such as configurable products, must provide a list of product options that a shopper can select
+   * (for example, "color", "size", etc.).
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductConfiguration[]}
+   */
+  configurations?: ProductConfiguration[];
+  /**
+   * Composite products, such as bundle products, must include a list of individual products that are part of the
+   * bundle, organized into groups (for example, "shirts", "pants", "accessories").
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductBundle[]}
+   */
+  bundles?: ProductBundle[];
+  /**
+   * A list of external IDs for the product.
+   *
+   * @memberof FeedProductLayer
+   * @type {ProductExternalId[]}
+   */
+  externalIds?: ProductExternalId[];
+}
+/**
+ * @export
+ * @interface FeedProductLayerDelete
+ */
+export interface FeedProductLayerDelete {
+  /**
+   * Product unique identifier
+   *
+   * @memberof FeedProductLayerDelete
+   * @type {string}
+   */
+  sku: string;
+  /**
+   * @memberof FeedProductLayerDelete
+   * @type {SourceLayer}
+   */
+  source: SourceLayer;
+}
+/**
+ * @export
  * @interface FeedProductUpdate
  */
 export interface FeedProductUpdate {
@@ -1281,6 +1401,28 @@ export interface Source {
    * @type {string}
    */
   locale: string;
+}
+/**
+ * Source of the entity, for example, "en-US" for US English for layer "MyLayer"
+ *
+ * @export
+ * @interface SourceLayer
+ */
+export interface SourceLayer {
+  /**
+   * A single value that represents content locale. When absent layer is treated as global for any locale.
+   *
+   * @memberof SourceLayer
+   * @type {string}
+   */
+  locale?: string;
+  /**
+   * A single value that represents content layer.
+   *
+   * @memberof SourceLayer
+   * @type {string}
+   */
+  layer: string;
 }
 /**
  * Final price offered for bulk purchases at a specific quantity threshold. Example: $100 regular price with tier price
