@@ -140,6 +140,8 @@ The Commerce Optimizer SDK Client provides the ability to easily manage the foll
 - Product Metadata
 - Price Books
 - Prices
+- Categories
+- Product Layers
 
 ### Product Operations
 
@@ -352,6 +354,129 @@ const priceDelete: FeedPricesDelete = {
 
 const response = await client.deletePrices([priceDelete]);
 // response.data: { status: 'ACCEPTED', acceptedCount: 1 }
+```
+
+### Category Operations
+
+#### Create Categories
+
+```typescript
+import { FeedCategory } from '@adobe-commerce/aco-ts-sdk';
+
+const parentCategory: FeedCategory = {
+  slug: 'electronics',
+  source: { locale: 'en-US' },
+  name: 'Electronics',
+  families: ['tech-products'],
+};
+
+const childCategory: FeedCategory = {
+  slug: 'electronics/computers',
+  source: { locale: 'en-US' },
+  name: 'Computers',
+  families: ['tech-products'],
+};
+
+const response = await client.createCategories([parentCategory, childCategory]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
+```
+
+#### Update Categories
+
+```typescript
+import { FeedCategoryUpdate } from '@adobe-commerce/aco-ts-sdk';
+
+const parentCategory: FeedCategoryUpdate = {
+  slug: 'electronics',
+  source: { locale: 'en-US' },
+  name: 'Updated Electronics',
+  families: ['tech-products'],
+};
+
+const childCategory: FeedCategoryUpdate = {
+  slug: 'electronics/computers',
+  source: { locale: 'en-US' },
+  name: 'Updated Computers',
+  families: ['tech-products'],
+};
+
+const response = await client.updateCategories([parentCategory, childCategory]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
+```
+
+#### Delete Categories
+
+```typescript
+import { FeedPricesDelete } from '@adobe-commerce/aco-ts-sdk';
+
+const parentCategoryDelete: FeedCategoryDelete = {
+  slug: 'electronics',
+  source: { locale: 'en-US' },
+};
+
+const childCategoryDelete: FeedCategoryDelete = {
+  slug: 'electronics/computers',
+  source: { locale: 'en-US' },
+};
+
+const response = await client.deleteCategories([parentCategoryDelete, childCategoryDelete]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
+```
+
+### Product Layer Operations
+
+#### Create Product Layers
+
+```typescript
+import { FeedProductLayer } from '@adobe-commerce/aco-ts-sdk';
+
+const productLayer1: FeedProductLayer = {
+  sku: 'BASE-SKU-001',
+  source: { locale: 'en-US', layer: 'custom-layer-1' },
+  name: 'Product 1 - Layer 2',
+  description: 'This is a different description for the base product',
+  attributes: [
+    {
+      code: 'color',
+      values: ['Yellow'],
+    },
+  ],
+};
+
+const productLayer2: FeedProductLayer = {
+  sku: 'BASE-SKU-001',
+  source: { locale: 'en-US', layer: 'custom-layer-2' },
+  name: 'Product 1 - Layer 2',
+  description: 'This is another different description for the base product',
+  attributes: [
+    {
+      code: 'color',
+      values: ['Blue'],
+    },
+  ],
+};
+
+const response = await client.createProductLayers([productLayer1, productLayer2]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
+```
+
+#### Delete Product Layers
+
+```typescript
+import { FeedProductLayerDelete } from '@adobe-commerce/aco-ts-sdk';
+
+const productLayer1Delete: FeedProductLayerDelete = {
+  sku: 'BASE-SKU-001',
+  source: { locale: 'en-US', layer: 'custom-layer-1' },
+};
+
+const productLayer2Delete: FeedProductLayerDelete = {
+  sku: 'BASE-SKU-001',
+  source: { locale: 'en-US', layer: 'custom-layer-2' },
+};
+
+const response = await client.deleteProductLayers([productLayer1Delete, productLayer2Delete]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 2 }
 ```
 
 ## Types
