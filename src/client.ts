@@ -34,6 +34,8 @@ import {
   FeedPricesUpdate,
   FeedProduct,
   FeedProductDelete,
+  FeedProductLayer,
+  FeedProductLayerDelete,
   FeedProductUpdate,
 } from './types';
 
@@ -222,6 +224,30 @@ export interface Client {
    */
   updatePrices(data: FeedPricesUpdate[]): Promise<ApiResponse>;
   /**
+   * Create or replace product layers You can create a product layer to merge and override a base product. When creating
+   * product layers: - Each product layer requires a SKU identifier which matches to a base product. - A product layer
+   * may have a defined catalog `source.locale`, and if absent is treated as a global layer for any locale. - A product
+   * layer must have a defined catalog `source.layer`. - All other fields are optional. If provided, they are used to
+   * override the base product. - When merging array lists, the first array is merged with the base list. All other
+   * inner lists of the same object are treated as replace values. For example `attributes` is merged with base list,
+   * but `attributes.values` is a replacement. <pre> { "sku": "pants-red-32", "source": { "locale": "en", "layer":
+   * "custom-layer" }, "attributes": [ { "code": "color", "values": ["Green", "Light Green"], "variantReferenceId":
+   * "pants-color-green" } ] } </pre>
+   *
+   * @param data - FeedProductLayer[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  createProductLayers(data: FeedProductLayer[]): Promise<ApiResponse>;
+  /**
+   * Delete product layers Delete product layers with specified `sku` and `source` values
+   *
+   * @param data - FeedProductLayerDelete[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  deleteProductLayers(data: FeedProductLayerDelete[]): Promise<ApiResponse>;
+  /**
    * Create or replace products You can create different types of products, such as simple products and configurable
    * products. When creating products: - Each product requires a unique SKU identifier. - Products must have a defined
    * catalog source, for example `locale`. - Add values for the required `name`, `slug`, and `status` fields. - Define
@@ -283,7 +309,7 @@ export interface Client {
    */
   createProducts(data: FeedProduct[]): Promise<ApiResponse>;
   /**
-   * Delete products Delete products with specified `sku`` and `source`` values
+   * Delete products Delete products with specified `sku` and `source` values
    *
    * @param data - FeedProductDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -437,6 +463,20 @@ export function createClient(clientConfig: ClientConfig): Client {
     async updatePrices(data: FeedPricesUpdate[]): Promise<ApiResponse> {
       return await http.request(`/v1/catalog/products/prices`, {
         method: 'PATCH',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async createProductLayers(data: FeedProductLayer[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/products/layers`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async deleteProductLayers(data: FeedProductLayerDelete[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/products/layers/delete`, {
+        method: 'POST',
         body: JSON.stringify(data),
       });
     },
