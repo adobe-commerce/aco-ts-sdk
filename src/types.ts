@@ -663,7 +663,8 @@ export interface FeedProductDelete {
  */
 export interface FeedProductLayer {
   /**
-   * SKU (Stock Keeping Unit) is a unique identifier for a product.
+   * SKU (Stock Keeping Unit) that uniquely identifies the base product this layer will modify. Must match an existing
+   * product SKU in the catalog.
    *
    * @memberof FeedProductLayer
    * @type {string}
@@ -675,28 +676,31 @@ export interface FeedProductLayer {
    */
   source: SourceLayer;
   /**
-   * Product name
+   * Product display name that will override the base product name. Use for localized names, seasonal branding, or
+   * promotional titles.
    *
    * @memberof FeedProductLayer
    * @type {string}
    */
   name?: string;
   /**
-   * The URL key for the product.
+   * URL-friendly identifier for the product page. Override to create layer-specific URLs for SEO or campaign tracking.
    *
    * @memberof FeedProductLayer
    * @type {string}
    */
   slug?: string;
   /**
-   * The main description for the product
+   * Detailed product description that replaces the base product description. Use for localized content, seasonal
+   * messaging, or enhanced marketing copy.
    *
    * @memberof FeedProductLayer
    * @type {string}
    */
   description?: string;
   /**
-   * A short description of the product
+   * Brief product summary that appears in product listings and search results. Override for concise, layer-specific
+   * messaging.
    *
    * @memberof FeedProductLayer
    * @type {string}
@@ -708,51 +712,56 @@ export interface FeedProductLayer {
    */
   metaTags?: ProductMetaAttribute;
   /**
-   * A list of product attributes.
+   * Product attributes that will be merged with base product attributes. Use to add layer-specific variants, localized
+   * values, or seasonal properties.
    *
    * @memberof FeedProductLayer
    * @type {ProductAttribute[]}
    */
   attributes?: ProductAttribute[];
   /**
-   * A list of product images.
+   * Product images that will be merged with base product images. Use to add seasonal imagery, locale-specific photos,
+   * or promotional visuals.
    *
    * @memberof FeedProductLayer
    * @type {ProductImage[]}
    */
   images?: ProductImage[];
   /**
-   * A list of linked SKUs.
+   * Related product SKUs that will be merged with base product links. Use to add seasonal recommendations,
+   * locale-specific cross-sells, or promotional bundles.
    *
    * @memberof FeedProductLayer
    * @type {ProductLink[]}
    */
   links?: ProductLink[];
   /**
-   * A list of product routes.
+   * URL routing configurations that will be merged with base product routes. Use to add layer-specific navigation paths
+   * or campaign-specific URLs.
    *
    * @memberof FeedProductLayer
    * @type {ProductRoutes[]}
    */
   routes?: ProductRoutes[];
   /**
-   * Composite products, such as configurable products, must provide a list of product options that a shopper can select
-   * (for example, "color", "size", etc.).
+   * Product configuration options for composite products (for example, configurable products) that will be merged with
+   * base configurations. Use to add layer-specific variants or seasonal options.
    *
    * @memberof FeedProductLayer
    * @type {ProductConfiguration[]}
    */
   configurations?: ProductConfiguration[];
   /**
-   * Composite products, such as bundle products, must include a list of individual products that are part of the
-   * bundle, organized into groups (for example, "shirts", "pants", "accessories").
+   * Bundle product definitions that will be merged with base product bundles. Use to create seasonal bundles,
+   * promotional packages, or locale-specific product groupings.
    *
    * @memberof FeedProductLayer
    * @type {ProductBundle[]}
    */
   bundles?: ProductBundle[];
   /**
-   * A list of external IDs for the product.
+   * External system identifiers that will be merged with base product external IDs. Use to add layer-specific tracking
+   * codes, campaign IDs, or integration references.
    *
    * @memberof FeedProductLayer
    * @type {ProductExternalId[]}
@@ -765,7 +774,8 @@ export interface FeedProductLayer {
  */
 export interface FeedProductLayerDelete {
   /**
-   * Product unique identifier
+   * SKU (Stock Keeping Unit) that identifies the base product containing the layer to delete. Must match an existing
+   * product SKU in the catalog.
    *
    * @memberof FeedProductLayerDelete
    * @type {string}
@@ -1403,21 +1413,24 @@ export interface Source {
   locale: string;
 }
 /**
- * Source of the entity, for example, "en-US" for US English for layer "MyLayer"
+ * Identifies the source context for a product layer, combining locale and layer name to create a unique layer
+ * identifier. This allows for precise targeting of content overrides.
  *
  * @export
  * @interface SourceLayer
  */
 export interface SourceLayer {
   /**
-   * A single value that represents content locale. When absent layer is treated as global for any locale.
+   * ISO locale code (for example, "en-US", "fr-FR", "de-DE") that specifies the target market or language. When
+   * omitted, the layer applies globally across all locales. Use for market-specific customizations.
    *
    * @memberof SourceLayer
    * @type {string}
    */
   locale?: string;
   /**
-   * A single value that represents content layer.
+   * Unique identifier for the layer within the product's layer hierarchy. Use descriptive names that indicate the
+   * layer's purpose (for example, "seasonal-winter-2024", "promotional-black-friday", "a-b-test-variant").
    *
    * @memberof SourceLayer
    * @type {string}

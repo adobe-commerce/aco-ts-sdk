@@ -224,15 +224,20 @@ export interface Client {
    */
   updatePrices(data: FeedPricesUpdate[]): Promise<ApiResponse>;
   /**
-   * Create or replace product layers You can create a product layer to merge and override a base product. When creating
-   * product layers: - Each product layer requires a SKU identifier which matches to a base product. - A product layer
-   * may have a defined catalog `source.locale`, and if absent is treated as a global layer for any locale. - A product
-   * layer must have a defined catalog `source.layer`. - All other fields are optional. If provided, they are used to
-   * override the base product. - When merging array lists, the first array is merged with the base list. All other
-   * inner lists of the same object are treated as replace values. For example `attributes` is merged with base list,
-   * but `attributes.values` is a replacement. <pre> { "sku": "pants-red-32", "source": { "locale": "en", "layer":
-   * "custom-layer" }, "attributes": [ { "code": "color", "values": ["Green", "Light Green"], "variantReferenceId":
-   * "pants-color-green" } ] } </pre>
+   * Create or replace product layers Create product layers to customize and override base product data for specific
+   * contexts, locales, or business requirements. Product layers enable you to: - Override product attributes for
+   * specific markets or channels - Provide locale-specific content while maintaining a global base product - Create
+   * seasonal or promotional variations without duplicating entire product records - Implement A/B testing scenarios
+   * with different product presentations ## Layer behavior and requirements **Required fields:** - `sku`: Must match an
+   * existing base product SKU - `source.layer`: Identifies the layer name for organization and retrieval **Optional
+   * Fields:** - `source.locale`: When specified, layer applies only to that locale. When omitted, layer applies
+   * globally across all locales - All product fields (name, description, images, and so on): Override corresponding
+   * base product values ## Merging logic Product layers use intelligent merging: - **Simple fields** (name,
+   * description, and so on): Complete replacement of base values - **Array fields** (attributes, images, etc.):
+   * First-level arrays are merged with base arrays - **Nested arrays** (attribute.values, etc.): Complete replacement
+   * of nested arrays **Example:** Adding a color variant while preserving existing attributes: `json { \"sku\":
+   * \"red-pants\", \"source\": { \"locale\": \"en-US\", \"layer\": \"seasonal-colors\" }, \"attributes\": [ { \"code\":
+   * \"color\", \"values\": [\"Crimson Red\", \"Deep Red\"], \"variantReferenceId\": \"pants-color-crimson\" } ] } `
    *
    * @param data - FeedProductLayer[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -240,7 +245,12 @@ export interface Client {
    */
   createProductLayers(data: FeedProductLayer[]): Promise<ApiResponse>;
   /**
-   * Delete product layers Delete product layers with specified `sku` and `source` values
+   * Delete product layers Remove specific product layers by SKU and source identifiers. This operation permanently
+   * deletes the layer data while preserving the base product. **Use Cases:** - Remove expired seasonal or promotional
+   * layers - Clean up test layers after A/B testing completion - Delete locale-specific layers when discontinuing
+   * market support - Remove outdated customizations **Important Notes:** - Only the specified layer is deleted; base
+   * product and other layers remain intact - Both `sku` and `source` (locale + layer) must match exactly for successful
+   * deletion
    *
    * @param data - FeedProductLayerDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
