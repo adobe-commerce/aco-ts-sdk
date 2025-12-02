@@ -684,13 +684,6 @@ export interface FeedProductLayer {
    */
   name?: string;
   /**
-   * URL-friendly identifier for the product page. Override to create layer-specific URLs for SEO or campaign tracking.
-   *
-   * @memberof FeedProductLayer
-   * @type {string}
-   */
-  slug?: string;
-  /**
    * Detailed product description that replaces the base product description. Use for localized content, seasonal
    * messaging, or enhanced marketing copy.
    *
@@ -735,30 +728,6 @@ export interface FeedProductLayer {
    * @type {ProductLink[]}
    */
   links?: ProductLink[];
-  /**
-   * URL routing configurations that will be merged with base product routes. Use to add layer-specific navigation paths
-   * or campaign-specific URLs.
-   *
-   * @memberof FeedProductLayer
-   * @type {ProductRoutes[]}
-   */
-  routes?: ProductRoutes[];
-  /**
-   * Product configuration options for composite products (for example, configurable products) that will be merged with
-   * base configurations. Use to add layer-specific variants or seasonal options.
-   *
-   * @memberof FeedProductLayer
-   * @type {ProductConfiguration[]}
-   */
-  configurations?: ProductConfiguration[];
-  /**
-   * Bundle product definitions that will be merged with base product bundles. Use to create seasonal bundles,
-   * promotional packages, or locale-specific product groupings.
-   *
-   * @memberof FeedProductLayer
-   * @type {ProductBundle[]}
-   */
-  bundles?: ProductBundle[];
   /**
    * External system identifiers that will be merged with base product external IDs. Use to add layer-specific tracking
    * codes, campaign IDs, or integration references.

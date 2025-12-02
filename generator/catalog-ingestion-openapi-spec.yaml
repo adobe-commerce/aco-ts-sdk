@@ -1369,7 +1369,7 @@ paths:
                       },
                       "name": "Premium Red Winter Pants - Limited Edition",
                       "description": "Stay warm and stylish with our premium red winter pants. Features thermal lining and water-resistant fabric perfect for cold weather adventures.",
-                      "shortDescription": "Premium thermal-lined winter pants in classic red",
+                      "shortDescription": "Premium thermal-lined winter pants in warm, classic red",
                       "images": [
                         {
                           "url": "https://cdn.example.com/products/red-pants-winter-2024.jpg",
@@ -2657,10 +2657,6 @@ components:
           type: string
           description: Product display name that will override the base product name. Use for localized names, seasonal branding, or promotional titles.
           example: Premium Red Winter Pants - Limited Edition
-        slug:
-          type: string
-          description: URL-friendly identifier for the product page. Override to create layer-specific URLs for SEO or campaign tracking.
-          example: premium-red-winter-pants-limited-edition
         description:
           type: string
           nullable: true
@@ -2688,21 +2684,6 @@ components:
           description: Related product SKUs that will be merged with base product links. Use to add seasonal recommendations, locale-specific cross-sells, or promotional bundles.
           items:
             $ref: "#/components/schemas/ProductLink"
-        routes:
-          type: array
-          description: URL routing configurations that will be merged with base product routes. Use to add layer-specific navigation paths or campaign-specific URLs.
-          items:
-            $ref: "#/components/schemas/ProductRoutes"
-        configurations:
-          type: array
-          description: Product configuration options for composite products (for example, configurable products) that will be merged with base configurations. Use to add layer-specific variants or seasonal options.
-          items:
-            $ref: "#/components/schemas/ProductConfiguration"
-        bundles:
-          type: array
-          description: Bundle product definitions that will be merged with base product bundles. Use to create seasonal bundles, promotional packages, or locale-specific product groupings.
-          items:
-            $ref: "#/components/schemas/ProductBundle"
         externalIds:
           type: array
           description: External system identifiers that will be merged with base product external IDs. Use to add layer-specific tracking codes, campaign IDs, or integration references.
