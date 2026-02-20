@@ -33,3 +33,6 @@ generator/openapitools.json
 
 # Demo
 demo/
+
+# AI Rules
+.cursor/

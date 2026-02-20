@@ -40,8 +40,10 @@ tags:
       - Updating existing category information
       - Deleting categories from the catalog
       - Associating categories with product families for enhanced organization
+      - Adding SEO meta tags (title, description, keywords) to categories
+      - Associating images with categories
 
-      Categories use a slug-based hierarchy format to represent parent-child relationships, for example, "men/clothing/pants'.
+      Categories use a slug-based hierarchy format to represent parent-child relationships, for example, "men/clothing/pants".
 
       After you create categories and assign them to products, you can retrieve category data to render storefront menus and manage hierarchical category
       trees using the GraphQL `navigation` and `categorytree` queries. See
@@ -318,6 +320,8 @@ paths:
       description: |
         Update existing product attribute metadata with new values.
         When the update is processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
+
+        > **Note:** Before submitting an update request, verify that the target entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but the update is silently ignored.
       operationId: updateProductMetadata
       parameters:
         - $ref: "#/components/parameters/Authorization"
@@ -419,7 +423,10 @@ paths:
           - A category `slug` string can contain only lowercase letters, numbers, and hyphens with `/` used as a separator for hierarchy.
           - Create each category as a separate entity.
           - Use the `name` field to define the display name for the category.
+          - Use the optional `description` field to provide a full-text description of the category.
           - Use the optional `families` field to associate categories with product families for enhanced organization.
+          - Use the optional `metaTags` field to define SEO meta tags (title, description, keywords) for the category.
+          - Use the optional `images` field to associate images with the category.
 
         After you create categories, link a product to a category using the `path` value for the [routes](#operation/createProducts!path=routes&t=request) field. When you create or update products. The value of `path` in the route must match the `slug` value for the category.
 
@@ -460,12 +467,27 @@ paths:
                       "slug": "men",
                       "source": { "locale": "en-US" },
                       "name": "Men",
-                      "families": ["apparel", "accessories"]
+                      "description": "Men's clothing, shoes, and accessories",
+                      "families": ["apparel", "accessories"],
+                      "metaTags": {
+                        "title": "Men's Collection",
+                        "description": "Shop men's clothing, shoes, and accessories",
+                        "keywords": ["men", "clothing", "accessories"]
+                      },
+                      "images": [
+                        {
+                          "url": "https://example.com/images/men-category.png",
+                          "label": "Men's Category",
+                          "roles": ["SMALL"],
+                          "customRoles": []
+                        }
+                      ]
                     },
                     {
                       "slug": "men/clothing",
                       "source": { "locale": "en-US" },
                       "name": "Men's Clothing",
+                      "description": "Men's clothing and apparel",
                       "families": ["apparel"]
                     },
                     {
@@ -482,6 +504,8 @@ paths:
       description: |
         Update existing product categories with new values.
         When the update is processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply changes for fields in an `array`.
+
+        > **Note:** Before submitting an update request, verify that the target entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but the update is silently ignored.
       operationId: updateCategories
       parameters:
         - $ref: "#/components/parameters/Authorization"
@@ -514,13 +538,29 @@ paths:
                   The example below updates the following:
                   * `name` - Change the category display name.
                   * `families` - Replace the product families associated with the category.
+                  * `metaTags` - Update the SEO meta tags for the category.
+                  * `images` - Replace the images associated with the category.
                 value:
                   [
                     {
                       "slug": "men/clothing",
                       "source": { "locale": "en-US" },
                       "name": "Men's Apparel",
-                      "families": ["clothing", "fashion"]
+                      "description": "Updated collection of men's apparel and fashion",
+                      "families": ["clothing", "fashion"],
+                      "metaTags": {
+                        "title": "Men's Apparel - Updated",
+                        "description": "Updated collection of men's apparel",
+                        "keywords": ["men", "apparel", "fashion"]
+                      },
+                      "images": [
+                        {
+                          "url": "https://example.com/images/mens-apparel.png",
+                          "label": "Men's Apparel",
+                          "roles": ["SMALL"],
+                          "customRoles": []
+                        }
+                      ]
                     }
                   ]
   /v1/catalog/categories/delete:
@@ -1101,6 +1141,7 @@ paths:
         * `configurations` match on `type` and `attributeCode`
         * `externalIds` match on `type` and `origin`
 
+        > **Note:** Before submitting an update request, verify that the target entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but the update is silently ignored.
       operationId: updateProducts
       parameters:
         - $ref: "#/components/parameters/Authorization"
@@ -1591,6 +1632,8 @@ paths:
         * **Base Price Books**: Update name and currency as needed
         * **Child Price Books**: Include correct `parentId` in request (will be ignored if different)
         * **Hierarchy Restructuring**: Delete child price book and recreate with new parent reference
+
+        > **Note:** Before submitting an update request, verify that the target entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but the update is silently ignored.
       operationId: updatePriceBooks
       parameters:
         - name: Content-Type
@@ -2006,6 +2049,7 @@ paths:
         * Ensure tier quantities are in ascending order
         * Test updates in a development environment first
 
+        > **Note:** Before submitting an update request, verify that the target entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but the update is silently ignored.
       operationId: updatePrices
       parameters:
         - $ref: "#/components/parameters/Authorization"
@@ -2377,6 +2421,11 @@ components:
           maxLength: 128
           description: Display name of the category
           example: "Men's Pants"
+        description:
+          type: string
+          nullable: true
+          description: Full-text description of the category.
+          example: "Men's clothing, shoes, and accessories"
         families:
           type: array
           nullable: true
@@ -2386,6 +2435,13 @@ components:
             Optional array of product family identifiers that this category is associated with.
             Used for enhanced product organization and filtering.
           example: ["apparel", "clothing"]
+        metaTags:
+          $ref: "#/components/schemas/ProductMetaAttribute"
+        images:
+          type: array
+          description: A list of category images.
+          items:
+            $ref: "#/components/schemas/ProductImage"
       additionalProperties: false
     FeedCategoryUpdate:
       title: FeedCategoryUpdate
@@ -2413,6 +2469,11 @@ components:
           maxLength: 128
           description: Display name of the category
           example: "Men's Pants"
+        description:
+          type: string
+          nullable: true
+          description: Full-text description of the category.
+          example: "Men's clothing, shoes, and accessories"
         families:
           type: array
           nullable: true
@@ -2424,6 +2485,13 @@ components:
             you can associate it with the "apparel" family.
             Note: This field uses the replace strategy to replace the entire array with the new values.
           example: ["apparel", "clothing"]
+        metaTags:
+          $ref: "#/components/schemas/ProductMetaAttribute"
+        images:
+          type: array
+          description: A list of category images.
+          items:
+            $ref: "#/components/schemas/ProductImage"
       additionalProperties: false
     FeedCategoryDelete:
       title: Delete category

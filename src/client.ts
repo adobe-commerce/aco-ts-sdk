@@ -46,11 +46,14 @@ export interface Client {
    * unique `slug` and `source`. - To create parent-child relationships, create the `slug` field in a hierarchical
    * format, for example `men/clothing/pants\'. - A category `slug`string can contain only lowercase letters, numbers,
    * and hyphens with`/`used as a separator for hierarchy. - Create each category as a separate entity. - Use
-   * the`name`field to define the display name for the category. - Use the optional`families`field to associate
-   * categories with product families for enhanced organization. After you create categories, link a product to a
-   * category using the`path`value for the [routes](#operation/createProducts!path=routes&t=request) field. When you
-   * create or update products. The value of`path`in the route must match the`slug` value for the category. To update
-   * existing categories, use the update operation.
+   * the`name`field to define the display name for the category. - Use the optional`description`field to provide a
+   * full-text description of the category. - Use the optional`families`field to associate categories with product
+   * families for enhanced organization. - Use the optional`metaTags`field to define SEO meta tags (title, description,
+   * keywords) for the category. - Use the optional`images`field to associate images with the category. After you create
+   * categories, link a product to a category using the`path`value for the
+   * [routes](#operation/createProducts!path=routes&t=request) field. When you create or update products. The value
+   * of`path`in the route must match the`slug` value for the category. To update existing categories, use the update
+   * operation.
    *
    * @param data - FeedCategory[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -75,7 +78,9 @@ export interface Client {
   /**
    * Update categories Update existing product categories with new values. When the update is processed, the merge
    * strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy is used to apply
-   * changes for fields in an `array`.
+   * changes for fields in an `array`. > **Note:** Before submitting an update request, verify that the target entity
+   * already exists. Update operations do not validate the existence of the entity — if it does not exist, the request
+   * is accepted, but the update is silently ignored.
    *
    * @param data - FeedCategoryUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -110,7 +115,9 @@ export interface Client {
   /**
    * Update product attribute metadata Update existing product attribute metadata with new values. When the update is
    * processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy
-   * is used to apply changes for fields in an `array`.
+   * is used to apply changes for fields in an `array`. > **Note:** Before submitting an update request, verify that the
+   * target entity already exists. Update operations do not validate the existence of the entity — if it does not exist,
+   * the request is accepted, but the update is silently ignored.
    *
    * @param data - FeedMetadataUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -169,7 +176,9 @@ export interface Client {
    *   validates that `parentId` references exist and hierarchy depth is maintained <h3>Update Strategies</h3> * **Base
    *   Price Books**: Update name and currency as needed * **Child Price Books**: Include correct `parentId` in request
    *   (will be ignored if different) * **Hierarchy Restructuring**: Delete child price book and recreate with new
-   *   parent reference
+   *   parent reference > **Note:** Before submitting an update request, verify that the target entity already exists.
+   *   Update operations do not validate the existence of the entity — if it does not exist, the request is accepted,
+   *   but the update is silently ignored.
    *
    * @param data - FeedPricebook[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -216,7 +225,9 @@ export interface Client {
    * discounts/tiers, send an empty array * To add new discounts/tiers, include both existing and new items <h3>Best
    * practices</h3> * Always include the complete array of discounts/tiers when updating * Use descriptive discount
    * codes for easier management * Ensure tier quantities are in ascending order * Test updates in a development
-   * environment first
+   * environment first > **Note:** Before submitting an update request, verify that the target entity already exists.
+   * Update operations do not validate the existence of the entity — if it does not exist, the request is accepted, but
+   * the update is silently ignored.
    *
    * @param data - FeedPricesUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -333,7 +344,9 @@ export interface Client {
    * list, you can update a specific object by matching on a key field. The following fields are supported: *
    * `attributes` - match on `code` * `images` - match on `url` * `routes` - match on `path` * `links` - match on `type`
    * and `sku` * `bundles` match on `type` and `group` * `configurations` match on `type` and `attributeCode` *
-   * `externalIds` match on `type` and `origin`
+   * `externalIds` match on `type` and `origin` > **Note:** Before submitting an update request, verify that the target
+   * entity already exists. Update operations do not validate the existence of the entity — if it does not exist, the
+   * request is accepted, but the update is silently ignored.
    *
    * @param data - FeedProductUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
