@@ -91,6 +91,13 @@ export interface FeedCategory {
    */
   name: string;
   /**
+   * Full-text description of the category.
+   *
+   * @memberof FeedCategory
+   * @type {string}
+   */
+  description?: string;
+  /**
    * Optional array of product family identifiers that this category is associated with. Used for enhanced product
    * organization and filtering.
    *
@@ -98,6 +105,18 @@ export interface FeedCategory {
    * @type {string[]}
    */
   families?: string[];
+  /**
+   * @memberof FeedCategory
+   * @type {ProductMetaAttribute}
+   */
+  metaTags?: ProductMetaAttribute;
+  /**
+   * A list of category images.
+   *
+   * @memberof FeedCategory
+   * @type {ProductImage[]}
+   */
+  images?: ProductImage[];
 }
 /**
  * Delete category information for removing categories from the catalog.
@@ -148,6 +167,13 @@ export interface FeedCategoryUpdate {
    */
   name?: string;
   /**
+   * Full-text description of the category.
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {string}
+   */
+  description?: string;
+  /**
    * Optional array of product family identifiers that this category is associated with. Used for enhanced product
    * organization and filtering. For example, for a clothing category, you can associate it with the "apparel" family.
    * Note: This field uses the replace strategy to replace the entire array with the new values.
@@ -156,6 +182,18 @@ export interface FeedCategoryUpdate {
    * @type {string[]}
    */
   families?: string[];
+  /**
+   * @memberof FeedCategoryUpdate
+   * @type {ProductMetaAttribute}
+   */
+  metaTags?: ProductMetaAttribute;
+  /**
+   * A list of category images.
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {ProductImage[]}
+   */
+  images?: ProductImage[];
 }
 /**
  * @export
