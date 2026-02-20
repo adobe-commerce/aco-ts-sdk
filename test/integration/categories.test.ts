@@ -17,7 +17,15 @@
 import { config } from 'dotenv';
 import { describe, test, beforeAll, expect } from 'vitest';
 import { Client, createClient } from '../../src/client';
-import { FeedCategory, FeedCategoryUpdate, Environment, Region, ClientConfig, LogLevel } from '../../src/types';
+import {
+  FeedCategory,
+  FeedCategoryUpdate,
+  Environment,
+  Region,
+  ClientConfig,
+  LogLevel,
+  ProductImageRolesEnum,
+} from '../../src/types';
 import { consoleLogger } from '../../src/logger';
 
 config();
@@ -38,12 +46,38 @@ describe('Categories Integration Tests', () => {
     source: { locale: 'en-US' },
     name: 'Electronics',
     families: ['tech-products'],
+    description: 'Electronics category',
+    metaTags: {
+      title: 'Electronics',
+      description: 'Electronics category',
+      keywords: ['electronics', 'tech', 'products'],
+    },
+    images: [
+      {
+        url: 'https://placehold.co/150',
+        label: 'Electronics category image',
+        roles: [ProductImageRolesEnum.Base],
+      },
+    ],
   };
 
   const topLevelCategory2: FeedCategory = {
     slug: 'clothing',
     source: { locale: 'en-US' },
     name: 'Clothing',
+    description: 'Clothing category',
+    metaTags: {
+      title: 'Clothing',
+      description: 'Clothing category',
+      keywords: ['clothing', 'fashion', 'products'],
+    },
+    images: [
+      {
+        url: 'https://placehold.co/150',
+        label: 'Clothing category image',
+        roles: [ProductImageRolesEnum.Base],
+      },
+    ],
   };
 
   const childCategory1: FeedCategory = {
@@ -137,12 +171,38 @@ describe('Categories Integration Tests', () => {
       source: { locale: 'en-US' },
       name: 'Updated Electronics',
       families: ['tech-products', 'gadgets'],
+      description: 'Updated electronics category',
+      metaTags: {
+        title: 'Updated Electronics',
+        description: 'Updated electronics category',
+        keywords: ['electronics', 'tech', 'products'],
+      },
+      images: [
+        {
+          url: 'https://placehold.co/200',
+          label: 'Updated electronics category image',
+          roles: [ProductImageRolesEnum.Base],
+        },
+      ],
     };
 
     const categoryUpdate2: FeedCategoryUpdate = {
       slug: 'clothing',
       source: { locale: 'en-US' },
       name: 'Updated Clothing',
+      description: 'Updated clothing category',
+      metaTags: {
+        title: 'Updated Clothing',
+        description: 'Updated clothing category',
+        keywords: ['clothing', 'fashion', 'products'],
+      },
+      images: [
+        {
+          url: 'https://placehold.co/200',
+          label: 'Updated clothing category image',
+          roles: [ProductImageRolesEnum.Base],
+        },
+      ],
     };
 
     const response = await client.updateCategories([categoryUpdate1, categoryUpdate2]);
