@@ -1651,7 +1651,7 @@ export interface AdobeCredentials {
   clientSecret: string;
 }
 
-export type Region = 'na1';
+export type Region = 'na1' | 'eu1' | 'uk1' | 'au1' | 'in1' | 'sg1';
 
 export type Environment = 'production' | 'sandbox';
 
