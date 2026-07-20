@@ -48,12 +48,12 @@ export interface Client {
    * and hyphens with`/`used as a separator for hierarchy. - Create each category as a separate entity. - Use
    * the`name`field to define the display name for the category. - Use the optional`description`field to provide a
    * full-text description of the category. - Use the optional`families`field to associate categories with product
-   * families for enhanced organization. - Use the optional`metaTags`field to define SEO meta tags (title, description,
-   * keywords) for the category. - Use the optional`images`field to associate images with the category. After you create
-   * categories, link a product to a category using the`path`value for the
-   * [routes](#operation/createProducts!path=routes&t=request) field. When you create or update products. The value
-   * of`path`in the route must match the`slug` value for the category. To update existing categories, use the update
-   * operation.
+   * families for enhanced organization. - Use the optional`position`field to assign a numeric sort order to the
+   * category. - Use the optional`metaTags`field to define SEO meta tags (title, description, keywords) for the
+   * category. - Use the optional`images`field to associate images with the category. After you create categories, link
+   * a product to a category using the`path`value for the [routes](#operation/createProducts!path=routes&t=request)
+   * field. When you create or update products. The value of`path`in the route must match the`slug` value for the
+   * category. To update existing categories, use the update operation.
    *
    * @param data - FeedCategory[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
