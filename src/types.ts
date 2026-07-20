@@ -106,6 +106,13 @@ export interface FeedCategory {
    */
   families?: string[];
   /**
+   * Sort order for the category
+   *
+   * @memberof FeedCategory
+   * @type {number}
+   */
+  position?: number;
+  /**
    * @memberof FeedCategory
    * @type {ProductMetaAttribute}
    */
@@ -182,6 +189,13 @@ export interface FeedCategoryUpdate {
    * @type {string[]}
    */
   families?: string[];
+  /**
+   * Sort order for the category
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {number}
+   */
+  position?: number;
   /**
    * @memberof FeedCategoryUpdate
    * @type {ProductMetaAttribute}
