@@ -23,10 +23,10 @@ import {
   ApiResponse,
   FeedCategory,
   FeedCategoryDelete,
+  FeedCategoryMetadata,
+  FeedCategoryMetadataDelete,
+  FeedCategoryMetadataUpdate,
   FeedCategoryUpdate,
-  FeedMetadata,
-  FeedMetadataDelete,
-  FeedMetadataUpdate,
   FeedPriceBookDelete,
   FeedPricebook,
   FeedPrices,
@@ -36,6 +36,9 @@ import {
   FeedProductDelete,
   FeedProductLayer,
   FeedProductLayerDelete,
+  FeedProductMetadata,
+  FeedProductMetadataDelete,
+  FeedProductMetadataUpdate,
   FeedProductUpdate,
 } from './types';
 
@@ -50,10 +53,11 @@ export interface Client {
    * full-text description of the category. - Use the optional`families`field to associate categories with product
    * families for enhanced organization. - Use the optional`position`field to assign a numeric sort order to the
    * category. - Use the optional`metaTags`field to define SEO meta tags (title, description, keywords) for the
-   * category. - Use the optional`images`field to associate images with the category. After you create categories, link
-   * a product to a category using the`path`value for the [routes](#operation/createProducts!path=routes&t=request)
-   * field. When you create or update products. The value of`path`in the route must match the`slug` value for the
-   * category. To update existing categories, use the update operation.
+   * category. - Use the optional`images`field to associate images with the category. - Use the
+   * optional`attributes`field to add additional attributes. After you create categories, link a product to a category
+   * using the`path`value for the [routes](#operation/createProducts!path=routes&t=request) field. When you create or
+   * update products. The value of`path`in the route must match the`slug` value for the category. To update existing
+   * categories, use the update operation.
    *
    * @param data - FeedCategory[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -87,44 +91,34 @@ export interface Client {
    */
   updateCategories(data: FeedCategoryUpdate[]): Promise<ApiResponse>;
   /**
-   * Create product attribute metadata To ensure product data is indexed for discovery, create or replace existing
-   * product attribute metadata resources before creating products. For each Commerce project, you must define metadata
-   * for the following attributes for each catalog source (`locale`): - `sku` - `name` - `description` -
-   * `shortDescription` - `price` Also, you can define metadata for custom attributes. When creating product attribute
-   * metadata: - Each product attribute requires a unique `code` and `source`. - Use the `dataType` field to define the
-   * data type for the product attribute. - Use the `visibleIn` field to define where the product attribute is displayed
-   * on the storefront. - Use the `filterable`, `sortable`, and `searchable` fields to define how the product attribute
-   * is used for filtering, sorting, and searching. - Use the `searchWeight` field to define the search weight for the
-   * product attribute. - Use the `searchTypes` field to define the search type for the product attribute. To update
-   * existing product attribute metadata, use the update operation.
+   * Create category attribute metadata When creating category attribute metadata: - Each category attribute requires a
+   * unique `code` and `source`. - Use the `dataType` field to define the data type for the category attribute. To
+   * update existing category attribute metadata, use the update operation.
    *
-   * @param data - FeedMetadata[] payload
+   * @param data - FeedCategoryMetadata[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  createProductMetadata(data: FeedMetadata[]): Promise<ApiResponse>;
+  createCategoryMetadata(data: FeedCategoryMetadata[]): Promise<ApiResponse>;
   /**
-   * Delete product attributes metadata Remove product attribute metadata resources from the catalog data.
+   * Delete category attributes metadata Remove category attribute metadata resources from the catalog data.
    *
-   * @param data - FeedMetadataDelete[] payload
+   * @param data - FeedCategoryMetadataDelete[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  deleteProductMetadata(data: FeedMetadataDelete[]): Promise<ApiResponse>;
+  deleteCategoryMetadata(data: FeedCategoryMetadataDelete[]): Promise<ApiResponse>;
   /**
-   * Update product attribute metadata Update existing product attribute metadata with new values. When the update is
+   * Update category attribute metadata Update existing category attribute metadata with new values. When the update is
    * processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy
-   * is used to apply changes for fields in an `array`. > **Note:** Before submitting an update request, verify that the
-   * target entity exists using the
-   * [attributeMetadata](https://developer.adobe.com/commerce/services/graphql-api/merchandising-api/index.html#query-attributeMetadata)
-   * GraphQL query. Update operations do not verify that the entity exists. Requests targeting a nonexistent entity are
-   * accepted, but the update has no effect.
+   * is used to apply changes for fields in an `array`. > **Note:** Update operations do not verify that the entity
+   * exists. Requests targeting a nonexistent entity are accepted, but the update has no effect.
    *
-   * @param data - FeedMetadataUpdate[] payload
+   * @param data - FeedCategoryMetadataUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
    * @throws {Error} If the API request fails
    */
-  updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ApiResponse>;
+  updateCategoryMetadata(data: FeedCategoryMetadataUpdate[]): Promise<ApiResponse>;
   /**
    * Create price books Create or replace existing price books with support for hierarchical pricing
    * structures.<h3>Creating Base Price Books</h3> Base price books are the foundation of your pricing hierarchy: *
@@ -230,9 +224,9 @@ export interface Client {
    * codes for easier management * Ensure tier quantities are in ascending order * Test updates in a development
    * environment first > **Note:** Before submitting an update request, verify that the target entity exists using the
    * [products GraphQL
-   * query](https://developer.adobe.com/commerce/services/graphql-api/merchandising-api/index.html#query-products) to
-   * check the prices assigned to the product SKU. Update operations do not verify that the entity exists. Requests
-   * targeting a nonexistent entity are accepted, but the update has no effect.
+   * query](https://developer.adobe.com/commerce/services/includes/autogenerated/merchandising-api#products) to check
+   * the prices assigned to the product SKU. Update operations do not verify that the entity exists. Requests targeting
+   * a nonexistent entity are accepted, but the update has no effect.
    *
    * @param data - FeedPricesUpdate[] payload
    * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
@@ -275,6 +269,45 @@ export interface Client {
    * @throws {Error} If the API request fails
    */
   deleteProductLayers(data: FeedProductLayerDelete[]): Promise<ApiResponse>;
+  /**
+   * Create product attribute metadata To ensure product data is indexed for discovery, create or replace existing
+   * product attribute metadata resources before creating products. For each Commerce project, you must define metadata
+   * for the following attributes for each catalog source (`locale`): - `sku` - `name` - `description` -
+   * `shortDescription` - `price` Also, you can define metadata for custom attributes. When creating product attribute
+   * metadata: - Each product attribute requires a unique `code` and `source`. - Use the `dataType` field to define the
+   * data type for the product attribute. - Use the `visibleIn` field to define where the product attribute is displayed
+   * on the storefront. - Use the `filterable`, `sortable`, and `searchable` fields to define how the product attribute
+   * is used for filtering, sorting, and searching. - Use the `searchWeight` field to define the search weight for the
+   * product attribute. - Use the `searchTypes` field to define the search type for the product attribute. To update
+   * existing product attribute metadata, use the update operation.
+   *
+   * @param data - FeedProductMetadata[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  createProductMetadata(data: FeedProductMetadata[]): Promise<ApiResponse>;
+  /**
+   * Delete product attributes metadata Remove product attribute metadata resources from the catalog data.
+   *
+   * @param data - FeedProductMetadataDelete[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  deleteProductMetadata(data: FeedProductMetadataDelete[]): Promise<ApiResponse>;
+  /**
+   * Update product attribute metadata Update existing product attribute metadata with new values. When the update is
+   * processed, the merge strategy is used to apply changes to `scalar` and `object` type fields. The replace strategy
+   * is used to apply changes for fields in an `array`. > **Note:** Before submitting an update request, verify that the
+   * target entity exists using the
+   * [attributeMetadata](https://developer.adobe.com/commerce/services/includes/autogenerated/merchandising-api#attributemetadata)
+   * GraphQL query. Update operations do not verify that the entity exists. Requests targeting a nonexistent entity are
+   * accepted, but the update has no effect.
+   *
+   * @param data - FeedProductMetadataUpdate[] payload
+   * @returns {Promise<ApiResponse>} Feed response indicating the number of accepted items
+   * @throws {Error} If the API request fails
+   */
+  updateProductMetadata(data: FeedProductMetadataUpdate[]): Promise<ApiResponse>;
   /**
    * Create or replace products You can create different types of products, such as simple products and configurable
    * products. When creating products: - Each product requires a unique SKU identifier. - Products must have a defined
@@ -353,8 +386,8 @@ export interface Client {
    * and `sku` * `bundles` match on `type` and `group` * `configurations` match on `type` and `attributeCode` *
    * `externalIds` match on `type` and `origin` > **Note:** Before submitting an update request, verify that the target
    * entity exists using the
-   * [products](https://developer.adobe.com/commerce/services/graphql-api/merchandising-api/index.html#query-products)
-   * GraphQL query. Update operations do not verify that the entity exists. Requests targeting a nonexistent entity are
+   * [products](https://developer.adobe.com/commerce/services/includes/autogenerated/merchandising-api#products) GraphQL
+   * query. Update operations do not verify that the entity exists. Requests targeting a nonexistent entity are
    * accepted, but the update has no effect.
    *
    * @param data - FeedProductUpdate[] payload
@@ -436,22 +469,22 @@ export function createClient(clientConfig: ClientConfig): Client {
       });
     },
 
-    async createProductMetadata(data: FeedMetadata[]): Promise<ApiResponse> {
-      return await http.request(`/v1/catalog/products/metadata`, {
+    async createCategoryMetadata(data: FeedCategoryMetadata[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories/metadata`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async deleteProductMetadata(data: FeedMetadataDelete[]): Promise<ApiResponse> {
-      return await http.request(`/v1/catalog/products/metadata/delete`, {
+    async deleteCategoryMetadata(data: FeedCategoryMetadataDelete[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories/metadata/delete`, {
         method: 'POST',
         body: JSON.stringify(data),
       });
     },
 
-    async updateProductMetadata(data: FeedMetadataUpdate[]): Promise<ApiResponse> {
-      return await http.request(`/v1/catalog/products/metadata`, {
+    async updateCategoryMetadata(data: FeedCategoryMetadataUpdate[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/categories/metadata`, {
         method: 'PATCH',
         body: JSON.stringify(data),
       });
@@ -509,6 +542,27 @@ export function createClient(clientConfig: ClientConfig): Client {
     async deleteProductLayers(data: FeedProductLayerDelete[]): Promise<ApiResponse> {
       return await http.request(`/v1/catalog/products/layers/delete`, {
         method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async createProductMetadata(data: FeedProductMetadata[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/products/metadata`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async deleteProductMetadata(data: FeedProductMetadataDelete[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/products/metadata/delete`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    },
+
+    async updateProductMetadata(data: FeedProductMetadataUpdate[]): Promise<ApiResponse> {
+      return await http.request(`/v1/catalog/products/metadata`, {
+        method: 'PATCH',
         body: JSON.stringify(data),
       });
     },

@@ -24,7 +24,7 @@ coverage/
 
 # pnpm specific
 pnpm-lock.yaml
-.pnpm-debug.log 
+.pnpm-debug.log
 
 # OpenAPI Generator
 .openapi-generator/
@@ -36,3 +36,4 @@ demo/
 
 # AI Rules
 .cursor/
+CLAUDE.md
