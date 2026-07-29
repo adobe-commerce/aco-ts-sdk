@@ -26,10 +26,11 @@ import {
 {{/models}}
   ApiResponse,
   ClientConfig,
-  FeedMetadataDataTypeEnum,
+  FeedProductMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
-  FeedMetadataVisibleInEnum,
+  FeedProductMetadataVisibleInEnum,
+  FeedCategoryMetadataDataTypeEnum,
 } from '../../src/types';
 
 // Mock the dependencies
@@ -63,8 +64,8 @@ describe('Client', () => {
           ...baseMock,
           code: 'test-attribute',
           label: 'Test Attribute',
-          dataType: FeedMetadataDataTypeEnum.Text,
-          visibleIn: [FeedMetadataVisibleInEnum.ProductDetail],
+          dataType: FeedProductMetadataDataTypeEnum.Text,
+          visibleIn: [FeedProductMetadataVisibleInEnum.ProductDetail],
           filterable: true,
           sortable: true,
           searchable: true,
@@ -73,6 +74,21 @@ describe('Client', () => {
         }];
 
       case 'deleteProductMetadata':
+        return [{
+          ...baseMock,
+          code: 'test-attribute'
+        }];
+
+      case 'createCategoryMetadata':
+      case 'updateCategoryMetadata':
+        return [{
+          ...baseMock,
+          code: 'test-attribute',
+          label: 'Test Attribute',
+          dataType: FeedCategoryMetadataDataTypeEnum.Text
+        }];
+
+      case 'deleteCategoryMetadata':
         return [{
           ...baseMock,
           code: 'test-attribute'

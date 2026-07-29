@@ -15,6 +15,91 @@
  */
 
 /**
+ * @export
+ * @interface CategoryAttribute
+ */
+export interface CategoryAttribute {
+  /**
+   * Category Attribute Code
+   *
+   * @memberof CategoryAttribute
+   * @type {string}
+   */
+  code: string;
+  /**
+   * A list of value(s) associated with a specified attribute code.
+   *
+   * @memberof CategoryAttribute
+   * @type {string[]}
+   */
+  values: string[];
+}
+/**
+ * @export
+ * @interface CategoryImage
+ */
+export interface CategoryImage {
+  /**
+   * Media resource URL
+   *
+   * @memberof CategoryImage
+   * @type {string}
+   */
+  url: string;
+  /**
+   * Media resource label
+   *
+   * @memberof CategoryImage
+   * @type {string}
+   */
+  label?: string;
+  /**
+   * Roles associated with this image that determine how the image is used on the storefront. - `BASE`: Category image
+   * is visible as a main image on the Category Detail Page. - `THUMBNAIL`: Thumbnail images appear in the thumbnail
+   * gallery, shopping cart, etc.
+   *
+   * @memberof CategoryImage
+   * @type {CategoryImageRolesEnum[]}
+   */
+  roles?: CategoryImageRolesEnum[];
+  /**
+   * Custom image role. Merchants can define custom roles in addition to the predefined values.
+   *
+   * @memberof CategoryImage
+   * @type {string[]}
+   */
+  customRoles?: string[];
+}
+/**
+ * Meta attributes that are specified in <meta> tags.
+ *
+ * @export
+ * @interface CategoryMetaAttribute
+ */
+export interface CategoryMetaAttribute {
+  /**
+   * A meta title
+   *
+   * @memberof CategoryMetaAttribute
+   * @type {string}
+   */
+  title?: string;
+  /**
+   * A meta keywords
+   *
+   * @memberof CategoryMetaAttribute
+   * @type {string[]}
+   */
+  keywords?: string[];
+  /**
+   * A meta description
+   *
+   * @memberof CategoryMetaAttribute
+   * @type {string}
+   */
+  description?: string;
+}
+/**
  * Fixed amount discount that reduces the regular price by a specific monetary value. Example: $100 regular price with a
  * $10 fixed discount results in $90 final price.
  *
@@ -114,16 +199,23 @@ export interface FeedCategory {
   position?: number;
   /**
    * @memberof FeedCategory
-   * @type {ProductMetaAttribute}
+   * @type {CategoryMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute;
+  metaTags?: CategoryMetaAttribute;
+  /**
+   * A list of category attributes.
+   *
+   * @memberof FeedCategory
+   * @type {CategoryAttribute[]}
+   */
+  attributes?: CategoryAttribute[];
   /**
    * A list of category images.
    *
    * @memberof FeedCategory
-   * @type {ProductImage[]}
+   * @type {CategoryImage[]}
    */
-  images?: ProductImage[];
+  images?: CategoryImage[];
 }
 /**
  * Delete category information for removing categories from the catalog.
@@ -145,6 +237,94 @@ export interface FeedCategoryDelete {
    * @type {Source}
    */
   source: Source;
+}
+/**
+ * Metadata information for a category attribute.
+ *
+ * @export
+ * @interface FeedCategoryMetadata
+ */
+export interface FeedCategoryMetadata {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedCategoryMetadata
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedCategoryMetadata
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Label for the attribute that is displayed in user interfaces.
+   *
+   * @memberof FeedCategoryMetadata
+   * @type {string}
+   */
+  label: string;
+  /**
+   * Data type
+   *
+   * @memberof FeedCategoryMetadata
+   * @type {FeedCategoryMetadataDataTypeEnum}
+   */
+  dataType: FeedCategoryMetadataDataTypeEnum;
+}
+/**
+ * Delete metadata information for a category attribute.
+ *
+ * @export
+ * @interface FeedCategoryMetadataDelete
+ */
+export interface FeedCategoryMetadataDelete {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedCategoryMetadataDelete
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedCategoryMetadataDelete
+   * @type {Source}
+   */
+  source: Source;
+}
+/**
+ * Metadata information for a category attribute.
+ *
+ * @export
+ * @interface FeedCategoryMetadataUpdate
+ */
+export interface FeedCategoryMetadataUpdate {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedCategoryMetadataUpdate
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedCategoryMetadataUpdate
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Label for the attribute that is displayed in user interfaces.
+   *
+   * @memberof FeedCategoryMetadataUpdate
+   * @type {string}
+   */
+  label?: string;
+  /**
+   * Data type
+   *
+   * @memberof FeedCategoryMetadataUpdate
+   * @type {FeedCategoryMetadataUpdateDataTypeEnum}
+   */
+  dataType?: FeedCategoryMetadataUpdateDataTypeEnum;
 }
 /**
  * Category information for updating existing categories.
@@ -198,16 +378,23 @@ export interface FeedCategoryUpdate {
   position?: number;
   /**
    * @memberof FeedCategoryUpdate
-   * @type {ProductMetaAttribute}
+   * @type {CategoryMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute;
+  metaTags?: CategoryMetaAttribute;
+  /**
+   * A list of category attributes.
+   *
+   * @memberof FeedCategoryUpdate
+   * @type {CategoryAttribute[]}
+   */
+  attributes?: CategoryAttribute[];
   /**
    * A list of category images.
    *
    * @memberof FeedCategoryUpdate
-   * @type {ProductImage[]}
+   * @type {CategoryImage[]}
    */
-  images?: ProductImage[];
+  images?: CategoryImage[];
 }
 /**
  * @export
@@ -242,186 +429,6 @@ export interface FeedItemFailedValidationResult {
    * @type {string}
    */
   value?: string;
-}
-/**
- * Metadata information for a product attribute.
- *
- * @export
- * @interface FeedMetadata
- */
-export interface FeedMetadata {
-  /**
-   * Attribute code
-   *
-   * @memberof FeedMetadata
-   * @type {string}
-   */
-  code: string;
-  /**
-   * @memberof FeedMetadata
-   * @type {Source}
-   */
-  source: Source;
-  /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
-   *
-   * @memberof FeedMetadata
-   * @type {FeedMetadataVisibleInEnum[]}
-   */
-  visibleIn?: FeedMetadataVisibleInEnum[];
-  /**
-   * Label for the attribute that is displayed in user interfaces.
-   *
-   * @memberof FeedMetadata
-   * @type {string}
-   */
-  label: string;
-  /**
-   * Data type
-   *
-   * @memberof FeedMetadata
-   * @type {FeedMetadataDataTypeEnum}
-   */
-  dataType: FeedMetadataDataTypeEnum;
-  /**
-   * Indicates whether the attribute can be used to filter products.
-   *
-   * @memberof FeedMetadata
-   * @type {boolean}
-   */
-  filterable?: boolean;
-  /**
-   * Indicates whether the attribute can be used to sort products.
-   *
-   * @memberof FeedMetadata
-   * @type {boolean}
-   */
-  sortable?: boolean;
-  /**
-   * Indicates whether the attribute value can be used in search queries to filter results.
-   *
-   * @memberof FeedMetadata
-   * @type {boolean}
-   */
-  searchable?: boolean;
-  /**
-   * The weight associated with a searchable attribute. Attributes with a greater weight are returned before attributes
-   * with a lower weight.
-   *
-   * @memberof FeedMetadata
-   * @type {number}
-   */
-  searchWeight?: number;
-  /**
-   * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on.
-   *
-   * @memberof FeedMetadata
-   * @type {FeedMetadataSearchTypesEnum[]}
-   */
-  searchTypes?: FeedMetadataSearchTypesEnum[];
-}
-/**
- * Delete metadata information for a product attribute.
- *
- * @export
- * @interface FeedMetadataDelete
- */
-export interface FeedMetadataDelete {
-  /**
-   * Attribute code
-   *
-   * @memberof FeedMetadataDelete
-   * @type {string}
-   */
-  code: string;
-  /**
-   * @memberof FeedMetadataDelete
-   * @type {Source}
-   */
-  source: Source;
-}
-/**
- * Metadata information for a product attribute.
- *
- * @export
- * @interface FeedMetadataUpdate
- */
-export interface FeedMetadataUpdate {
-  /**
-   * Attribute code
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {string}
-   */
-  code: string;
-  /**
-   * @memberof FeedMetadataUpdate
-   * @type {Source}
-   */
-  source: Source;
-  /**
-   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
-   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
-   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
-   * Compare Page.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {FeedMetadataUpdateVisibleInEnum[]}
-   */
-  visibleIn?: FeedMetadataUpdateVisibleInEnum[];
-  /**
-   * Label for the attribute that is displayed in user interfaces.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {string}
-   */
-  label?: string;
-  /**
-   * Data type
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {FeedMetadataUpdateDataTypeEnum}
-   */
-  dataType?: FeedMetadataUpdateDataTypeEnum;
-  /**
-   * Indicates whether the attribute can be used to filter products.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {boolean}
-   */
-  filterable?: boolean;
-  /**
-   * Indicates whether the attribute can be used to sort products.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {boolean}
-   */
-  sortable?: boolean;
-  /**
-   * Indicates whether the attribute value can be used in search queries to filter results.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {boolean}
-   */
-  searchable?: boolean;
-  /**
-   * The weight associated with a searchable attribute. Attributes with a greater weight are returned before attributes
-   * with a lower weight.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {number}
-   */
-  searchWeight?: number;
-  /**
-   * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on.
-   *
-   * @memberof FeedMetadataUpdate
-   * @type {FeedMetadataUpdateSearchTypesEnum[]}
-   */
-  searchTypes?: FeedMetadataUpdateSearchTypesEnum[];
 }
 /**
  * Price book information
@@ -636,9 +643,9 @@ export interface FeedProduct {
   visibleIn?: FeedProductVisibleInEnum[];
   /**
    * @memberof FeedProduct
-   * @type {ProductMetaAttribute}
+   * @type {CategoryMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute;
+  metaTags?: CategoryMetaAttribute;
   /**
    * A list of product attributes.
    *
@@ -753,9 +760,9 @@ export interface FeedProductLayer {
   shortDescription?: string;
   /**
    * @memberof FeedProductLayer
-   * @type {ProductMetaAttribute}
+   * @type {CategoryMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute;
+  metaTags?: CategoryMetaAttribute;
   /**
    * Product attributes that will be merged with base product attributes. Use to add layer-specific variants, localized
    * values, or seasonal properties.
@@ -807,6 +814,186 @@ export interface FeedProductLayerDelete {
    * @type {SourceLayer}
    */
   source: SourceLayer;
+}
+/**
+ * Metadata information for a product attribute.
+ *
+ * @export
+ * @interface FeedProductMetadata
+ */
+export interface FeedProductMetadata {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedProductMetadata
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedProductMetadata
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
+   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
+   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
+   * Compare Page.
+   *
+   * @memberof FeedProductMetadata
+   * @type {FeedProductMetadataVisibleInEnum[]}
+   */
+  visibleIn?: FeedProductMetadataVisibleInEnum[];
+  /**
+   * Label for the attribute that is displayed in user interfaces.
+   *
+   * @memberof FeedProductMetadata
+   * @type {string}
+   */
+  label: string;
+  /**
+   * Data type
+   *
+   * @memberof FeedProductMetadata
+   * @type {FeedProductMetadataDataTypeEnum}
+   */
+  dataType: FeedProductMetadataDataTypeEnum;
+  /**
+   * Indicates whether the attribute can be used to filter products.
+   *
+   * @memberof FeedProductMetadata
+   * @type {boolean}
+   */
+  filterable?: boolean;
+  /**
+   * Indicates whether the attribute can be used to sort products.
+   *
+   * @memberof FeedProductMetadata
+   * @type {boolean}
+   */
+  sortable?: boolean;
+  /**
+   * Indicates whether the attribute value can be used in search queries to filter results.
+   *
+   * @memberof FeedProductMetadata
+   * @type {boolean}
+   */
+  searchable?: boolean;
+  /**
+   * The weight associated with a searchable attribute. Attributes with a greater weight are returned before attributes
+   * with a lower weight.
+   *
+   * @memberof FeedProductMetadata
+   * @type {number}
+   */
+  searchWeight?: number;
+  /**
+   * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on.
+   *
+   * @memberof FeedProductMetadata
+   * @type {FeedProductMetadataSearchTypesEnum[]}
+   */
+  searchTypes?: FeedProductMetadataSearchTypesEnum[];
+}
+/**
+ * Delete metadata information for a product attribute.
+ *
+ * @export
+ * @interface FeedProductMetadataDelete
+ */
+export interface FeedProductMetadataDelete {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedProductMetadataDelete
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedProductMetadataDelete
+   * @type {Source}
+   */
+  source: Source;
+}
+/**
+ * Metadata information for a product attribute.
+ *
+ * @export
+ * @interface FeedProductMetadataUpdate
+ */
+export interface FeedProductMetadataUpdate {
+  /**
+   * Attribute code
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {string}
+   */
+  code: string;
+  /**
+   * @memberof FeedProductMetadataUpdate
+   * @type {Source}
+   */
+  source: Source;
+  /**
+   * Determines how the attribute is used on the storefront. * `PRODUCT_DETAIL`: Product attribute is visible on the
+   * Product Detail Page. * `PRODUCT_LISTING`: Product attribute is visible on Product Listing Page. * `SEARCH_RESULTS`:
+   * Product attribute is visible on Search Results Page. * `PRODUCT_COMPARE`: Product attribute is visible on Product
+   * Compare Page.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {FeedProductMetadataUpdateVisibleInEnum[]}
+   */
+  visibleIn?: FeedProductMetadataUpdateVisibleInEnum[];
+  /**
+   * Label for the attribute that is displayed in user interfaces.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {string}
+   */
+  label?: string;
+  /**
+   * Data type
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {FeedProductMetadataUpdateDataTypeEnum}
+   */
+  dataType?: FeedProductMetadataUpdateDataTypeEnum;
+  /**
+   * Indicates whether the attribute can be used to filter products.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {boolean}
+   */
+  filterable?: boolean;
+  /**
+   * Indicates whether the attribute can be used to sort products.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {boolean}
+   */
+  sortable?: boolean;
+  /**
+   * Indicates whether the attribute value can be used in search queries to filter results.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {boolean}
+   */
+  searchable?: boolean;
+  /**
+   * The weight associated with a searchable attribute. Attributes with a greater weight are returned before attributes
+   * with a lower weight.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {number}
+   */
+  searchWeight?: number;
+  /**
+   * Search types associated with this attribute, for example: `autocomplete`, `starts_with`, and so on.
+   *
+   * @memberof FeedProductMetadataUpdate
+   * @type {FeedProductMetadataUpdateSearchTypesEnum[]}
+   */
+  searchTypes?: FeedProductMetadataUpdateSearchTypesEnum[];
 }
 /**
  * @export
@@ -873,9 +1060,9 @@ export interface FeedProductUpdate {
   visibleIn?: FeedProductUpdateVisibleInEnum[];
   /**
    * @memberof FeedProductUpdate
-   * @type {ProductMetaAttribute}
+   * @type {CategoryMetaAttribute}
    */
-  metaTags?: ProductMetaAttribute;
+  metaTags?: CategoryMetaAttribute;
   /**
    * A list of product attributes.
    *
@@ -1334,35 +1521,6 @@ export interface ProductLink {
   sku: string;
 }
 /**
- * Meta attributes that are specified in <meta> tags.
- *
- * @export
- * @interface ProductMetaAttribute
- */
-export interface ProductMetaAttribute {
-  /**
-   * A meta title
-   *
-   * @memberof ProductMetaAttribute
-   * @type {string}
-   */
-  title?: string;
-  /**
-   * A meta keywords
-   *
-   * @memberof ProductMetaAttribute
-   * @type {string[]}
-   */
-  keywords?: string[];
-  /**
-   * A meta description
-   *
-   * @memberof ProductMetaAttribute
-   * @type {string}
-   */
-  description?: string;
-}
-/**
  * @export
  * @interface ProductOptionValue
  */
@@ -1508,74 +1666,38 @@ export interface TierPercentage {
 
 // Manually define any enum types that are referenced but not generated
 /**
- * Enum for FeedMetadata.visibleIn
+ * Enum for CategoryImage.roles
  *
  * @export
  * @enum {string}
  */
-export enum FeedMetadataVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
+export enum CategoryImageRolesEnum {
+  Base = 'BASE',
+  Thumbnail = 'THUMBNAIL',
 }
 /**
- * Enum for FeedMetadata.dataType
+ * Enum for FeedCategoryMetadata.dataType
  *
  * @export
  * @enum {string}
  */
-export enum FeedMetadataDataTypeEnum {
+export enum FeedCategoryMetadataDataTypeEnum {
   Text = 'TEXT',
   Decimal = 'DECIMAL',
   Integer = 'INTEGER',
   Boolean = 'BOOLEAN',
 }
 /**
- * Enum for FeedMetadata.searchTypes
+ * Enum for FeedCategoryMetadataUpdate.dataType
  *
  * @export
  * @enum {string}
  */
-export enum FeedMetadataSearchTypesEnum {
-  Autocomplete = 'AUTOCOMPLETE',
-  Contains = 'CONTAINS',
-  StartsWith = 'STARTS_WITH',
-}
-/**
- * Enum for FeedMetadataUpdate.visibleIn
- *
- * @export
- * @enum {string}
- */
-export enum FeedMetadataUpdateVisibleInEnum {
-  ProductDetail = 'PRODUCT_DETAIL',
-  ProductListing = 'PRODUCT_LISTING',
-  SearchResults = 'SEARCH_RESULTS',
-  ProductCompare = 'PRODUCT_COMPARE',
-}
-/**
- * Enum for FeedMetadataUpdate.dataType
- *
- * @export
- * @enum {string}
- */
-export enum FeedMetadataUpdateDataTypeEnum {
+export enum FeedCategoryMetadataUpdateDataTypeEnum {
   Text = 'TEXT',
   Decimal = 'DECIMAL',
   Integer = 'INTEGER',
   Boolean = 'BOOLEAN',
-}
-/**
- * Enum for FeedMetadataUpdate.searchTypes
- *
- * @export
- * @enum {string}
- */
-export enum FeedMetadataUpdateSearchTypesEnum {
-  Autocomplete = 'AUTOCOMPLETE',
-  Contains = 'CONTAINS',
-  StartsWith = 'STARTS_WITH',
 }
 /**
  * Enum for FeedProduct.status
@@ -1596,6 +1718,76 @@ export enum FeedProductStatusEnum {
 export enum FeedProductVisibleInEnum {
   Catalog = 'CATALOG',
   Search = 'SEARCH',
+}
+/**
+ * Enum for FeedProductMetadata.visibleIn
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataVisibleInEnum {
+  ProductDetail = 'PRODUCT_DETAIL',
+  ProductListing = 'PRODUCT_LISTING',
+  SearchResults = 'SEARCH_RESULTS',
+  ProductCompare = 'PRODUCT_COMPARE',
+}
+/**
+ * Enum for FeedProductMetadata.dataType
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataDataTypeEnum {
+  Text = 'TEXT',
+  Decimal = 'DECIMAL',
+  Integer = 'INTEGER',
+  Boolean = 'BOOLEAN',
+}
+/**
+ * Enum for FeedProductMetadata.searchTypes
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataSearchTypesEnum {
+  Autocomplete = 'AUTOCOMPLETE',
+  Contains = 'CONTAINS',
+  StartsWith = 'STARTS_WITH',
+}
+/**
+ * Enum for FeedProductMetadataUpdate.visibleIn
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataUpdateVisibleInEnum {
+  ProductDetail = 'PRODUCT_DETAIL',
+  ProductListing = 'PRODUCT_LISTING',
+  SearchResults = 'SEARCH_RESULTS',
+  ProductCompare = 'PRODUCT_COMPARE',
+}
+/**
+ * Enum for FeedProductMetadataUpdate.dataType
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataUpdateDataTypeEnum {
+  Text = 'TEXT',
+  Decimal = 'DECIMAL',
+  Integer = 'INTEGER',
+  Boolean = 'BOOLEAN',
+}
+/**
+ * Enum for FeedProductMetadataUpdate.searchTypes
+ *
+ * @export
+ * @enum {string}
+ */
+export enum FeedProductMetadataUpdateSearchTypesEnum {
+  Autocomplete = 'AUTOCOMPLETE',
+  Contains = 'CONTAINS',
+  StartsWith = 'STARTS_WITH',
 }
 /**
  * Enum for FeedProductUpdate.status

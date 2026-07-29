@@ -21,10 +21,11 @@ import { createAuthService } from '../../src/auth';
 import {
   ApiResponse,
   ClientConfig,
-  FeedMetadataDataTypeEnum,
+  FeedProductMetadataDataTypeEnum,
   FeedProductStatusEnum,
   FeedProductVisibleInEnum,
-  FeedMetadataVisibleInEnum,
+  FeedProductMetadataVisibleInEnum,
+  FeedCategoryMetadataDataTypeEnum,
 } from '../../src/types';
 
 // Mock the dependencies
@@ -59,8 +60,8 @@ describe('Client', () => {
             ...baseMock,
             code: 'test-attribute',
             label: 'Test Attribute',
-            dataType: FeedMetadataDataTypeEnum.Text,
-            visibleIn: [FeedMetadataVisibleInEnum.ProductDetail],
+            dataType: FeedProductMetadataDataTypeEnum.Text,
+            visibleIn: [FeedProductMetadataVisibleInEnum.ProductDetail],
             filterable: true,
             sortable: true,
             searchable: true,
@@ -70,6 +71,25 @@ describe('Client', () => {
         ];
 
       case 'deleteProductMetadata':
+        return [
+          {
+            ...baseMock,
+            code: 'test-attribute',
+          },
+        ];
+
+      case 'createCategoryMetadata':
+      case 'updateCategoryMetadata':
+        return [
+          {
+            ...baseMock,
+            code: 'test-attribute',
+            label: 'Test Attribute',
+            dataType: FeedCategoryMetadataDataTypeEnum.Text,
+          },
+        ];
+
+      case 'deleteCategoryMetadata':
         return [
           {
             ...baseMock,
@@ -266,7 +286,7 @@ describe('Client', () => {
     });
   });
 
-  describe('createProductMetadata', () => {
+  describe('createCategoryMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
       const config: ClientConfig = {
         credentials: mockCredentials,
@@ -275,7 +295,7 @@ describe('Client', () => {
         environment: mockEnvironment,
       };
       const client = createClient(config);
-      const mockData = createMockData('createProductMetadata');
+      const mockData = createMockData('createCategoryMetadata');
       const mockResponse: ApiResponse = {
         ok: true,
         status: 200,
@@ -288,9 +308,9 @@ describe('Client', () => {
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      const result = await client.createProductMetadata(mockData);
+      const result = await client.createCategoryMetadata(mockData);
 
-      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories/metadata', {
         method: 'POST',
         body: JSON.stringify(mockData),
       });
@@ -298,7 +318,7 @@ describe('Client', () => {
     });
   });
 
-  describe('deleteProductMetadata', () => {
+  describe('deleteCategoryMetadata', () => {
     it('should call the correct endpoint with POST method', async () => {
       const config: ClientConfig = {
         credentials: mockCredentials,
@@ -307,7 +327,7 @@ describe('Client', () => {
         environment: mockEnvironment,
       };
       const client = createClient(config);
-      const mockData = createMockData('deleteProductMetadata');
+      const mockData = createMockData('deleteCategoryMetadata');
       const mockResponse: ApiResponse = {
         ok: true,
         status: 200,
@@ -320,9 +340,9 @@ describe('Client', () => {
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      const result = await client.deleteProductMetadata(mockData);
+      const result = await client.deleteCategoryMetadata(mockData);
 
-      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata/delete', {
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories/metadata/delete', {
         method: 'POST',
         body: JSON.stringify(mockData),
       });
@@ -330,7 +350,7 @@ describe('Client', () => {
     });
   });
 
-  describe('updateProductMetadata', () => {
+  describe('updateCategoryMetadata', () => {
     it('should call the correct endpoint with PATCH method', async () => {
       const config: ClientConfig = {
         credentials: mockCredentials,
@@ -339,7 +359,7 @@ describe('Client', () => {
         environment: mockEnvironment,
       };
       const client = createClient(config);
-      const mockData = createMockData('updateProductMetadata');
+      const mockData = createMockData('updateCategoryMetadata');
       const mockResponse: ApiResponse = {
         ok: true,
         status: 200,
@@ -352,9 +372,9 @@ describe('Client', () => {
 
       mockHttpClient.request.mockResolvedValue(mockResponse);
 
-      const result = await client.updateProductMetadata(mockData);
+      const result = await client.updateCategoryMetadata(mockData);
 
-      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/categories/metadata', {
         method: 'PATCH',
         body: JSON.stringify(mockData),
       });
@@ -612,6 +632,102 @@ describe('Client', () => {
 
       expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/layers/delete', {
         method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('createProductMetadata', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('createProductMetadata');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.createProductMetadata(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('deleteProductMetadata', () => {
+    it('should call the correct endpoint with POST method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('deleteProductMetadata');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.deleteProductMetadata(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata/delete', {
+        method: 'POST',
+        body: JSON.stringify(mockData),
+      });
+      expect(result).toEqual(mockResponse);
+    });
+  });
+
+  describe('updateProductMetadata', () => {
+    it('should call the correct endpoint with PATCH method', async () => {
+      const config: ClientConfig = {
+        credentials: mockCredentials,
+        tenantId: mockTenantId,
+        region: mockRegion,
+        environment: mockEnvironment,
+      };
+      const client = createClient(config);
+      const mockData = createMockData('updateProductMetadata');
+      const mockResponse: ApiResponse = {
+        ok: true,
+        status: 200,
+        statusText: 'OK',
+        data: {
+          status: 'ACCEPTED',
+          acceptedCount: 1,
+        },
+      };
+
+      mockHttpClient.request.mockResolvedValue(mockResponse);
+
+      const result = await client.updateProductMetadata(mockData);
+
+      expect(mockHttpClient.request).toHaveBeenCalledWith('/v1/catalog/products/metadata', {
+        method: 'PATCH',
         body: JSON.stringify(mockData),
       });
       expect(result).toEqual(mockResponse);

@@ -11,6 +11,26 @@ For complete Merchandising Services documentation, visit the
 **Note:** Adobe also provides the [Commerce Optimizer Java SDK](https://github.com/adobe-commerce/aco-java-sdk) for Java
 project integrations.
 
+## Migrating to v2.0.0
+
+Version 2.0.0 splits the single metadata type into separate **product** and **category** metadata types to support the
+new category attribute metadata feeds. The metadata **method names are unchanged** (`createProductMetadata`,
+`updateProductMetadata`, `deleteProductMetadata`) — only the associated **type and enum names** changed. If you import
+any of the removed identifiers, update them as follows:
+
+| Removed in v2.0.0 (`FeedMetadata*`) | Replacement (`FeedProductMetadata*`) |
+| ----------------------------------- | ------------------------------------ |
+| `FeedMetadata`                      | `FeedProductMetadata`                |
+| `FeedMetadataUpdate`                | `FeedProductMetadataUpdate`          |
+| `FeedMetadataDelete`                | `FeedProductMetadataDelete`          |
+| `FeedMetadataDataTypeEnum`          | `FeedProductMetadataDataTypeEnum`    |
+| `FeedMetadataVisibleInEnum`         | `FeedProductMetadataVisibleInEnum`   |
+| `FeedMetadataSearchTypesEnum`       | `FeedProductMetadataSearchTypesEnum` |
+
+v2.0.0 also adds category attribute metadata support via the new `createCategoryMetadata`, `updateCategoryMetadata`, and
+`deleteCategoryMetadata` methods and their `FeedCategoryMetadata*` types. See
+[Category Metadata Operations](#category-metadata-operations) below.
+
 ## Install the SDK
 
 ```bash
@@ -141,6 +161,7 @@ The Commerce Optimizer SDK Client provides the ability to easily manage the foll
 - Price Books
 - Prices
 - Categories
+- Category Metadata
 - Product Layers
 
 ### Product Operations
@@ -220,14 +241,18 @@ const response = await client.deleteProducts([productDelete]);
 #### Create Product Metadata
 
 ```typescript
-import { FeedMetadata, FeedMetadataDataTypeEnum, FeedMetadataVisibleInEnum } from '@adobe-commerce/aco-ts-sdk';
+import {
+  FeedProductMetadata,
+  FeedProductMetadataDataTypeEnum,
+  FeedProductMetadataVisibleInEnum,
+} from '@adobe-commerce/aco-ts-sdk';
 
-const metadata: FeedMetadata = {
+const metadata: FeedProductMetadata = {
   code: 'color',
   source: { locale: 'en-US' },
   label: 'Color',
-  dataType: FeedMetadataDataTypeEnum.Text,
-  visibleIn: [FeedMetadataVisibleInEnum.ProductDetail],
+  dataType: FeedProductMetadataDataTypeEnum.Text,
+  visibleIn: [FeedProductMetadataVisibleInEnum.ProductDetail],
   filterable: true,
   sortable: true,
   searchable: true,
@@ -240,9 +265,9 @@ const response = await client.createProductMetadata([metadata]);
 #### Update Product Metadata
 
 ```typescript
-import { FeedMetadataUpdate } from '@adobe-commerce/aco-ts-sdk';
+import { FeedProductMetadataUpdate } from '@adobe-commerce/aco-ts-sdk';
 
-const metadataUpdate: FeedMetadataUpdate = {
+const metadataUpdate: FeedProductMetadataUpdate = {
   code: 'color',
   source: { locale: 'en-US' },
   label: 'Updated Color Label',
@@ -255,14 +280,61 @@ const response = await client.updateProductMetadata([metadataUpdate]);
 #### Delete Product Metadata
 
 ```typescript
-import { FeedMetadataDelete } from '@adobe-commerce/aco-ts-sdk';
+import { FeedProductMetadataDelete } from '@adobe-commerce/aco-ts-sdk';
 
-const metadataDelete: FeedMetadataDelete = {
+const metadataDelete: FeedProductMetadataDelete = {
   code: 'color',
   source: { locale: 'en-US' },
 };
 
 const response = await client.deleteProductMetadata([metadataDelete]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
+```
+
+### Category Metadata Operations
+
+#### Create Category Metadata
+
+```typescript
+import { FeedCategoryMetadata, FeedCategoryMetadataDataTypeEnum } from '@adobe-commerce/aco-ts-sdk';
+
+const metadata: FeedCategoryMetadata = {
+  code: 'department',
+  source: { locale: 'en-US' },
+  label: 'Department',
+  dataType: FeedCategoryMetadataDataTypeEnum.Text,
+};
+
+const response = await client.createCategoryMetadata([metadata]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
+```
+
+#### Update Category Metadata
+
+```typescript
+import { FeedCategoryMetadataUpdate } from '@adobe-commerce/aco-ts-sdk';
+
+const metadataUpdate: FeedCategoryMetadataUpdate = {
+  code: 'department',
+  source: { locale: 'en-US' },
+  label: 'Updated Department Label',
+};
+
+const response = await client.updateCategoryMetadata([metadataUpdate]);
+// response.data: { status: 'ACCEPTED', acceptedCount: 1 }
+```
+
+#### Delete Category Metadata
+
+```typescript
+import { FeedCategoryMetadataDelete } from '@adobe-commerce/aco-ts-sdk';
+
+const metadataDelete: FeedCategoryMetadataDelete = {
+  code: 'department',
+  source: { locale: 'en-US' },
+};
+
+const response = await client.deleteCategoryMetadata([metadataDelete]);
 // response.data: { status: 'ACCEPTED', acceptedCount: 1 }
 ```
 
