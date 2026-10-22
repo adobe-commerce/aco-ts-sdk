@@ -37,3 +37,5 @@ demo/
 # AI Rules
 .cursor/
 CLAUDE.md
+.claude/
+.scout/
